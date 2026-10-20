@@ -679,7 +679,7 @@ $('#exp').onclick=async()=>{
   audio.onended=()=>rec.stop();rec.start(500);await audio.play();
 };
 /* Gir beskjed om høyde når siden vises inni en annen side (nettsiden) */
-try{const send=()=>{if(parent!==window)parent.postMessage({ah:'h',h:document.documentElement.scrollHeight},'*')};new ResizeObserver(send).observe(document.body);addEventListener('load',send);send()}catch(e){}
+try{if(parent!==window){document.body.style.minHeight='0';const w=document.querySelector('.wrap'),send=()=>{const h=Math.ceil(w.getBoundingClientRect().height+parseFloat(getComputedStyle(w).paddingTop||0)*0+8);parent.postMessage({ah:'h',h:h},'*')};new ResizeObserver(send).observe(w);addEventListener('load',send);send()}}catch(e){}
 </script>
 </body>
 </html>
