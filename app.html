@@ -35,6 +35,8 @@ textarea{width:100%;background:#0b0615;border:1px solid var(--line);color:var(--
 .chip.on{border-color:transparent;background:linear-gradient(90deg,#ff2bd633,#2bd9ff33);box-shadow:inset 0 0 0 1px var(--a)}
 label.t{display:flex;gap:6px;align-items:center;color:var(--mut);cursor:pointer}
 .btns{display:flex;gap:10px}
+body.lock .card{pointer-events:none;opacity:.5;transition:opacity .2s}
+body.lock #stage{pointer-events:none}
 .btn{flex:1;border:0;border-radius:12px;padding:14px;font:inherit;font-weight:700;letter-spacing:.06em;cursor:pointer;color:#fff;background:linear-gradient(90deg,var(--a),#7b2bff 55%,var(--b))}
 .btn.s{background:#1b1030;border:1px solid var(--line)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
@@ -78,8 +80,10 @@ label.t{display:flex;gap:6px;align-items:center;color:var(--mut);cursor:pointer}
 
 <div class="btns">
 <button class="btn s" id="play" disabled>▶ Play</button>
-<button class="btn" id="exp" disabled>Export video</button>
+<button class="btn" id="exp" disabled title="Plays the whole song with your current settings and saves the video. Settings are locked while it runs.">Export video</button>
+<button class="btn s" id="expl" disabled title="Plays the song in real time and records it. You can keep changing scenes and settings while it records.">● Live export</button>
 </div>
+<div style="font-size:12px;color:#8a85a8;margin:-4px 2px 12px;line-height:1.5"><b>Export video</b>: settings are locked, the whole song is recorded start to finish. <b>Live export</b>: you keep control and can change things while it records.</div>
 <div id="st">Upload a song to start. Until then you see a demo.</div>
 </div>
 
@@ -735,7 +739,7 @@ frame();
 const st=t=>$('#st').textContent=t;
 function load(f){
   if(!f)return;audio.src=URL.createObjectURL(f);audio.load();loaded=true;
-  $('#fn').textContent=f.name;$('#play').disabled=$('#exp').disabled=false;$('#tag').textContent=f.name.replace(/\.[^.]+$/,'');
+  $('#fn').textContent=f.name;$('#play').disabled=$('#exp').disabled=$('#expl').disabled=false;$('#tag').textContent=f.name.replace(/\.[^.]+$/,'');
   st('Ready. Press play to preview the show, or export right away.');
 }
 $('#fi').onchange=e=>load(e.target.files[0]);
@@ -775,25 +779,34 @@ idz.addEventListener('drop',e=>loadImg(e.dataTransfer.files[0]));
 $('#laser').onchange=e=>laserOn=e.target.checked;$('#strobe').onchange=e=>strobe=e.target.checked;
 
 let DL=null;(window.claude?claude.use('downloads'):Promise.resolve(null)).then(d=>DL=d).catch(()=>{});
-let curRec=null;
-$('#exp').onclick=async()=>{
-  if(exporting){if(curRec&&curRec.state!=='inactive'){audio.pause();audio.onended=null;curRec.stop()}return}
+let curRec=null,recTimer=null;
+const mmss=t=>{t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+function stopRec(){if(curRec&&curRec.state!=='inactive'){audio.pause();audio.onended=null;curRec.stop()}}
+async function startRec(live){
+  if(exporting){stopRec();return}
   if(!loaded)return;initAudio();await ac.resume();
   const mt=['video/mp4;codecs=avc1.640033,mp4a.40.2','video/mp4;codecs=avc1,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t));
   if(!mt){st('Your browser does not support video recording. Try Chrome or Safari.');return}
   const stream=cv.captureStream(60);stream.addTrack(dest.stream.getAudioTracks()[0]);
-  const rec=new MediaRecorder(stream,{mimeType:mt,videoBitsPerSecond:QH===1080?24e6:14e6}),ch=[];curRec=rec;
+  const rec=new MediaRecorder(stream,{mimeType:mt,videoBitsPerSecond:QH>=2160?60e6:QH>=1440?36e6:QH===1080?24e6:14e6}),ch=[];curRec=rec;
+  const btn=live?$('#expl'):$('#exp'),other=live?$('#exp'):$('#expl');
   rec.ondataavailable=e=>e.data.size&&ch.push(e.data);
   rec.onstop=async()=>{
-    exporting=false;curRec=null;audio.onended=()=>{if(!exporting)$('#play').textContent='▶ Play'};$('#exp').disabled=$('#play').disabled=false;$('#exp').textContent='Export video';$('#play').textContent='▶ Play';
+    clearInterval(recTimer);document.body.classList.remove('lock');
+    exporting=false;curRec=null;audio.onended=()=>{if(!exporting)$('#play').textContent='▶ Play'};
+    $('#exp').disabled=$('#expl').disabled=$('#play').disabled=false;$('#exp').textContent='Export video';$('#expl').textContent='● Live export';$('#play').textContent='▶ Play';
     const blob=new Blob(ch,{type:mt.split(';')[0]}),ext=mt.includes('mp4')?'mp4':'webm';
     if(DL){try{await DL.save({filename:'afterhours-video.'+ext,data:blob});{const fps=Math.round(efr/((performance.now()-eT)/1000));st('Done! The video is saved. Average '+fps+' frames/s'+(fps<50?'. Your machine could not keep up with 60, try 720p for a smoother video.':'.'))}}catch(e){st('Saving was cancelled. Press export to try again.')}}
     else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='afterhours-video.'+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);st('Done! Your download should start now.')}
   };
-  audio.currentTime=0;exporting=true;efr=0;eT=performance.now();$('#play').disabled=true;$('#exp').textContent='■ Stop and save';
-  st('Recording in real time. Keep this tab in the foreground. Press “Stop and save” when you want to finish.');
+  audio.currentTime=0;exporting=true;efr=0;eT=performance.now();$('#play').disabled=true;other.disabled=true;btn.textContent='■ Stop and save';
+  if(!live)document.body.classList.add('lock');
+  const upd=()=>st((live?'Live recording ':'Exporting ')+mmss(audio.currentTime)+' / '+mmss(audio.duration)+(live?' · change anything you like, it is recorded as you go. ':' · settings are locked. ')+'Keep this tab in the foreground. Press “Stop and save” to finish early.');
+  upd();recTimer=setInterval(upd,500);
   audio.onended=()=>rec.stop();rec.start(500);await audio.play();
-};
+}
+$('#exp').onclick=()=>startRec(false);
+$('#expl').onclick=()=>startRec(true);
 /* Gir beskjed om høyde når siden vises inni en annen side (nettsiden) */
 try{if(parent!==window){document.body.style.minHeight='0';const w=document.querySelector('.wrap'),send=()=>{const h=Math.ceil(w.getBoundingClientRect().height+parseFloat(getComputedStyle(w).paddingTop||0)*0+8);parent.postMessage({ah:'h',h:h},'*')};new ResizeObserver(send).observe(w);addEventListener('load',send);send()}}catch(e){}
 </script>
