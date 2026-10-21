@@ -53,9 +53,9 @@ label.t{display:flex;gap:6px;align-items:center;color:var(--mut);cursor:pointer}
 
 <div class="card" id="imgcard" style="display:none">
 <h2>Image</h2>
-<label class="drop" id="idz"><input type="file" id="ii" accept="image/*"><b id="inm">Drop an image here, or click to choose</b>jpg, png, webp. The filter is applied on top, and the image moves with the music</label>
+<label class="drop" id="idz"><input type="file" id="ii" accept="image/*,video/*,.gif,.mp4,.webm,.mov"><b id="inm">Drop an image, GIF or video here, or click to choose</b>jpg, png, webp, gif, mp4, webm. The filter is applied on top, and it moves with the music</label>
 <div class="row" style="margin-top:12px;gap:12px"><label class="t" style="flex:1;min-width:200px;gap:10px">Size <input type="range" id="isz" min="15" max="400" value="100" style="flex:1;accent-color:#ff2bd6"></label><label class="t" style="flex:1;min-width:200px;gap:10px">Horizontal <input type="range" id="ipx" min="-100" max="100" value="0" style="flex:1;accent-color:#2bd9ff"></label><label class="t" style="flex:1;min-width:200px;gap:10px">Vertical <input type="range" id="ipy" min="-100" max="100" value="0" style="flex:1;accent-color:#2bd9ff"></label><button class="chip" id="irs">Reset</button></div>
-<div style="color:var(--mut);font-size:12px;margin-top:8px">Tip: drag the image to move it, and use the mouse wheel to zoom.</div>
+<div style="color:var(--mut);font-size:12px;margin-top:8px">Tip: drag it to move it, and use the mouse wheel to zoom.</div>
 </div>
 
 <div class="card">
@@ -64,7 +64,8 @@ label.t{display:flex;gap:6px;align-items:center;color:var(--mut);cursor:pointer}
 <div class="field c"><span class="lb" style="padding:0">Intensity</span><input type="range" id="int" min="30" max="160" value="100" style="accent-color:#ff2bd6"></div>
 <div class="field"><span class="lb">Filter</span><div class="row"><button class="chip on" data-fl="0">None</button><button class="chip" data-fl="1">VHS</button><button class="chip" data-fl="2">CRT</button><button class="chip" data-fl="3">Glitch</button><button class="chip" data-fl="4">Film</button></div></div>
 <div class="field c"><span class="lb" style="padding:0">Filter strength</span><input type="range" id="fa" min="10" max="100" value="70" style="accent-color:#2bd9ff"></div>
-<div class="field"><span class="lb">Colors</span><div><div class="row" id="pals"><button class="chip on" data-p="rave">Rave</button><button class="chip" data-p="inferno">Inferno</button><button class="chip" data-p="toxic">Toxic</button><button class="chip" data-p="ice">Ice</button><button class="chip" data-p="synth">Synth</button><button class="chip" data-p="custom">Custom</button></div>
+<div class="field c"><span class="lb" style="padding:0">Blur / echo</span><input type="range" id="bl" min="0" max="100" value="0" style="accent-color:#7b2bff"></div>
+<div class="field"><span class="lb">Colors</span><div><div class="row" id="pals"><button class="chip on" data-p="rave">Rave</button><button class="chip" data-p="inferno">Inferno</button><button class="chip" data-p="toxic">Toxic</button><button class="chip" data-p="ice">Ice</button><button class="chip" data-p="synth">Synth</button><button class="chip" data-p="bw">B&amp;W</button><button class="chip" data-p="custom">Custom</button></div>
 <div class="row" id="cust" style="display:none;margin-top:10px;gap:12px"><span style="color:var(--mut)">Count</span><button class="chip" data-cn="1">1</button><button class="chip" data-cn="2">2</button><button class="chip on" data-cn="3">3</button><label class="t"><span id="cl1">60 %</span><input type="color" id="c1" value="#ff2bd6"></label><label class="t" id="cw2"><span id="cl2">30 %</span><input type="color" id="c2" value="#2bd9ff"></label><label class="t" id="cw3"><span id="cl3">10 %</span><input type="color" id="c3" value="#ffffff"></label></div></div></div>
 <div class="field"><span class="lb">Effects</span><div class="row" style="gap:18px"><label class="t"><input type="checkbox" id="laser" checked> Lasers</label><label class="t"><input type="checkbox" id="strobe" checked> Strobe</label><label class="t"><input type="checkbox" id="fxon" checked> Glow</label></div></div>
 </div>
@@ -103,7 +104,7 @@ setFmt('h');
 
 const P={rave:[0,.14,.33,.5,.62,.8,.9],inferno:[0,.02,.05,.09,.96],toxic:[.27,.33,.4,.78,.85],ice:[.5,.54,.6,.68,.76],synth:[.78,.85,.92,.52,.58]};
 /* Egen palett: 1-3 fritt valgte farger (også hvit) etter 60-30-10-regelen. hueAt gir da en posisjon i en fargeløype, og setHSL slår opp i den. */
-let CUST=false,custN=3,LUT=null;const _setHSL=THREE.Color.prototype.setHSL;
+let BW=false,CUST=false,custN=3,LUT=null;const _setHSL=THREE.Color.prototype.setHSL;
 THREE.Color.prototype.setHSL=function(h,sa,l){
   if(!CUST||!LUT)return _setHSL.call(this,h,sa,l);
   const u=h-Math.floor(h),k=(u*255.999|0)*3;let r=LUT[k],g=LUT[k+1],b=LUT[k+2];
@@ -496,24 +497,138 @@ const IM=new THREE.ShaderMaterial({uniforms:{map:{value:mkTex(phC)},ia:{value:16
 IS.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),IM));
 var IZm=1,IPx=0,IPy=0;
 function imageUpdate(dt){
+  mediaTick();
   const u=IM.uniforms;u.sa.value=FW/FH;
   u.z.value=1.1*IZm*(1+kick*.045*INT+bassS*.018*INT);u.pan.value.set(IPx,IPy);
   u.off.value.set(Math.sin(T*.13)*.02,Math.cos(T*.11)*.015);
   u.sp.value=.0015+(snare*.006+clap*.003)*INT;
   u.br.value=1+kick*.12*INT+snare*.05*INT;
 }
-function loadImg(f){
-  if(!f||!/^image\//.test(f.type))return;
-  const im=new Image();im.onload=()=>{const old=IM.uniforms.map.value;IM.uniforms.map.value=mkTex(im);IM.uniforms.ia.value=im.naturalWidth/im.naturalHeight;if(old&&old.dispose)old.dispose();$('#inm').textContent=f.name+' · click to change'};
-  im.src=URL.createObjectURL(f);
+/* Bilde, GIF eller video som bakgrunn i Image-scenen */
+var MEDIA=null;
+function mediaSet(tex,ia,name,m){
+  const old=IM.uniforms.map.value;IM.uniforms.map.value=tex;IM.uniforms.ia.value=ia;if(old&&old.dispose&&old!==tex)old.dispose();
+  if(MEDIA&&MEDIA.v){MEDIA.v.pause();try{URL.revokeObjectURL(MEDIA.url)}catch(e){}}
+  MEDIA=m||null;$('#inm').textContent=name+' · click to change';
+}
+async function loadImg(f){
+  if(!f)return;
+  const ty=f.type||'',nm=f.name||'';
+  try{
+    if(/^video\//.test(ty)||/\.(mp4|webm|mov|m4v)$/i.test(nm)){
+      const v=document.createElement('video'),url=URL.createObjectURL(f);v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';v.src=url;
+      await new Promise((ok,no)=>{v.onloadeddata=ok;v.onerror=()=>no(new Error('video'))});
+      const t=new THREE.Texture(v);t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.generateMipmaps=false;t.needsUpdate=true;
+      mediaSet(t,v.videoWidth/v.videoHeight,nm,{kind:'video',v,tex:t,url});try{await v.play()}catch(e){}return;
+    }
+    if(ty==='image/gif'||/\.gif$/i.test(nm)){
+      try{
+        const buf=new Uint8Array(await f.arrayBuffer());const G=await gifDecode(buf);
+        const cv2=document.createElement('canvas');cv2.width=G.fr[0].bm.width;cv2.height=G.fr[0].bm.height;const g=cv2.getContext('2d');g.drawImage(G.fr[0].bm,0,0);
+        const t=mkTex(cv2);mediaSet(t,cv2.width/cv2.height,nm,{kind:'gif',fr:G.fr,tot:G.tot,cv:cv2,g,tex:t,last:0});return;
+      }catch(e){console.warn('gif decode',e)}
+      /* reserve: vanlig <img> som tegnes til lerret hver ramme */
+      const im=new Image();im.style.cssText='position:fixed;left:0;top:0;width:2px;height:2px;opacity:.01;pointer-events:none';document.body.appendChild(im);
+      await new Promise((ok,no)=>{im.onload=ok;im.onerror=()=>no(new Error('gif'));im.src=URL.createObjectURL(f)});
+      const cv2=document.createElement('canvas');cv2.width=im.naturalWidth;cv2.height=im.naturalHeight;const t=mkTex(cv2);
+      mediaSet(t,cv2.width/cv2.height,nm,{kind:'gifimg',im,cv:cv2,g:cv2.getContext('2d'),tex:t});return;
+    }
+    if(!/^image\//.test(ty))return;
+    const im=new Image();im.onload=()=>mediaSet(mkTex(im),im.naturalWidth/im.naturalHeight,nm,null);im.src=URL.createObjectURL(f);
+  }catch(e){$('#inm').textContent='Could not open that file. Try another one.'}
 }
 
+/* Egen GIF-dekoder (virker i alle nettlesere, uten ImageDecoder) */
+async function gifDecode(d){
+  let p=6;const W=d[p]|d[p+1]<<8,H=d[p+2]|d[p+3]<<8,fl=d[p+4];p+=7;
+  let gct=null;if(fl&0x80){const n=3<<((fl&7)+1);gct=d.subarray(p,p+n);p+=n}
+  const raw=[];let gce=null;
+  while(p<d.length){const b=d[p++];
+    if(b===0x3B)break;
+    if(b===0x21){const lb=d[p++];if(lb===0xF9){const pk=d[p+1];gce={dis:(pk>>2)&7,tr:pk&1?d[p+4]:-1,dl:(d[p+2]|d[p+3]<<8)}}
+      while(d[p]){p+=d[p]+1}p++}
+    else if(b===0x2C){
+      const x=d[p]|d[p+1]<<8,y=d[p+2]|d[p+3]<<8,w=d[p+4]|d[p+5]<<8,h=d[p+6]|d[p+7]<<8,pk=d[p+8];p+=9;
+      let ct=gct;if(pk&0x80){const n=3<<((pk&7)+1);ct=d.subarray(p,p+n);p+=n}
+      const mc=d[p++];const chunks=[];let tl=0;while(d[p]){chunks.push(d.subarray(p+1,p+1+d[p]));tl+=d[p];p+=d[p]+1}p++;
+      raw.push({x,y,w,h,il:!!(pk&0x40),ct,mc,chunks,tl,gce});gce=null}
+    else break}
+  if(!raw.length)throw new Error('empty gif');
+  const N=raw.length,step=Math.max(1,Math.ceil(N/240));
+  let sc=Math.min(1,960/Math.max(W,H));const cnt=Math.ceil(N/step),by=cnt*W*sc*H*sc*4;if(by>256e6)sc*=Math.sqrt(256e6/by);
+  const ow=Math.max(2,Math.round(W*sc)),oh=Math.max(2,Math.round(H*sc));
+  const cur=new Uint8ClampedArray(W*H*4),cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d');
+  const fr=[];let tot=0,prev=null,saved=null;
+  for(let i=0;i<N;i++){
+    const r=raw[i],ge=r.gce||{dis:0,tr:-1,dl:10};
+    if(prev){if(prev.dis===2){for(let yy=0;yy<prev.h;yy++){const o=((prev.y+yy)*W+prev.x)*4;cur.fill(0,o,o+prev.w*4)}}else if(prev.dis===3&&saved)cur.set(saved)}
+    saved=ge.dis===3?cur.slice():null;
+    /* LZW */
+    const px=new Uint8Array(r.w*r.h),mc=r.mc,clr=1<<mc,eoi=clr+1;
+    let data;if(r.chunks.length===1)data=r.chunks[0];else{data=new Uint8Array(r.tl);let o=0;r.chunks.forEach(c=>{data.set(c,o);o+=c.length})}
+    const pre=new Uint16Array(4096),suf=new Uint8Array(4096),stk=new Uint8Array(4097);
+    let cs=mc+1,nx=eoi+1,mx=1<<cs,old=-1,fc=0,bits=0,nb=0,di=0,op=0;const tn=px.length;
+    for(let k=0;k<clr;k++){suf[k]=k;pre[k]=0}
+    while(op<tn&&di<data.length+4){
+      while(nb<cs&&di<data.length){bits|=data[di++]<<nb;nb+=8}
+      if(nb<cs)break;const code=bits&(mx-1);bits>>=cs;nb-=cs;
+      if(code===clr){cs=mc+1;nx=eoi+1;mx=1<<cs;old=-1;continue}
+      if(code===eoi)break;
+      let sp=0,c=code;
+      if(old===-1){px[op++]=suf[c];old=c;fc=c;continue}
+      if(c>=nx){stk[sp++]=fc;c=old}
+      while(c>=clr){stk[sp++]=suf[c];c=pre[c]}
+      fc=suf[c];stk[sp++]=fc;
+      while(sp>0&&op<tn)px[op++]=stk[--sp];
+      if(nx<4096){pre[nx]=old;suf[nx]=fc;nx++;if(nx>=mx&&cs<12){cs++;mx=1<<cs}}
+      old=code}
+    /* tegn ramme */
+    let rows=null;if(r.il){rows=[];[[0,8],[4,8],[2,4],[1,2]].forEach(([s0,st])=>{for(let y=s0;y<r.h;y+=st)rows.push(y)})}
+    const ct=r.ct;
+    for(let yy=0;yy<r.h;yy++){const sy=rows?rows[yy]:yy,Y=r.y+sy;if(Y>=H)continue;
+      for(let xx=0;xx<r.w;xx++){const X=r.x+xx;if(X>=W)continue;const ci=px[yy*r.w+xx];if(ci===ge.tr)continue;const o=(Y*W+X)*4;cur[o]=ct[ci*3];cur[o+1]=ct[ci*3+1];cur[o+2]=ct[ci*3+2];cur[o+3]=255}}
+    prev={dis:ge.dis,x:r.x,y:r.y,w:r.w,h:r.h};
+    const dl=Math.max(.02,(ge.dl||10)/100);
+    if(i%step===0){cx.putImageData(new ImageData(cur,W,H),0,0);
+      const bm=await createImageBitmap(cv,{resizeWidth:ow,resizeHeight:oh,resizeQuality:'medium'});fr.push({bm,d:dl*step,t0:tot});tot+=dl*step}
+    if(i%6===0){$('#inm').textContent='Loading GIF… '+Math.round(i/N*100)+'%';await new Promise(r=>setTimeout(r,0))}
+  }
+  return {fr,tot}
+}
+function mediaTick(){
+  const m=MEDIA;if(!m)return;
+  if(m.kind==='video'){if(m.v.readyState>=2)m.tex.needsUpdate=true}
+  else if(m.kind==='gif'){const t=(OFF?OFF.t:T)%m.tot;let i=m.last;if(!(m.fr[i].t0<=t&&t<m.fr[i].t0+m.fr[i].d)){i=0;while(i<m.fr.length-1&&m.fr[i].t0+m.fr[i].d<=t)i++}
+    if(i!==m.last||!m.drawn){m.last=i;m.drawn=1;m.g.clearRect(0,0,m.cv.width,m.cv.height);m.g.drawImage(m.fr[i].bm,0,0);m.tex.needsUpdate=true}}
+  else if(m.kind==='gifimg'){m.g.clearRect(0,0,m.cv.width,m.cv.height);m.g.drawImage(m.im,0,0);m.tex.needsUpdate=true}
+}
+/* Brukes av skrivebordsappens eksport: stiller videoen på riktig tidspunkt for hvert bilde */
+async function mediaSeek(t){const m=MEDIA;if(!m||m.kind!=='video'||!isFinite(m.v.duration))return;m.v.pause();const target=t%m.v.duration;
+  if(Math.abs(m.v.currentTime-target)<.001)return;await new Promise(ok=>{const to=setTimeout(ok,700);m.v.onseeked=()=>{clearTimeout(to);ok()};m.v.currentTime=target})}
+function mediaResume(){const m=MEDIA;if(m&&m.kind==='video')m.v.play().catch(()=>{})}
+
 /* Etterbehandling: glød, vignett, korn */
-var comp=null,rp,bloom,fx,fxOn=true,FM=0,FA=.7,efr=0,eT=0,mel=0,pitch=.5,mPrev=0,mAvg=.01,lastN=-1,nT=-9,cPrev=0,cAvg=.01,lastC=-1,cT=-9,clap=0,rollV=0,kickR=0,snareR=0,clapR=0,bassS=0,SM=.5,tonal=0,melG=0,eng=0;
+var comp=null,rp,bloom,fx,trail=null,fxOn=true,FM=0,FA=.7,BL=0,efr=0,eT=0,mel=0,pitch=.5,mPrev=0,mAvg=.01,lastN=-1,nT=-9,cPrev=0,cAvg=.01,lastC=-1,cT=-9,clap=0,rollV=0,kickR=0,snareR=0,clapR=0,bassS=0,SM=.5,tonal=0,melG=0,eng=0;
 try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.RenderPass){
   comp=new THREE.EffectComposer(R);comp.setSize(FW,FH);
   rp=new THREE.RenderPass(S,cam);comp.addPass(rp);
   bloom=new THREE.UnrealBloomPass(new THREE.Vector2(FW,FH),.7,.6,.25);comp.addPass(bloom);
+  /* Blur/ekko: forrige bilde blandes inn, uskarpt og svakere, som en etterklang for det visuelle */
+  class TrailPass extends THREE.Pass{
+    constructor(w,h){super();this.needsSwap=true;this.fresh=true;
+      this.rt=new THREE.WebGLRenderTarget(w,h,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter});
+      const vs='varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}';
+      this.mat=new THREE.ShaderMaterial({uniforms:{c:{value:null},p:{value:null},k:{value:0},f:{value:1},rs:{value:new THREE.Vector2(w,h)}},vertexShader:vs,
+        fragmentShader:'uniform sampler2D c;uniform sampler2D p;uniform float k;uniform float f;uniform vec2 rs;varying vec2 vUv;void main(){vec3 cur=texture2D(c,vUv).rgb;vec2 uv=.5+(vUv-.5)*(1.-.004*k);vec2 px=(1.+5.*k)/rs;vec3 pv=texture2D(p,uv).rgb*.25;pv+=(texture2D(p,uv+vec2(px.x,0.)).rgb+texture2D(p,uv-vec2(px.x,0.)).rgb+texture2D(p,uv+vec2(0.,px.y)).rgb+texture2D(p,uv-vec2(0.,px.y)).rgb)*.125;pv+=(texture2D(p,uv+px).rgb+texture2D(p,uv-px).rgb+texture2D(p,uv+vec2(px.x,-px.y)).rgb+texture2D(p,uv+vec2(-px.x,px.y)).rgb)*.0625;pv*=(.55+.4*k)*(1.-f);gl_FragColor=vec4(max(cur,pv),1.);}'});
+      this.cpy=new THREE.ShaderMaterial({uniforms:{t:{value:null}},vertexShader:vs,fragmentShader:'uniform sampler2D t;varying vec2 vUv;void main(){gl_FragColor=texture2D(t,vUv);}'});
+      this.qm=new THREE.Mesh(new THREE.PlaneGeometry(2,2),this.mat);this.qm.frustumCulled=false;this.qs=new THREE.Scene();this.qs.add(this.qm);this.qc=new THREE.OrthographicCamera(-1,1,1,-1,0,1)}
+    draw(renderer,m){this.qm.material=m;renderer.render(this.qs,this.qc)}
+    setSize(w,h){this.rt.setSize(w,h);this.mat.uniforms.rs.value.set(w,h);this.fresh=true}
+    render(renderer,writeBuffer,readBuffer){
+      const u=this.mat.uniforms;u.c.value=readBuffer.texture;u.p.value=this.rt.texture;u.f.value=this.fresh?1:0;this.fresh=false;
+      renderer.setRenderTarget(this.renderToScreen?null:writeBuffer);this.draw(renderer,this.mat);
+      this.cpy.uniforms.t.value=writeBuffer.texture;renderer.setRenderTarget(this.rt);this.draw(renderer,this.cpy)}}
+  trail=new TrailPass(FW,FH);trail.enabled=false;comp.addPass(trail);
   fx=new THREE.ShaderPass({uniforms:{tDiffuse:{value:null},t:{value:0},ft:{value:0},k:{value:0},vg:{value:0},fm:{value:0},fa:{value:.7},sn:{value:0},rs:{value:new THREE.Vector2(1920,1080)}},
     vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader:[
@@ -543,7 +658,7 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
     ' gl_FragColor=vec4(col,1.);}'
     ].join('\n')});
   comp.addPass(fx);
-}}catch(e){comp=null}
+}}catch(e){comp=null;console.error('fx',e)}
 
 /* Lyd og beat-deteksjon */
 const audio=new Audio();let ac,an,dest,exporting=false,loaded=false;
@@ -610,7 +725,7 @@ function frame(){
   autoUpdate(dt);
   if(mode==='tunnel')tunnelUpdate(dt,hit);else if(mode==='image')imageUpdate(dt);
   const sc2=mode==='tunnel'?TS:mode==='image'?IS:S,rc=mode==='image'?ic:cam;
-  if(comp&&(fxOn||FM>0)){rp.scene=sc2;rp.camera=rc;bloom.strength=!fxOn?0:mode==='image'?.18+(kick*.25+clap*.1)*INT:(.5+(kick*.45+clap*.2+energy*.25+mel*.12)*INT)*(1-hy)+hy*(.45+eng*.3);const U=fx.uniforms;U.t.value=T%10;U.ft.value=T;U.k.value=fxOn?kick*INT*(1-hy*.8):0;U.vg.value=eng*hy;U.fm.value=FM;U.fa.value=FA;U.sn.value=snare;U.rs.value.set(FW,FH);comp.render(dt)}else R.render(sc2,rc);
+  if(comp&&(fxOn||FM>0||BL>.01)){if(trail){trail.enabled=BL>.01;trail.mat.uniforms.k.value=BL}rp.scene=sc2;rp.camera=rc;bloom.strength=!fxOn?0:mode==='image'?.18+(kick*.25+clap*.1)*INT:(.5+(kick*.45+clap*.2+energy*.25+mel*.12)*INT)*(1-hy)+hy*(.45+eng*.3);const U=fx.uniforms;U.t.value=T%10;U.ft.value=T;U.k.value=fxOn?kick*INT*(1-hy*.8):0;U.vg.value=eng*hy;U.fm.value=FM;U.fa.value=FA;U.sn.value=snare;U.rs.value.set(FW,FH);comp.render(dt)}else R.render(sc2,rc);
   renderFlash();renderWM();
   if(loaded&&audio.duration)$('#bar').style.width=(audio.currentTime/audio.duration*100)+'%';
 }
@@ -631,10 +746,10 @@ dz.addEventListener('drop',e=>load(e.dataTransfer.files[0]));
 $('#play').onclick=async()=>{initAudio();await ac.resume();if(audio.paused){await audio.play();$('#play').textContent='❚❚ Pause'}else{audio.pause();$('#play').textContent='▶ Play'}};
 audio.onended=()=>{if(!exporting)$('#play').textContent='▶ Play'};
 
-function setPal(n){CUST=n==='custom';pal=CUST?buildCust():P[n];$('#cust').style.display=CUST?'flex':'none';document.querySelectorAll('#pals .chip').forEach(c=>c.classList.toggle('on',c.dataset.p===n))}
+function setPal(n){BW=n==='bw';CUST=n==='custom'||BW;if(BW){LUT=new Float32Array(768).fill(1);pal=[0]}else pal=CUST?buildCust():P[n];$('#cust').style.display=n==='custom'?'flex':'none';document.querySelectorAll('#pals .chip').forEach(c=>c.classList.toggle('on',c.dataset.p===n))}
 function custUpd(){const L=custN===1?['100 %']:custN===2?['70 %','30 %']:['60 %','30 %','10 %'];L.forEach((t,i)=>$('#cl'+(i+1)).textContent=t);$('#cw2').style.display=custN>=2?'flex':'none';$('#cw3').style.display=custN>=3?'flex':'none';document.querySelectorAll('[data-cn]').forEach(x=>x.classList.toggle('on',+x.dataset.cn===custN));if(CUST)pal=buildCust()}
 document.querySelectorAll('[data-cn]').forEach(c=>c.onclick=()=>{custN=+c.dataset.cn;custUpd()});
-['c1','c2','c3'].forEach(id=>$('#'+id).oninput=()=>{if(CUST)pal=buildCust()});
+['c1','c2','c3'].forEach(id=>$('#'+id).oninput=()=>{if(CUST&&!BW)pal=buildCust()});
 custUpd();
 document.querySelectorAll('#pals .chip').forEach(c=>c.onclick=()=>setPal(c.dataset.p));
 document.querySelectorAll('[data-f]').forEach(c=>c.onclick=()=>{if(exporting)return;document.querySelectorAll('[data-f]').forEach(x=>x.classList.toggle('on',x===c));setFmt(c.dataset.f)});
@@ -643,6 +758,7 @@ $('#int').oninput=e=>INT=e.target.value/100;document.querySelectorAll('[data-q]'
 $('#fxon').onchange=e=>fxOn=e.target.checked;
 document.querySelectorAll('[data-fl]').forEach(c=>c.onclick=()=>{FM=+c.dataset.fl;document.querySelectorAll('[data-fl]').forEach(x=>x.classList.toggle('on',x===c))});
 $('#fa').oninput=e=>FA=e.target.value/100;
+$('#bl').oninput=e=>{const v=e.target.value/100;if(BL<.01&&v>=.01&&trail)trail.fresh=true;BL=v};
 $('#ii').onchange=e=>loadImg(e.target.files[0]);
 function imgSync(){$('#isz').value=Math.round(IZm*100);$('#ipx').value=Math.round(IPx*100);$('#ipy').value=Math.round(IPy*100)}
 $('#isz').oninput=e=>IZm=e.target.value/100;$('#ipx').oninput=e=>IPx=e.target.value/100;$('#ipy').oninput=e=>IPy=e.target.value/100;
