@@ -1402,6 +1402,9 @@ async function startRec(live){
     if(dis){st('Export stopped. Nothing was saved.');return}
     const blob=new Blob(ch,{type:mt.split(';')[0]}),ext=mt.includes('mp4')?'mp4':'webm';
     if(DL){try{await DL.save({filename:'afterhours-video.'+ext,data:blob});{const fps=Math.round(efr/((performance.now()-eT)/1000));st('Done! The video is saved. Average '+fps+' frames/s'+(fps<50?'. Your machine could not keep up with 60, try 720p for a smoother video.':'.'))}}catch(e){st('Saving was cancelled. Press export to try again.')}}
+    else if(window.AH&&AH.remux){/* desktop: ffmpeg lager en vanlig mp4 med indeks foran, så den kan spoles i alle spillere */
+      st('Finishing the video file…');try{const r=await AH.remux({data:new Uint8Array(await blob.arrayBuffer()),mt,name:'afterhours-live.mp4'});
+        if(r&&r.ok){st('Done! Saved to '+r.out);AH.reveal(r.out)}else if(r&&r.canceled)st('Saving was cancelled.');else st('Could not save the video: '+(r&&r.log||'unknown error'))}catch(e){st('Could not save the video: '+(e&&e.message||e))}}
     else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='afterhours-video.'+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);st('Done! Your download should start now.')}
   };
   audio.currentTime=0;exporting=true;efr=0;eT=performance.now();$('#play').disabled=true;other.disabled=true;if(live)btn.textContent='■ Stop and save';else{btn.textContent='Exporting… click to stop';btn.classList.add('busy')}
