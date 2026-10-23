@@ -1,9 +1,5 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Afterhours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap">
 <style>
@@ -94,7 +90,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 <section id="try">
   <h2>Try it right here</h2>
   <p class="sub">Drop in a song, pick a look, and watch it move. This is the full web version, with a watermark. Exporting works in Chrome and Edge.</p>
-  <iframe id="app" src="app.html" title="Afterhours web version" loading="lazy" style="width:min(1500px,calc(100vw - 40px));height:calc(100vh - 24px);height:min(960px,calc(100svh - 24px));min-height:560px;border:0;border-radius:18px;background:#07030d;display:block;position:relative;left:50%;transform:translateX(-50%);box-shadow:0 0 0 1px #2a1b45"></iframe>
+  <iframe id="app" src="app.html" allow="fullscreen" allowfullscreen title="Afterhours web version" loading="lazy" style="width:min(1500px,calc(100vw - 40px));height:calc(100vh - 24px);height:min(960px,calc(100svh - 24px));min-height:560px;border:0;border-radius:18px;background:#07030d;display:block;position:relative;left:50%;transform:translateX(-50%);box-shadow:0 0 0 1px #2a1b45"></iframe>
   <p class="note" style="margin-top:10px">Prefer a bigger view? <a href="app.html">Open it full screen</a>.</p>
 </section>
 
@@ -205,5 +201,3 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
   document.getElementById('dlbtn').addEventListener('click',function(e){e.preventDefault()});
 })();
 </script>
-
-</body></html>
