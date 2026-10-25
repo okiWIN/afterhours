@@ -534,12 +534,12 @@ body.lock .mth{pointer-events:none}
 <div class="note" id="vlmhint" style="margin:0 0 6px;color:#9fb0e8"></div>
 <textarea id="vlyr" rows="6" spellcheck="false" placeholder="[00:12.50] First line of the song&#10;[00:15.80] Next line&#10;&#10;…or paste plain lines and press Tap timing" style="width:100%;box-sizing:border-box;resize:vertical;background:linear-gradient(180deg,#07080c,#10121a);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:12px/1.5 var(--mono);padding:7px 9px;box-shadow:inset 0 1px 3px #000"></textarea>
 <div class="row" style="margin-top:6px;gap:6px"><label class="chip" style="cursor:pointer" data-tip="Open an .lrc lyrics file with timings (you can find these online or make one with Tap timing).">Load .lrc<input type="file" id="vlrcf" accept=".lrc,.txt,text/plain" style="display:none"></label><button class="chip" id="vtap" type="button" data-tip="Time plain lyrics yourself: the song starts from the beginning and you press Space when each line starts.">Tap timing</button><button class="chip" id="vlrcx" type="button" data-tip="Remove the lyrics and turn them off.">Clear</button></div>
-<div class="row" style="margin-top:6px;gap:6px;align-items:center"><button class="chip" id="vauto" type="button" data-tip="AUTO-DETECT: listens to the loaded song and writes the lyrics with timing for every word (speech recognition that runs on your own computer). The first time it downloads a speech model.">✦ Auto-detect lyrics</button><select id="vamodel" style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px" data-tip="Fast: smaller model, quicker (about 80 MB download). Accurate: bigger model, better on fast or unclear vocals (about 250 MB)."><option value="Xenova/whisper-base">Fast</option><option value="Xenova/whisper-small">Accurate</option></select><select id="valang" style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px" data-tip="The language that is sung. Auto guesses it, but picking it gives better results."><option value="">Auto language</option><option value="english">English</option><option value="norwegian">Norwegian</option><option value="swedish">Swedish</option><option value="danish">Danish</option><option value="spanish">Spanish</option><option value="french">French</option><option value="german">German</option><option value="japanese">Japanese</option><option value="korean">Korean</option></select><span class="note" id="vlinfo" style="margin:0 0 0 6px;flex:1"></span></div>
+<div class="row" style="margin-top:6px;gap:6px;align-items:center"><button class="chip" id="vauto" type="button" data-tip="AUTO-DETECT: listens to the loaded song and writes the lyrics with timing for every word (speech recognition that runs on your own computer). Uses the most accurate model, on your graphics card when possible. The first time it downloads the speech model.">✦ Auto-detect lyrics</button><select id="valang" style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px" data-tip="The language that is sung. Auto guesses it, but picking it gives better results."><option value="">Auto language</option><option value="english">English</option><option value="norwegian">Norwegian</option><option value="swedish">Swedish</option><option value="danish">Danish</option><option value="spanish">Spanish</option><option value="french">French</option><option value="german">German</option><option value="japanese">Japanese</option><option value="korean">Korean</option></select><span class="note" id="vlinfo" style="margin:0 0 0 6px;flex:1"></span></div>
 </div>
 <div id="vtapbox" style="display:none;margin-top:8px;padding:10px;border:1px solid #4d5fd6;border-radius:5px;background:#0d1120"><div class="lb" style="margin-bottom:6px">Tap timing</div><div id="vtapline" style="font:15px var(--mono);color:#fff;margin-bottom:8px">–</div><div class="row" style="gap:6px"><button class="chip on" id="vtapgo" type="button">Tap (Space)</button><button class="chip" id="vtapback" type="button">Undo</button><button class="chip" id="vtapstop" type="button">Done (Esc)</button></div></div>
 <details style="margin-top:10px;border:1px solid #262b3d;border-radius:5px;padding:7px 10px;background:#0b0d14"><summary style="cursor:pointer;font:12px var(--mono);color:#dfe6ff">How lyrics work</summary>
 <div class="note" style="margin:8px 0 2px;line-height:1.6">
-<b>Easiest: ✦ Auto-detect lyrics.</b> Load a song, pick the language and press the button. The app listens to the vocals and writes every line with timing for each word – it runs on your own computer, the first time it downloads a speech model. Check the text afterwards: fast rap, autotune and heavy effects can give wrong words, which you can just correct in the box.<br>
+<b>Easiest: ✦ Auto-detect lyrics.</b> Load a song, pick the language and press the button. It uses the most accurate speech model (Whisper large-v3-turbo) on your graphics card – the first download is big (around 1–1.5 GB) but only happens once. The app listens to the vocals and writes every line with timing for each word – it runs on your own computer, the first time it downloads a speech model. Check the text afterwards: fast rap, autotune and heavy effects can give wrong words, which you can just correct in the box.<br>
 <b>1. Or add them yourself.</b> Either load an <b>.lrc</b> file (lines like <code>[00:12.50] text</code>), paste one in the box, or paste plain lines, one line per row.<br>
 <b>2. Time them (plain lines only).</b> Press <b>Tap timing</b>. The song restarts from the beginning. Press <b>Space</b> exactly when each line starts. <b>Backspace</b> undoes the last tap, <b>Esc</b> or <b>Done</b> finishes. The timings are written into the box, so you can fine-tune them by hand.<br>
 <b>3. Choose how they are shown.</b><br>
@@ -2503,9 +2503,9 @@ const atime=()=>OFF?OFF.t:(audio&&!isNaN(audio.currentTime)?audio.currentTime:0)
 /* nåværende linje/ord */
 window.lyrText=()=>{if(VLM==='off'||!VLYR.length)return null;const t=atime();let i=-1;for(let k=0;k<VLYR.length;k++){if(VLYR[k].t<=t)i=k;else break}if(i<0)return null;
   const L=VLYR[i],nx=VLYR[i+1],end=nx?nx.t:L.t+6;if(t>end||t-L.t>12||!L.text)return null;
-  if(VLM==='line')return L.text;
-  if(L.words){let w=L.words[0].w;for(const x of L.words)if(x.t<=t)w=x.w;return w}
-  const ws=L.text.split(/\s+/).filter(Boolean),span=Math.min(end-L.t,Math.max(1.2,ws.length*.45)),k=Math.min(ws.length-1,Math.floor((t-L.t)/span*ws.length));return ws[Math.max(0,k)]||null};
+  if(VLM==='line')return L.text.toUpperCase();
+  if(L.words){let w=L.words[0].w;for(const x of L.words)if(x.t<=t)w=x.w;return w.toUpperCase()}
+  const ws=L.text.split(/\s+/).filter(Boolean),span=Math.min(end-L.t,Math.max(1.2,ws.length*.45)),k=Math.min(ws.length-1,Math.floor((t-L.t)/span*ws.length));return (ws[Math.max(0,k)]||'').toUpperCase()||null};
 window.lyrAll=()=>VLYR.map(l=>l.text).join('');
 /* Tap timing */
 const box=$('#vtapbox'),ln=$('#vtapline');let T=null;
@@ -2524,8 +2524,11 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
    Lyden gjøres mono, filtreres mot vokalområdet og resamples til 16 kHz, kjøres i 30 s vinduer med overlapp, og ordene grupperes i linjer med ordtider (LRC) ===== */
 const TFX='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2/dist/transformers.min.js';let asrP=null,asrM='',asrRun=false,asrStop=false;
 const lrcT=s=>{const m=Math.floor(s/60),x=s-m*60;return String(m).padStart(2,'0')+':'+(x<10?'0':'')+x.toFixed(2)};
-async function getAsr(model,say){if(asrP&&asrM===model)return asrP;asrM=model;asrP=(async()=>{const T=await import(TFX);T.env.allowLocalModels=false;
-    const seen={};return T.pipeline('automatic-speech-recognition',model,{dtype:'q8',device:'wasm',progress_callback:p=>{if(p.status==='progress'&&p.total>1e6){seen[p.file]=[p.loaded,p.total];let a=0,b=0;for(const k in seen){a+=seen[k][0];b+=seen[k][1]}say('Downloading the speech model (first time only)… '+Math.round(a/1048576)+' / '+Math.round(b/1048576)+' MB')}}})})();
+/* beste modell: Whisper large-v3-turbo (med ordtider) på skjermkortet via WebGPU. Uten WebGPU: Whisper small på prosessoren */
+async function hasGPU(){try{return !!(navigator.gpu&&await navigator.gpu.requestAdapter())}catch(e){return false}}
+async function getAsr(say){if(asrP)return asrP;asrP=(async()=>{const T=await import(TFX);T.env.allowLocalModels=false;const gpu=await hasGPU();asrM=gpu?'gpu':'cpu';
+    const model=gpu?'onnx-community/whisper-large-v3-turbo_timestamped':'Xenova/whisper-small',o=gpu?{device:'webgpu',dtype:{encoder_model:'fp16',decoder_model_merged:'q4'}}:{device:'wasm',dtype:'q8'};
+    const seen={};return T.pipeline('automatic-speech-recognition',model,{...o,progress_callback:p=>{if(p.status==='progress'&&p.total>1e6){seen[p.file]=[p.loaded,p.total];let a=0,b=0;for(const k in seen){a+=seen[k][0];b+=seen[k][1]}say('Downloading the speech model (first time only)… '+Math.round(a/1048576)+' / '+Math.round(b/1048576)+' MB')}}})})();
   try{return await asrP}catch(e){asrP=null;throw e}}
 function linesFrom(W){/* ord → linjer: ny linje ved pause, punktum, 7 ord eller 4,5 s */const L=[];let cur=[];
   W.forEach((w,i)=>{const pv=cur[cur.length-1];if(pv&&(w.t-pv.e>.7||/[.!?]$/.test(pv.w)||cur.length>=7||w.t-cur[0].t>4.5)){L.push(cur);cur=[]}cur.push(w)});if(cur.length)L.push(cur);
@@ -2540,18 +2543,18 @@ $('#vauto').onclick=async()=>{const btn=$('#vauto');if(asrRun){asrStop=true;info
     const N=Math.ceil(buf.duration*16000),oc=new OfflineAudioContext(1,N,16000),src=oc.createBufferSource();src.buffer=buf;
     const hp=oc.createBiquadFilter();hp.type='highpass';hp.frequency.value=130;const lp=oc.createBiquadFilter();lp.type='lowpass';lp.frequency.value=7500;src.connect(hp);hp.connect(lp);lp.connect(oc.destination);src.start();
     const pcm=(await oc.startRendering()).getChannelData(0);
-    say('Loading the speech model…');const asr=await getAsr($('#vamodel').value,say);
+    say('Loading the speech model…');const asr=await getAsr(say);
     const lang=$('#valang').value,WL=30,ST=25,words=[];let last=-1;
     for(let w0=0;w0<buf.duration;w0+=ST){if(asrStop)throw new Error('stopped');
       const a=Math.floor(w0*16000),seg=pcm.subarray(a,Math.min(pcm.length,a+WL*16000));let rms=0;for(let i=0;i<seg.length;i+=8)rms+=seg[i]*seg[i];rms=Math.sqrt(rms/(seg.length/8));
-      say('Listening… '+mmss(Math.min(buf.duration,w0+WL))+' / '+mmss(buf.duration)+' ('+Math.round(Math.min(1,(w0+WL)/buf.duration)*100)+' %)');await new Promise(r=>setTimeout(r,0));
+      say('Listening'+(asrM==='gpu'?' (graphics card)':' (processor – slower)')+'… '+mmss(Math.min(buf.duration,w0+WL))+' / '+mmss(buf.duration)+' ('+Math.round(Math.min(1,(w0+WL)/buf.duration)*100)+' %)');await new Promise(r=>setTimeout(r,0));
       if(rms<.004)continue;
       const opt={return_timestamps:'word',task:'transcribe'};if(lang)opt.language=lang;let out;
       try{out=await asr(seg,opt)}catch(e){/* modellen uten ordtider: bruk linjetider og fordel ordene */const o2={return_timestamps:true,task:'transcribe'};if(lang)o2.language=lang;out=await asr(seg,o2);
         out.chunks=(out.chunks||[]).flatMap(c=>{const ws=c.text.trim().split(/\s+/).filter(Boolean),a=c.timestamp[0]||0,b=c.timestamp[1]||a+2;return ws.map((w,k)=>({text:w,timestamp:[a+(b-a)*k/ws.length,a+(b-a)*(k+1)/ws.length]}))})}
       const lo=w0===0?0:2.5,hi=w0+WL>=buf.duration?1e9:WL-2.5;
       (out.chunks||[]).forEach(c=>{const t=c.timestamp[0],e=c.timestamp[1]==null?t+.4:c.timestamp[1],w=(c.text||'').trim();if(t==null||t<lo||t>=hi||!w)return;
-        if(/[♪\[\]()*]/.test(w)||e-t>4)return;const T=w0+t;if(T<=last)return;last=T;words.push({t:T,e:w0+e,w})})}
+        if(/[♪\[\]()*]/.test(w)||e-t>4)return;const T=w0+t;if(T<=last)return;last=T;words.push({t:T,e:w0+e,w:w.toUpperCase()})})}
     /* fjern typiske «hallusinasjoner» (samme frase gjentatt mange ganger i en instrumental del) */
     const clean=[];words.forEach(w=>{const k=clean.length;if(k>=6&&clean.slice(k-6).every(x=>x.w.toLowerCase()===w.w.toLowerCase()))return;clean.push(w)});
     if(!clean.length){say('No vocals were found in this song.');return}
