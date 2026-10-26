@@ -460,6 +460,7 @@ body.lock .mth{pointer-events:none}
 @media(max-width:980px){#scn{grid-template-columns:repeat(5,1fr)}}
 
 #odz.ovoff{opacity:.55}
+html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}html.lowp .slot b,html.lowp #ttl,html.lowp .kv{animation:none!important}
 </style>
 </head>
 <body>
@@ -476,7 +477,7 @@ body.lock .mth{pointer-events:none}
 </div>
 <div id="stage"><canvas id="cv"></canvas><button id="fsb" type="button" aria-label="Full screen" data-tip="FULL SCREEN: show the video on the whole screen. Press Esc or F to exit."><svg viewBox="0 0 20 20" aria-hidden="true"><g class="in" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5"/></g><g class="out" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 3v4.5H3M17 7.5h-4.5V3M12.5 17v-4.5H17M3 12.5h4.5V17"/></g></svg></button><div id="tag" style="display:none">demo · 120 bpm</div><div id="bar"></div></div>
 <div class="cells">
-<div class="field fcell" data-tip="Filter laid over the whole picture. Turn the knob to set how strong it is."><div class="fl"><span class="lb">Filter</span><div class="row"><button class="chip on" data-fl="0">None</button><button class="chip" data-fl="1">VHS</button><button class="chip" data-fl="2">CRT</button><button class="chip" data-fl="3">Glitch</button><button class="chip" data-fl="4">Film</button></div></div><div class="kin"><div class="knob xs" id="kFa" data-def="10" tabindex="0" role="slider" aria-label="Filter strength" data-for="fa" data-tip="FILTER STRENGTH: how strong the VHS, CRT, Glitch or Film filter is."><div class="cap"></div></div><span class="lb">Strength</span><span class="kv" id="vFa">70</span></div></div>
+<div class="field fcell" data-tip="Filter laid over the whole picture. Turn the knob to set how strong it is."><div class="fl"><span class="lb">Filter</span><div class="row"><button class="chip on" data-fl="0">None</button><button class="chip" data-fl="1">VHS</button><button class="chip" data-fl="2">CRT</button><button class="chip" data-fl="3">Glitch</button><button class="chip" data-fl="4">Film</button><button class="chip" data-fl="5" data-tip="HANDHELD: 90s pocket console LCD – chunky pixels, four shades of green with dithering, a visible pixel grid and glare on the screen.">Handheld</button><button class="chip" data-fl="6" data-tip="THERMAL: heat camera – dark purple to red, yellow and white by brightness.">Thermal</button><button class="chip" data-fl="7" data-tip="NIGHT VISION: grainy green night scope with a round mask.">Night vision</button><button class="chip" data-fl="8" data-tip="ASCII: the picture is built from text characters, like an old terminal.">ASCII</button><button class="chip" data-fl="9" data-tip="HALFTONE: printed magazine dots.">Halftone</button><button class="chip" data-fl="10" data-tip="INFRARED: pink and red false colors like infrared film.">Infrared</button><button class="chip" data-fl="11" data-tip="SECURITY CAM: low-res black and white CCTV with fisheye and a blinking REC light.">Security cam</button><button class="chip" data-fl="12" data-tip="KALEIDOSCOPE: the picture mirrored into 8 slices around the center.">Kaleido</button><button class="chip" data-fl="13" data-tip="LED WALL: the picture shown as glowing LED dots, like a big club screen.">LED wall</button></div></div><div class="kin"><div class="knob xs" id="kFa" data-def="10" tabindex="0" role="slider" aria-label="Filter strength" data-for="fa" data-tip="FILTER STRENGTH: how strong the VHS, CRT, Glitch or Film filter is."><div class="cap"></div></div><span class="lb">Strength</span><span class="kv" id="vFa">70</span></div></div>
 <div class="field fx3"><span class="lb">Effects</span><div class="fxg"><div class="fxc"><label class="t" data-tip="LASERS: thin beams from the center that flash on snares, claps and hi-hats (Particles, Orbits, Organic)."><input type="checkbox" id="laser"> Lasers</label><div class="kin2"><div class="knob xs" id="kLb" data-def="0" tabindex="0" role="slider" data-for="lzb" data-tip="LASER BLUR: echo only on the laser beams. Double-click to turn it off."><div class="cap"></div></div><span class="lb">Blur</span><span class="kv" id="vLb">100</span></div></div><div class="fxc"><label class="t" data-tip="STROBE: the background flashes on snares and claps."><input type="checkbox" id="strobe" checked> Strobe</label></div><div class="fxc"><label class="t" data-tip="GLOW: the soft light around everything (bloom)."><input type="checkbox" id="fxon" checked> Glow</label><div class="kin2"><div class="knob xs" id="kGl" data-def="50" tabindex="0" role="slider" data-for="glw" data-tip="GLOW AMOUNT: how much light bleeds around the shapes. Double-click for default."><div class="cap"></div></div><span class="lb">Amount</span><span class="kv" id="vGl">50</span></div></div></div></div>
 <div class="field colf" style="grid-column:1/-1" data-tip="Color palette. Custom lets you pick 1 to 3 colors of your own."><span class="lb">Colors</span><div id="orbpw" data-tip="ORBITS PRESET: Classic is the dot patterns. Geometry draws sacred geometry (Flower of Life, Metatron, Sri Yantra…)."><span class="lb">Preset</span><div class="row"><button class="chip on" data-op="classic">Classic</button><button class="chip" data-op="geo">Geometry</button></div></div><div><div class="row" id="pals"><button class="chip on" data-p="rave">Rave</button><button class="chip" data-p="inferno">Inferno</button><button class="chip" data-p="toxic">Toxic</button><button class="chip" data-p="ice">Ice</button><button class="chip" data-p="synth">Synth</button><button class="chip" data-p="bw">B&amp;W</button><button class="chip" data-p="custom">Custom</button></div>
 <div class="row" id="cust" style="display:none;margin-top:8px;gap:10px"><span class="lb">Count</span><button class="chip" data-cn="1">1</button><button class="chip" data-cn="2">2</button><button class="chip on" data-cn="3">3</button><label class="t"><span id="cl1">60 %</span><input type="color" id="c1" value="#ff2bd6"></label><label class="t" id="cw2"><span id="cl2">30 %</span><input type="color" id="c2" value="#2bd9ff"></label><label class="t" id="cw3"><span id="cl3">10 %</span><input type="color" id="c3" value="#ffffff"></label><button class="chip" id="crnd" data-tip="Random: picks a well-known 60-30-10 color combination.">Random</button><span id="cname" class="lb" style="letter-spacing:.08em"></span></div></div></div>
@@ -604,6 +605,8 @@ Between lines (and before the first one) Void goes back to the Words. Kicks stil
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script>
 const $=s=>document.querySelector(s), add=THREE.AdditiveBlending;
+/* mobil/svak maskin: lavere forhåndsvisning, halv bloom, færre DOM-oppdateringer */
+var LOWP=(()=>{try{return matchMedia('(pointer:coarse)').matches||innerWidth<820||(navigator.deviceMemory&&navigator.deviceMemory<=4)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4)}catch(e){return false}})();if(LOWP)document.documentElement.classList.add('lowp');
 const cv=$('#cv'), R=new THREE.WebGLRenderer({canvas:cv,antialias:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
 R.setPixelRatio(1);
 const S=new THREE.Scene(); S.fog=new THREE.FogExp2(0x050109,.03);
@@ -1344,7 +1347,7 @@ var comp=null,rp,bloom,fx,trail=null,ovP=null,lzP=null,fxOn=true,FM=0,FA=.7,BL=0
 try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.RenderPass){
   comp=new THREE.EffectComposer(R);comp.setSize(FW,FH);
   rp=new THREE.RenderPass(S,cam);comp.addPass(rp);
-  bloom=new THREE.UnrealBloomPass(new THREE.Vector2(FW,FH),.7,.6,.25);comp.addPass(bloom);
+  bloom=new THREE.UnrealBloomPass(new THREE.Vector2(FW,FH),.7,.6,.25);if(LOWP){const bs=bloom.setSize.bind(bloom);bloom.setSize=(w,h)=>bs(Math.max(2,w>>1),Math.max(2,h>>1));bloom.setSize(FW,FH)}comp.addPass(bloom);
   /* Blur/ekko: forrige bilde blandes inn, uskarpt og svakere, som en etterklang for det visuelle */
   class TrailPass extends THREE.Pass{
     constructor(w,h){super();this.needsSwap=true;this.fresh=true;
@@ -1363,14 +1366,17 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
   trail=new TrailPass(FW,FH);trail.enabled=false;comp.addPass(trail);
   lzP=new THREE.RenderPass(LZC,oc);lzP.clear=false;lzP.enabled=false;comp.addPass(lzP);
   ovP=new THREE.RenderPass(OVC,oc);ovP.clear=false;ovP.enabled=false;comp.addPass(ovP);
-  fx=new THREE.ShaderPass({uniforms:{tDiffuse:{value:null},t:{value:0},ft:{value:0},k:{value:0},vg:{value:0},fm:{value:0},fa:{value:.7},sn:{value:0},rs:{value:new THREE.Vector2(1920,1080)}},
+  /* tegn-atlas til ASCII-filteret: 10 tegn fra tomt til fullt, i monospace */
+  const GA=document.createElement('canvas');GA.width=640;GA.height=64;const gaT=new THREE.CanvasTexture(GA);gaT.minFilter=gaT.magFilter=THREE.LinearFilter;gaT.generateMipmaps=false;
+  const drawGA=()=>{const g=GA.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,640,64);g.fillStyle='#fff';g.textAlign='center';g.textBaseline='middle';g.font='700 52px "Space Mono","Courier New",monospace';' .:-=+*#%@'.split('').forEach((c,i)=>g.fillText(c,i*64+32,34));gaT.needsUpdate=true};drawGA();if(document.fonts)document.fonts.ready.then(drawGA);
+  fx=new THREE.ShaderPass({uniforms:{ga:{value:gaT},tDiffuse:{value:null},t:{value:0},ft:{value:0},k:{value:0},vg:{value:0},fm:{value:0},fa:{value:.7},sn:{value:0},rs:{value:new THREE.Vector2(1920,1080)}},
     vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader:[
-    'uniform sampler2D tDiffuse;uniform float t;uniform float ft;uniform float k;uniform float vg;uniform float fm;uniform float fa;uniform float sn;uniform vec2 rs;varying vec2 vUv;',
+    'uniform sampler2D ga;uniform sampler2D tDiffuse;uniform float t;uniform float ft;uniform float k;uniform float vg;uniform float fm;uniform float fa;uniform float sn;uniform vec2 rs;varying vec2 vUv;',
     'float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233))+t)*43758.5453);}',
     'float h2(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}',
     'void main(){',
-    ' float f1=step(.5,fm)*step(fm,1.5),f2=step(1.5,fm)*step(fm,2.5),f3=step(2.5,fm)*step(fm,3.5),f4=step(3.5,fm);',
+    ' float f1=step(.5,fm)*step(fm,1.5),f2=step(1.5,fm)*step(fm,2.5),f3=step(2.5,fm)*step(fm,3.5),f4=step(3.5,fm)*step(fm,4.5),f5=step(4.5,fm)*step(fm,5.5);float F=floor(fm+.5);',
     ' vec2 uv=vUv,c0=vUv-.5;float d=length(c0);',
     ' float oob=1.;',
     ' if(f2>.5){float r2=dot(c0,c0);uv=.5+c0*(1.+r2*.22*fa);oob=step(0.,uv.x)*step(uv.x,1.)*step(0.,uv.y)*step(uv.y,1.);}',
@@ -1379,6 +1385,12 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
     '  uv.x+=fa*(sin(uv.y*30.+ft*2.)*.0014+band*jr*.035+bot*jr*.12);}',
     ' float bl=0.;',
     ' if(f3>.5){float blk=floor(uv.y*14.),rr=h2(vec2(blk,floor(ft*18.)));float on=step(.93-sn*.3,rr);uv.x+=fa*on*(h2(vec2(blk,floor(ft*18.)+9.))-.5)*.12*(.3+sn);bl=fa*(.004+sn*.012);}',
+    ' if(F==12.){vec2 q=uv-.5;q.x*=rs.x/rs.y;float a=atan(q.y,q.x)+ft*.05,r=length(q),sg=6.2832/8.;a=mod(a,sg);a=abs(a-sg*.5);q=vec2(cos(a),sin(a))*r;q.x*=rs.y/rs.x;uv=.5+q;}',
+    ' if(F==11.){float r2=dot(c0,c0);uv=.5+c0*(1.-r2*.35);}',
+    ' vec2 cell=vec2(1.);if(f5>.5)cell=vec2(rs.y/150.);if(F==8.)cell=vec2(rs.y/62.,rs.y/62.*1.6);if(F==9.)cell=vec2(rs.y/110.);if(F==11.)cell=vec2(rs.y/240.);if(F==13.)cell=vec2(rs.y/80.);',
+    ' vec2 hfp=vec2(.5);',
+    ' if(F==9.){vec2 P=vUv*rs;vec2 q=mat2(.7071,-.7071,.7071,.7071)*P/cell.x;hfp=fract(q);vec2 qc=(floor(q)+.5)*cell.x;uv=(mat2(.7071,.7071,-.7071,.7071)*qc)/rs;}',
+    ' else if(cell.x>1.)uv=(floor(uv*rs/cell)+.5)*cell/rs;',
     ' if(f4>.5){uv+=fa*vec2(h2(vec2(floor(ft*24.),3.))-.5,h2(vec2(floor(ft*24.),4.))-.5)*.0025;}',
     ' if(f1>.5)bl=fa*.0035;',
     ' vec2 o=c0*d*(.012+k*.03)+vec2(bl,0.);',
@@ -1388,6 +1400,37 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
     ' if(f1>.5){float lm=dot(col,vec3(.299,.587,.114));col=mix(col,vec3(lm),fa*.18);col=col*(1.-.07*fa)+.035*fa;col*=1.-fa*.12*(.5+.5*sin(uv.y*270.*6.2832));col+=(h(vUv*vec2(rs.x/4.,rs.y/2.))-.5)*.11*fa;}',
     ' if(f2>.5){float sc=.5+.5*sin(uv.y*360.*6.2832);col*=1.-fa*.22*sc;col*=1.-fa*dot(c0,c0)*1.6;col*=1.+fa*.12;col*=1.+fa*.03*sin(ft*60.);col*=oob;}',
     ' if(f4>.5){col+=(h(vUv*rs/1.5)-.5)*.16*fa;col*=mix(vec3(1.),vec3(1.05,1.,.9),fa);col=mix(col,col*col*(3.-2.*col),fa*.5);col*=1.+fa*.05*(h2(vec2(floor(ft*24.),1.))-.5);float sx=h2(vec2(floor(ft*8.),2.));col+=.25*fa*step(.5,h2(vec2(floor(ft*8.),5.)))*smoothstep(.0015,0.,abs(uv.x-sx));}',
+    ' if(f5>.5){',
+    '  vec2 pp=vUv*rs/cell;vec2 ip=floor(pp),fp=fract(pp);',
+    '  float lm=dot(col,vec3(.299,.587,.114));lm=pow(clamp(lm*1.15,0.,1.),.85);',
+    '  int bx=int(mod(ip.x,4.)),by=int(mod(ip.y,4.));float bay=0.;',
+    '  if(by==0)bay=bx==0?0.:bx==1?8.:bx==2?2.:10.;else if(by==1)bay=bx==0?12.:bx==1?4.:bx==2?14.:6.;else if(by==2)bay=bx==0?3.:bx==1?11.:bx==2?1.:9.;else bay=bx==0?15.:bx==1?7.:bx==2?13.:5.;',
+    '  float q=clamp(floor(lm*3.+(bay/16.-.5)*.9+.5),0.,3.);',
+    '  vec3 p0=vec3(.06,.13,.07),p1=vec3(.19,.33,.15),p2=vec3(.47,.62,.24),p3=vec3(.74,.82,.42);',
+    '  vec3 lcd=q<.5?p0:q<1.5?p1:q<2.5?p2:p3;',
+    '  float gx=smoothstep(0.,.12,fp.x)*smoothstep(1.,.88,fp.x),gy=smoothstep(0.,.12,fp.y)*smoothstep(1.,.88,fp.y);lcd*=mix(.78,1.,gx*gy);',
+    '  lcd*=.9+.1*smoothstep(1.1,.2,length(vUv-.5));',
+    '  float gl=smoothstep(.0,.5,vUv.x+vUv.y*.6-.35)*smoothstep(1.,.55,vUv.x+vUv.y*.6-.35);lcd+=vec3(.05,.06,.04)*gl;',
+    '  lcd+=(h2(floor(vUv*rs/2.))-.5)*.025;',
+    '  col=mix(col,lcd,clamp(.5+fa*.7,0.,1.));}',
+    ' {vec2 pp=vUv*rs/cell,fp=fract(pp);float lm=dot(col,vec3(.299,.587,.114));vec3 o=col;',
+    ' if(F==6.){vec3 bl=(texture2D(tDiffuse,uv+vec2(3.,0.)/rs).rgb+texture2D(tDiffuse,uv-vec2(3.,0.)/rs).rgb+texture2D(tDiffuse,uv+vec2(0.,3.)/rs).rgb+texture2D(tDiffuse,uv-vec2(0.,3.)/rs).rgb)*.25;float x=clamp(mix(lm,dot(bl,vec3(.299,.587,.114)),.45)*1.25+.04,0.,1.);',
+    '  vec3 c1=vec3(.01,0.,.05),c2=vec3(.2,0.,.42),c3=vec3(.62,0.,.55),c4=vec3(.95,.12,.12),c5=vec3(1.,.55,0.),c6=vec3(1.,.92,.25),c7=vec3(1.);',
+    '  float y=x*6.;o=y<1.?mix(c1,c2,y):y<2.?mix(c2,c3,y-1.):y<3.?mix(c3,c4,y-2.):y<4.?mix(c4,c5,y-3.):y<5.?mix(c5,c6,y-4.):mix(c6,c7,y-5.);o+=(h(vUv*rs/2.)-.5)*.03;}',
+    ' if(F==7.){vec3 bl=(texture2D(tDiffuse,uv+vec2(4.,0.)/rs).rgb+texture2D(tDiffuse,uv-vec2(4.,0.)/rs).rgb+texture2D(tDiffuse,uv+vec2(0.,4.)/rs).rgb+texture2D(tDiffuse,uv-vec2(0.,4.)/rs).rgb)*.25;',
+    '  float x=pow(lm,.65)*1.25+dot(bl,vec3(.3,.6,.1))*.6+.06;x+=(h(vUv*rs/1.5)-.5)*.22;x*=1.+.06*(h2(vec2(floor(ft*24.),7.))-.5);',
+    '  o=mix(vec3(.0,.06,.02),vec3(.45,1.,.4),clamp(x,0.,1.))*min(1.4,x+.2);o+=vec3(.6,1.,.6)*pow(max(0.,x-.85),2.)*2.;',
+    '  float rr=length((vUv-.5)*vec2(rs.x/rs.y,1.));o*=smoothstep(.6,.48,rr);o+=vec3(.0,.08,.02)*smoothstep(.48,.6,rr)*smoothstep(.64,.6,rr);o*=.93+.07*sin(vUv.y*rs.y*2.1);}',
+    ' if(F==8.){float id=floor(clamp(pow(lm,.55)*1.9,0.,.999)*10.);float ch=texture2D(ga,vec2((id+clamp(fp.x,.04,.96))/10.,clamp(fp.y,.02,.98))).r;',
+    '  vec3 tint=mix(vec3(.6,1.,.65),col/max(.15,max(col.r,max(col.g,col.b))),.55);o=tint*ch*(1.+lm*1.6)+vec3(0.,.025,.01);}',
+    ' if(F==9.){vec2 g=hfp-.5;float r=sqrt(clamp(lm*1.15,0.,1.))*.68;float aa=1.2/cell.x;float dt=smoothstep(r+aa,r-aa,length(g));',
+    '  vec3 ink=col/max(.2,max(col.r,max(col.g,col.b)));vec3 paper=vec3(.05,.045,.07)+(h2(floor(vUv*rs/2.))-.5)*.02;o=mix(paper,ink*1.05,dt);}',
+    ' if(F==10.){o=vec3(col.g*1.2+col.r*.3,col.r*.55+col.b*.2,col.b*.9+col.g*.25);o=mix(o,o*vec3(1.15,.8,1.),.5);}',
+    ' if(F==11.){float x=lm*1.15+.03+(h(vUv*rs/3.)-.5)*.14;float bar=smoothstep(.04,0.,abs(fract(vUv.y-ft*.07)-.5));x+=bar*.06;o=vec3(x*1.0,x*1.06,x*.98)*(.88+.12*sin(vUv.y*rs.y*1.2+ft*20.));o*=1.-dot(c0,c0)*1.8;vec2 rp=vUv*rs/rs.y-vec2(.06,.92);o=mix(o,vec3(1.,.05,.05),step(length(rp),.012)*step(.5,fract(ft*.8)));}',
+    ' if(F==13.){vec2 g=fp-.5;float aa=1.5/cell.x;float d2=length(g);vec3 c=col*1.6;',
+    '  float sub=fp.x*3.;vec3 sp=vec3(smoothstep(1.,.7,sub),smoothstep(.0,.3,sub)*smoothstep(2.,1.7,sub),smoothstep(2.,2.3,sub));c*=mix(vec3(1.),sp*1.6+.25,.35);',
+    '  o=c*smoothstep(.4+aa,.4-aa,d2)+col*.35*smoothstep(.75,.25,d2)+vec3(.01);}',
+    ' if(F>5.5)col=mix(col,o,clamp(.45+fa*.8,0.,1.));}',
     ' col+=(h(vUv*512.)-.5)*.045;',
     ' gl_FragColor=vec4(col,1.);}'
     ].join('\n')});
@@ -1430,20 +1473,20 @@ function onsetB(o,a,b,k,mn,nb){const e=av2(a,b);
   const f=nb?Math.max(0,e-o.p,(e-o.p3)*.6):Math.max(0,e-o.p,(e-o.p3)*.6,fx*.9,fx3*.55);o.p3=o.p2;o.p2=o.p;o.p=e;const n=Math.max(1,o.n);_med.length=0;for(let i=0;i<n;i++)_med.push(o.h[i]);_med.sort((x,y)=>x-y);const md=_med[n>>2]||0;const thr=mn+k*1.7*md;o.h[o.i]=f;o.i=(o.i+1)%o.h.length;o.n=Math.min(o.h.length,o.n+1);return{e,f,thr}}
 let kick=0,snare=0,energy=0,bass=0,mid=0,high=0,bAvg=.3,hPrev=0,fAvg=.02,lastK=-1,lastS=-1,dB=-1,dS=-1,T=0,last=performance.now()/1000;
 const sc=new THREE.Vector3();
-function frame(){requestAnimationFrame(frame);if(OFF)return;psWatch();tick();miniDraw();hwMeter()}
+let frN=0;function frame(){requestAnimationFrame(frame);if(OFF)return;psWatch();tick();frN++;if(!LOWP||frN%2===0){miniDraw();hwMeter()}}
 /* jevnere forhåndsvisning: hvis maskinen ikke holder skjermens bildefrekvens, rendres forhåndsvisningen litt lavere (ned til 60 %) og skrus opp igjen når det er luft.
    Eksport rendres alltid i full oppløsning. */
 var PS=1;let psBW=0,psBH=0,psW=0,psH=0,psT=performance.now(),psBest=1e9,psN=0,psSum=0,psCalm=0;
 function psApply(k){if(!psBW)return;PS=k;FW=Math.round(psBW*k/2)*2;FH=Math.round(psBH*k/2)*2;R.setSize(FW,FH,false);if(comp)comp.setSize(FW,FH);psW=FW;psH=FH}
 window.psFull=()=>{if(PS<1)psApply(1)};
 function psWatch(){const now=performance.now(),d=now-psT;psT=now;
-  if(FW!==psW||FH!==psH){psBW=FW;psBH=FH;psW=FW;psH=FH;PS=1;psN=psSum=psCalm=0;return}
+  if(FW!==psW||FH!==psH){psBW=FW;psBH=FH;psW=FW;psH=FH;PS=1;psN=psSum=psCalm=0;if(LOWP&&!exporting)psApply(.5);return}
   if(exporting){if(PS<1)psApply(1);psN=psSum=0;return}
   if(d>250||document.hidden){psN=psSum=0;return}
   psBest=Math.min(psBest*1.0005,d);psSum+=d;psN++;
   if(psN>=90){const avg=psSum/psN,ratio=avg/Math.max(4,psBest);psN=psSum=0;
-    if(ratio>1.3&&PS>.6){psApply(Math.max(.6,+(PS-.15).toFixed(2)));psCalm=0}
-    else if(ratio<1.08&&PS<1){if(++psCalm>=3){psApply(Math.min(1,+(PS+.15).toFixed(2)));psCalm=0}}else psCalm=0}}
+    const pmin=LOWP?.35:.6,pmax=LOWP?.75:1;if(ratio>1.3&&PS>pmin){psApply(Math.max(pmin,+(PS-.15).toFixed(2)));psCalm=0}
+    else if(ratio<1.08&&PS<pmax){if(++psCalm>=3){psApply(Math.min(pmax,+(PS+.15).toFixed(2)));psCalm=0}}else psCalm=0}}
 var _lzC=null,_mtr=null,_mPk=[0,0,0];function hwMeter(){if(!_mtr){_mtr=[$('#mL'),$('#mM'),$('#mH')];if(!_mtr[0]){_mtr=null;return}}const c=v=>Math.max(0,Math.min(1,v)).toFixed(3);const vv=[Math.max(bassS*.75,kick*.85),Math.max(snare*.9,clap*.9,mid*.6),high*1.3];for(let i=0;i<3;i++){const v=Math.max(0,Math.min(1,vv[i]));_mPk[i]=v>=_mPk[i]?v:Math.max(v,_mPk[i]-.006);_mtr[i].style.setProperty('--v',c(v));_mtr[i].style.setProperty('--p',c(Math.round(_mPk[i]*13)/13))}}
 function tick(){if(exporting)efr++;
   const now=performance.now()/1000,rdt=OFF?OFF.dt:Math.min(.05,now-last),dt=rdt*SPD;last=now;T+=dt;RT+=rdt;
@@ -1964,7 +2007,7 @@ window.mtArrange=function(mode){MT.arr=mode||MT.arr;MT.custom=false;const L=MT.o
 /* ===== tegning ===== */
 let lastFreq=0;
 function panel(g,w,h,S,k){g.shadowColor='transparent';if(MT.bg){const r=7*S;g.fillStyle='rgba(4,5,9,.52)';g.beginPath();g.roundRect?g.roundRect(.5,.5,w-1,h-1,r):g.rect(.5,.5,w-1,h-1);g.fill();g.strokeStyle='rgba(255,255,255,.07)';g.lineWidth=1;g.stroke()}
-  g.fillStyle='rgba(200,208,240,.42)';g.font=FONT(8*S,400);g.textAlign='left';g.textBaseline='alphabetic';if(g.letterSpacing!==undefined)g.letterSpacing=(1.2*S)+'px';g.fillText(LBL[k],8*S,13*S);if(g.letterSpacing!==undefined)g.letterSpacing='0px'}
+  g.fillStyle='rgba(200,208,240,.42)';g.font=FONT(8*S,400);g.textAlign='left';g.textBaseline='alphabetic';if(g.letterSpacing!==undefined)g.letterSpacing=(1.2*S)+'px';/* navn skjult: bare selve meteren vises */if(g.letterSpacing!==undefined)g.letterSpacing='0px'}
 const FX=(f,w)=>Math.log(f/20)/Math.log(1000)*w;
 function dbAt(f,sr){const bf=f/sr*NFFT;if(bf<1)return sdb[1];const b0=Math.floor(bf),fr=bf-b0;if(b0>=HN-1)return sdb[HN-1];return sdb[b0]*(1-fr)+sdb[b0+1]*fr}
 function dbMax(f0,f1,sr){const b0=Math.max(1,Math.floor(f0/sr*NFFT)),b1=Math.min(HN-1,Math.ceil(f1/sr*NFFT));let m=-140;for(let b=b0;b<=b1;b++)if(sdb[b]>m)m=sdb[b];return m}
@@ -2524,11 +2567,20 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
    Lyden gjøres mono, filtreres mot vokalområdet og resamples til 16 kHz, kjøres i 30 s vinduer med overlapp, og ordene grupperes i linjer med ordtider (LRC) ===== */
 const TFX='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2/dist/transformers.min.js';let asrP=null,asrM='',asrRun=false,asrStop=false;
 const lrcT=s=>{const m=Math.floor(s/60),x=s-m*60;return String(m).padStart(2,'0')+':'+(x<10?'0':'')+x.toFixed(2)};
-/* beste modell: Whisper large-v3-turbo (med ordtider) på skjermkortet via WebGPU. Uten WebGPU: Whisper small på prosessoren */
-async function hasGPU(){try{return !!(navigator.gpu&&await navigator.gpu.requestAdapter())}catch(e){return false}}
-async function getAsr(say){if(asrP)return asrP;asrP=(async()=>{const T=await import(TFX);T.env.allowLocalModels=false;const gpu=await hasGPU();asrM=gpu?'gpu':'cpu';
-    const model=gpu?'onnx-community/whisper-large-v3-turbo_timestamped':'Xenova/whisper-small',o=gpu?{device:'webgpu',dtype:{encoder_model:'fp16',decoder_model_merged:'q4'}}:{device:'wasm',dtype:'q8'};
-    const seen={};return T.pipeline('automatic-speech-recognition',model,{...o,progress_callback:p=>{if(p.status==='progress'&&p.total>1e6){seen[p.file]=[p.loaded,p.total];let a=0,b=0;for(const k in seen){a+=seen[k][0];b+=seen[k][1]}say('Downloading the speech model (first time only)… '+Math.round(a/1048576)+' / '+Math.round(b/1048576)+' MB')}}})})();
+/* beste modell først, med automatisk reserve: 1) large-v3-turbo med ordtider på skjermkortet (fp16 hvis kortet støtter det, ellers q4),
+   2) Whisper small på prosessoren (den som virket fra før). Hver modell prøvekjøres på 1 s stillhet før den brukes, så en feil faller videre i stedet for å stoppe */
+let asrErr='';
+async function gpuInfo(){try{if(!navigator.gpu)return null;const a=await navigator.gpu.requestAdapter({powerPreference:'high-performance'});return a?{f16:a.features.has('shader-f16')}:null}catch(e){return null}}
+async function getAsr(say,skipGpu){if(asrP)return asrP;asrP=(async()=>{const T=await import(TFX);T.env.allowLocalModels=false;const g=skipGpu?null:await gpuInfo();
+    const tries=[];if(g)tries.push({tag:'gpu',model:'onnx-community/whisper-large-v3-turbo_timestamped',o:{device:'webgpu',dtype:{encoder_model:g.f16?'fp16':'q4',decoder_model_merged:'q4'}}});
+    tries.push({tag:'cpu',model:'Xenova/whisper-small',o:{device:'wasm',dtype:'q8'}});
+    for(const t of tries){try{const seen={};say(t.tag==='gpu'?'Loading the speech model on your graphics card…':'Loading the speech model on the processor…');
+        const load=(async()=>{const p=await T.pipeline('automatic-speech-recognition',t.model,{...t.o,progress_callback:x=>{if(x.status==='progress'&&x.total>1e6){seen[x.file]=[x.loaded,x.total];let a=0,b=0;for(const k in seen){a+=seen[k][0];b+=seen[k][1]}say(a>=b-1?'Download done. Preparing the model'+(t.tag==='gpu'?' on the graphics card':'')+' – the first time this can take a minute…':'Downloading the speech model (first time only)… '+Math.round(a/1048576)+' / '+Math.round(b/1048576)+' MB')}else if(x.status==='ready'||x.status==='done')say('Preparing the model'+(t.tag==='gpu'?' on the graphics card':'')+' – the first time this can take a minute…')}});
+          say('Testing the model…');await p(new Float32Array(16000),{return_timestamps:'word',max_new_tokens:8});return p})();
+        /* GPU-en får maks 3 minutter på å bli klar etter nedlasting, ellers brukes prosessoren */
+        const p=t.tag==='gpu'?await Promise.race([load,new Promise((_,rj)=>setTimeout(()=>rj(new Error('graphics card did not respond')),180000))]):await load;asrM=t.tag;return p}
+      catch(e){asrErr=String(e&&e.message||e);console.warn('ASR '+t.tag+' failed:',e)}}
+    throw new Error(asrErr||'no speech model could be loaded')})();
   try{return await asrP}catch(e){asrP=null;throw e}}
 function linesFrom(W){/* ord → linjer: ny linje ved pause, punktum, 7 ord eller 4,5 s */const L=[];let cur=[];
   W.forEach((w,i)=>{const pv=cur[cur.length-1];if(pv&&(w.t-pv.e>.7||/[.!?]$/.test(pv.w)||cur.length>=7||w.t-cur[0].t>4.5)){L.push(cur);cur=[]}cur.push(w)});if(cur.length)L.push(cur);
@@ -2537,20 +2589,21 @@ window.lyrLinesFrom=linesFrom;
 $('#vauto').onclick=async()=>{const btn=$('#vauto');if(asrRun){asrStop=true;info.textContent='Stopping…';return}
   if(!loaded||!curFile){info.textContent='Load a song first.';return}
   if(ta.value.trim()&&!confirm('Replace the lyrics in the box with the auto-detected ones?'))return;
-  asrRun=true;asrStop=false;btn.textContent='■ Stop';const say=t=>{info.textContent=t};
+  asrRun=true;asrStop=false;btn.textContent='■ Stop';let base='',t0=performance.now();const say=t=>{base=t;info.textContent=t};const tick=setInterval(()=>{if(base&&!/^(Stopped|No vocals|Could not|Auto-detect failed)/.test(base))info.textContent=base+'  ·  '+Math.round((performance.now()-t0)/1000)+' s'},1000);
   try{say('Preparing the audio…');
     const ac0=new(window.AudioContext||window.webkitAudioContext)(),buf=await ac0.decodeAudioData(await curFile.arrayBuffer());ac0.close();
     const N=Math.ceil(buf.duration*16000),oc=new OfflineAudioContext(1,N,16000),src=oc.createBufferSource();src.buffer=buf;
     const hp=oc.createBiquadFilter();hp.type='highpass';hp.frequency.value=130;const lp=oc.createBiquadFilter();lp.type='lowpass';lp.frequency.value=7500;src.connect(hp);hp.connect(lp);lp.connect(oc.destination);src.start();
     const pcm=(await oc.startRendering()).getChannelData(0);
-    say('Loading the speech model…');const asr=await getAsr(say);
+    say('Loading the speech model…');let asr=await getAsr(say);
     const lang=$('#valang').value,WL=30,ST=25,words=[];let last=-1;
     for(let w0=0;w0<buf.duration;w0+=ST){if(asrStop)throw new Error('stopped');
       const a=Math.floor(w0*16000),seg=pcm.subarray(a,Math.min(pcm.length,a+WL*16000));let rms=0;for(let i=0;i<seg.length;i+=8)rms+=seg[i]*seg[i];rms=Math.sqrt(rms/(seg.length/8));
       say('Listening'+(asrM==='gpu'?' (graphics card)':' (processor – slower)')+'… '+mmss(Math.min(buf.duration,w0+WL))+' / '+mmss(buf.duration)+' ('+Math.round(Math.min(1,(w0+WL)/buf.duration)*100)+' %)');await new Promise(r=>setTimeout(r,0));
       if(rms<.004)continue;
       const opt={return_timestamps:'word',task:'transcribe'};if(lang)opt.language=lang;let out;
-      try{out=await asr(seg,opt)}catch(e){/* modellen uten ordtider: bruk linjetider og fordel ordene */const o2={return_timestamps:true,task:'transcribe'};if(lang)o2.language=lang;out=await asr(seg,o2);
+      try{out=await asr(seg,opt)}catch(e0){if(asrM==='gpu'){console.warn('GPU run failed, switching to processor',e0);asrP=null;asr=await getAsr(say,true);try{out=await asr(seg,opt)}catch(e1){out=null}}}
+      if(!out)try{out=await asr(seg,opt)}catch(e){/* modellen uten ordtider: bruk linjetider og fordel ordene */const o2={return_timestamps:true,task:'transcribe'};if(lang)o2.language=lang;out=await asr(seg,o2);
         out.chunks=(out.chunks||[]).flatMap(c=>{const ws=c.text.trim().split(/\s+/).filter(Boolean),a=c.timestamp[0]||0,b=c.timestamp[1]||a+2;return ws.map((w,k)=>({text:w,timestamp:[a+(b-a)*k/ws.length,a+(b-a)*(k+1)/ws.length]}))})}
       const lo=w0===0?0:2.5,hi=w0+WL>=buf.duration?1e9:WL-2.5;
       (out.chunks||[]).forEach(c=>{const t=c.timestamp[0],e=c.timestamp[1]==null?t+.4:c.timestamp[1],w=(c.text||'').trim();if(t==null||t<lo||t>=hi||!w)return;
@@ -2558,9 +2611,9 @@ $('#vauto').onclick=async()=>{const btn=$('#vauto');if(asrRun){asrStop=true;info
     /* fjern typiske «hallusinasjoner» (samme frase gjentatt mange ganger i en instrumental del) */
     const clean=[];words.forEach(w=>{const k=clean.length;if(k>=6&&clean.slice(k-6).every(x=>x.w.toLowerCase()===w.w.toLowerCase()))return;clean.push(w)});
     if(!clean.length){say('No vocals were found in this song.');return}
-    lyrSet(linesFrom(clean));setMode('word');say(info.textContent+' · auto-detected – check and correct the text if needed')}
-  catch(e){const m=String(e&&e.message||e);say(m==='stopped'?'Stopped.':/fetch|network|Failed to|load|import/i.test(m)?'Could not download the speech model ('+m+'). It needs an internet connection the first time – if it keeps failing here, use the desktop app.':'Auto-detect failed: '+m)}
-  finally{asrRun=false;btn.textContent='✦ Auto-detect lyrics'}};
+    lyrSet(linesFrom(clean));setMode('word');const done=info.textContent.split('  ·  ')[0]+' · auto-detected – check and correct the text if needed';base='';info.textContent=done}
+  catch(e){const m=String(e&&e.message||e);say(m==='stopped'?'Stopped.':/fetch|network|Failed to|load|import/i.test(m)?'Could not download the speech model ('+m+'). It needs an internet connection the first time – if it keeps failing here, use the desktop app.':'Auto-detect failed: '+m+(asrErr&&asrErr!==m?' ('+asrErr+')':''))}
+  finally{clearInterval(tick);asrRun=false;btn.textContent='✦ Auto-detect lyrics'}};
 })();
 </script>
 </body>
