@@ -19,7 +19,10 @@ nav{display:flex;gap:20px;font-size:14px;color:var(--mut)}
 nav a{text-decoration:none}
 nav a:hover{color:var(--ink)}
 .hero{position:relative;border:1px solid var(--line);border-radius:22px;overflow:hidden;min-height:440px;display:flex;align-items:flex-end;background:#000}
-.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero canvas,.hero video{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero video{object-fit:cover;background:#000}
+.badge{display:inline-flex;align-items:center;gap:8px;font:500 11px/1 var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);background:#07030daa;border:1px solid var(--line);border-radius:999px;padding:7px 12px;margin-bottom:16px}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink)}
 .hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,#07030dcc 78%,#07030d)}
 .hero .in{position:relative;padding:clamp(20px,4vw,44px);max-width:720px}
 h1{font:700 clamp(30px,6vw,60px)/1.04 var(--display);margin:0 0 16px;text-wrap:balance;letter-spacing:-.01em}
@@ -63,14 +66,18 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 
 <div class="hero">
   <canvas id="hero" aria-hidden="true"></canvas>
+  <!-- Demo video: upload a file named demo.mp4 next to index.html. Until it exists, the animated tunnel shows instead. -->
+  <video id="demo" src="demo.mp4" autoplay muted loop playsinline preload="auto" aria-label="Afterhours demo video" hidden></video>
   <div class="shade"></div>
   <div class="in">
+    <span class="badge" id="demobadge" hidden><i></i>Made with Afterhours</span>
     <h1>Drop in a beat.<br><em>Get a video that moves with it.</em></h1>
     <p class="lead">Afterhours reads the kick, snare, claps and melody of your track and turns them into immersive 3D visuals, ready to post on YouTube, TikTok and Reels.</p>
     <div class="cta">
-      <a class="btn p" href="#try">Try it now</a>
-      <a class="btn s" href="#get">Get the desktop app</a>
+      <a class="btn p" href="#try" data-goatcounter-click="cta-try-free-hero" data-goatcounter-title="Try it free (hero)">Try it free</a>
+      <a class="btn s" href="#get" data-goatcounter-click="cta-desktop-hero" data-goatcounter-title="Get the desktop app (hero)">Get the desktop app</a>
     </div>
+    <p class="note" style="margin:12px 0 0">Runs in your browser. No sign-up.</p>
   </div>
 </div>
 
@@ -91,7 +98,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
   <h2>Try it right here</h2>
   <p class="sub">Drop in a song, pick a look, and watch it move. This is the full web version, with a watermark. Exporting works in Chrome and Edge.</p>
   <iframe id="app" src="app.html" allow="fullscreen" allowfullscreen title="Afterhours web version" loading="lazy" style="width:min(1500px,calc(100vw - 40px));height:calc(100vh - 24px);height:min(960px,calc(100svh - 24px));min-height:560px;border:0;border-radius:18px;background:#07030d;display:block;position:relative;left:50%;transform:translateX(-50%);box-shadow:0 0 0 1px #2a1b45"></iframe>
-  <p class="note" style="margin-top:10px">Prefer a bigger view? <a href="app.html">Open it full screen</a>.</p>
+  <p class="note" style="margin-top:10px">Prefer a bigger view? <a href="app.html" data-goatcounter-click="open-fullscreen" data-goatcounter-title="Open app full screen">Open it full screen</a>.</p>
 </section>
 
 <section id="why">
@@ -119,7 +126,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     <div class="r"><span>Encoding</span><span>In the browser</span><span>On your graphics card, or the CPU</span></div>
   </div>
   <div class="cta" style="margin-top:24px">
-    <a class="btn s" href="#try" id="webbtn">Try the web version</a>
+    <a class="btn s" href="#try" id="webbtn" data-goatcounter-click="cta-try-free-bottom" data-goatcounter-title="Try it free (bottom)">Try it free</a>
     <!-- TODO: replace # with the download link when the desktop app is ready -->
     <a class="btn p" href="#" aria-disabled="true" id="dlbtn">Download for Windows</a>
     <span class="note">The desktop app is coming soon.</span>
@@ -199,5 +206,11 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
   if(reduce)addEventListener('resize',function(){requestAnimationFrame(frame)});
   /* Appen har fast høyde og scroller inni seg, så forhåndsvisningen kan stå fast mens du justerer */
   document.getElementById('dlbtn').addEventListener('click',function(e){e.preventDefault()});
+  /* Show the demo video once it can play; the tunnel canvas stays as fallback */
+  var v=document.getElementById('demo'),badge=document.getElementById('demobadge');
+  v.addEventListener('canplay',function(){v.hidden=false;badge.hidden=false;var p=v.play();if(p&&p.catch)p.catch(function(){})});
+  v.addEventListener('error',function(){v.remove()});
 })();
 </script>
+<!-- Visitor counter (GoatCounter: free, no cookies). Replace "afterhours" with your own GoatCounter code if it differs. -->
+<script data-goatcounter="https://afterhours.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>

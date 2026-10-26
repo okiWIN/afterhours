@@ -688,7 +688,7 @@ for(let i=0;i<LZN;i++){const m=new THREE.MeshBasicMaterial({transparent:true,opa
   b.frustumCulled=g.frustumCulled=false;LZ.add(b,g);LZB.push({b,g,m,a:i/LZN*6.2832,o:0,sw:Math.random()*6})}
 const _ls=new THREE.Vector3(),_le=new THREE.Vector3();let lzK=0,lzL=-9;
 function laserUpdate(dt){
-  const on=laserOn&&mode==='tunnel'&&hy<.5&&rwS<.5;lzOn=laserOn&&mode==='tunnel';lzK*=Math.exp(-dt*7);if(snT>lzL){lzL=snT;lzK=1}
+  const on=laserOn&&mode==='tunnel'&&hy<.5&&rwS<.5;lzOn=laserOn&&mode==='tunnel'&&(tstyle==='organic'||tstyle==='particles'||tstyle==='orbits');/* lasere finnes bare i disse; ellers blir ekkoet hengende igjen */lzK*=Math.exp(-dt*7);if(snT>lzL){lzL=snT;lzK=1}
   const lv=on?Math.min(1,(lzK*.9+Math.max(0,high*1.4-.25))*(.25+.75*FT)):0;LZ.visible=lv>.003||LZB.some(z=>z.o>.003);if(!LZ.visible)return;
   LZB.forEach((z,i)=>{z.o+=(lv*(.55+.45*Math.sin(T*3+z.sw))-z.o)*(1-Math.exp(-dt*18));
     const a=z.a+roll*.6+Math.sin(T*.7+z.sw)*.45,R=14+Math.sin(T*.9+i)*4;
@@ -1661,7 +1661,12 @@ async function startRec(live){
     const dis=discardRec;discardRec=false;
     $('#exp').classList.remove('busy');$('#exp').disabled=$('#expl').disabled=$('#play').disabled=false;$('#exp').textContent='Export video';$('#expl').textContent='● Live export';$('#play').textContent='▶ Play';
     if(dis){st('Export stopped. Nothing was saved.');return}
-    const blob=new Blob(ch,{type:mt.split(';')[0]}),ext=mt.includes('mp4')?'mp4':'webm';
+    let blob=new Blob(ch,{type:mt.split(';')[0]}),ext=mt.includes('mp4')?'mp4':'webm';
+    /* Nettleseren lagrer videoen i biter uten indeks, så den kan ikke spoles. Pakk den om til en vanlig MP4 med indeksen foran (ingen ny koding, går raskt). */
+    if(!(window.AH&&AH.remux)){st('Finishing the video file…');try{const M=await import('https://cdn.jsdelivr.net/npm/mediabunny@1.61.3/dist/bundles/mediabunny.min.mjs');
+      const output=new M.Output({format:new M.Mp4OutputFormat({fastStart:'in-memory'}),target:new M.BufferTarget()});
+      const conv=await M.Conversion.init({input:new M.Input({source:new M.BlobSource(blob),formats:M.ALL_FORMATS}),output});
+      if(conv.isValid){await conv.execute();blob=new Blob([output.target.buffer],{type:'video/mp4'});ext='mp4'}}catch(e){console.warn('Remux failed, saving the original file',e)}}
     if(DL){try{await DL.save({filename:'afterhours-video.'+ext,data:blob});{const fps=Math.round(efr/((performance.now()-eT)/1000));st('Done! The video is saved. Average '+fps+' frames/s'+(fps<50?'. Your machine could not keep up with 60, try 720p for a smoother video.':'.'))}}catch(e){st('Saving was cancelled. Press export to try again.')}}
     else if(window.AH&&AH.remux){/* desktop: ffmpeg lager en vanlig mp4 med indeks foran, så den kan spoles i alle spillere */
       st('Finishing the video file…');try{const r=await AH.remux({data:new Uint8Array(await blob.arrayBuffer()),mt,name:'afterhours-live.mp4'});
@@ -1750,7 +1755,12 @@ function miniDraw(){if(!miniOn||!mini.width)return;if(Math.abs(mini.width/mini.h
     const a=typeof autoOn!=='undefined'&&autoOn,sub=mode==='image'?'image':tstyle;
     const h=a?'Auto<small>'+(SN[sub]||'')+'</small>':(SN[cur]||'');
     if(h!==lastT){lastT=h;ttl.innerHTML=h}
-    const sty=(typeof autoOn!=='undefined'&&autoOn)?(mode==='tunnel'?tstyle:''):cur,tun=sty==='rings'||sty==='particles'||sty==='orbits'||sty==='organic';const kw=$('#kflw');if(kw&&kw.style.display!==(tun?'':'none'))kw.style.display=tun?'':'none';if((sty==='orbits'||sty==='particles')&&sty!==curPS){curPS=sty;const pi=$('#ptc'),kp=$('#kPt');if(kp)kp.dataset.def=PTKD[sty];pi.value=PTKS[sty];pi.dispatchEvent(new Event('input'))}const ptw=$('#kptw');if(ptw){const pd=(sty==='orbits'||sty==='particles')?'':'none';if(ptw.style.display!==pd)ptw.style.display=pd}const opw=$('#orbpw');if(opw){const od=sty==='orbits'?'flex':'none';if(opw.style.display!==od)opw.style.display=od}const lzc=_lzC||(_lzC=$('#laser')&&$('#laser').closest('.fxc'));if(lzc){const hz=sty==='hyper'||sty==='rings'||sty==='void'||sty==='drift';if(lzc.style.display!==(hz?'none':''))lzc.style.display=hz?'none':''}
+    const sty=(typeof autoOn!=='undefined'&&autoOn)?(mode==='tunnel'?tstyle:''):cur,tun=sty==='rings'||sty==='particles'||sty==='orbits'||sty==='organic';const kw=$('#kflw');if(kw&&kw.style.display!==(tun?'':'none'))kw.style.display=tun?'':'none';if((sty==='orbits'||sty==='particles')&&sty!==curPS){curPS=sty;const pi=$('#ptc'),kp=$('#kPt');if(kp)kp.dataset.def=PTKD[sty];pi.value=PTKS[sty];pi.dispatchEvent(new Event('input'))}const ptw=$('#kptw');if(ptw){const pd=(sty==='orbits'||sty==='particles')?'':'none';if(ptw.style.display!==pd)ptw.style.display=pd}const opw=$('#orbpw');if(opw){const od=sty==='orbits'?'flex':'none';if(opw.style.display!==od)opw.style.display=od}const lzc=_lzC||(_lzC=$('#laser')&&$('#laser').closest('.fxc'));if(lzc){const hz=sty==='hyper'||sty==='rings'||sty==='void'||sty==='drift'||sty==='image';if(lzc.style.display!==(hz?'none':''))lzc.style.display=hz?'none':''}
+    /* Skjul knapper som ikke gjør noe i denne modulen */
+    const shw=(el,on,d)=>{if(!el)return;const v=on?(d||''):'none';if(el.style.display!==v)el.style.display=v};
+    shw($('#strobe')&&$('#strobe').closest('.fxc'),!(sty==='hyper'||sty==='void'||sty==='drift'||sty==='image'));/* strobe lyser bakgrunnen, som disse dekker helt */
+    shw($('#kGl')&&$('#kGl').closest('.kin2'),!(sty==='void'||sty==='drift'||sty==='image'));/* disse har fast glød; på/av virker fortsatt */
+    shw($('#kFa')&&$('#kFa').closest('.kin'),FM>0);/* styrke betyr bare noe når et filter er valgt */
     if(tun&&sty!==curFS){curFS=sty;const fi=$('#fl');fi.value=Math.round(FLKS[sty]/1.5*100);fi.dispatchEvent(new Event('input'))}
     const n=loaded?$('#fn').textContent.replace(/\.[^.]+$/,''):'none';if(trk.textContent!==n)trk.textContent=n;
   },250);
