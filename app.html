@@ -1648,13 +1648,13 @@ var LIVE=false;
   sys.dataset.tip=window.AH?'SYSTEM SOUND: reacts to everything playing on this PC – Spotify, YouTube, games. Nothing extra is played back.':'SYSTEM SOUND: Chrome asks what to share. Pick the tab that plays (e.g. YouTube) and turn on “Share tab audio”, or the entire screen with “Share system audio” (Windows).';
   mic.dataset.tip='MICROPHONE: reacts to sound in the room – speakers, a DJ booth, a live band.';stp.dataset.tip='Stop listening to live audio.';
   const ui=k=>{sys.classList.toggle('on',k==='sys');mic.classList.toggle('on',k==='mic');stp.style.display=k?'':'none';lst.innerHTML=k?'<i></i>LISTENING':''};
-  window.liveStop=quiet=>{if(!ls)return;clearInterval(agc);ls.getTracks().forEach(t=>{t.onended=null;t.stop()});try{lsrc.disconnect();lg.disconnect()}catch(e){}ls=lsrc=lg=null;LIVE=false;try{an.connect(ac.destination)}catch(e){}if(window.mtHook&&window._fsrc)mtHook(ac,_fsrc);ui(null);if(!quiet)st('Live audio stopped.')};
+  window.liveStop=quiet=>{if(!ls)return;clearInterval(agc);ls.getTracks().forEach(t=>{t.onended=null;t.stop()});try{lsrc.disconnect();lg.disconnect()}catch(e){}ls=lsrc=lg=null;LIVE=false;try{an.connect(ac.destination)}catch(e){}if(window.mtHook&&window._fsrc)mtHook(ac,_fsrc);ui(null);if(exporting&&curRec&&curRec.state!=='inactive'&&window._recLV)stopRec(false);else if(!exporting)$('#expl').disabled=!loaded;if(!quiet&&!window._recLV)st('Live audio stopped.')};
   const start=async k=>{if(exporting)return;try{initAudio();await ac.resume();const C={echoCancellation:false,noiseSuppression:false,autoGainControl:false};let s;
       if(k==='mic')s=await md.getUserMedia({audio:C});
       else{s=await md.getDisplayMedia({video:true,audio:window.AH?true:C,systemAudio:'include'});if(!s.getAudioTracks().length){s.getTracks().forEach(t=>t.stop());st('No sound was shared. Try again and turn on “Share tab audio” or “Share system audio”.');return}s.getVideoTracks().forEach(t=>{t.enabled=false})}
       liveStop(true);if(!audio.paused){audio.pause();$('#play').textContent='▶ Play'}
       ls=s;lsrc=ac.createMediaStreamSource(s);lg=ac.createGain();lg.gain.value=1.5;lsrc.connect(lg);lg.connect(an);lg.connect(an2);try{an.disconnect(ac.destination)}catch(e){}if(window.mtHook)mtHook(ac,lg);
-      LIVE=true;s.getAudioTracks()[0].onended=()=>liveStop();ui(k);
+      LIVE=true;s.getAudioTracks()[0].onended=()=>liveStop();ui(k);if(!exporting)$('#expl').disabled=false;
       /* automatic level: quiet or loud sources still drive the show the same way */
       const buf=new Uint8Array(an.frequencyBinCount);agc=setInterval(()=>{if(!lg)return;an.getByteFrequencyData(buf);let m=0;for(let i=1;i<160;i++)m+=buf[i];m/=159;if(m<2)return;const want=m<55?1.06:m>95?.94:1;lg.gain.value=Math.max(.4,Math.min(12,lg.gain.value*want))},150);
       st(k==='mic'?'Live: listening to the microphone.':'Live: reacting to the sound that is playing.')}
@@ -1761,7 +1761,7 @@ const mmss=t=>{t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+':'+String
 function stopRec(d){discardRec=!!d;if(curRec&&curRec.state!=='inactive'){audio.pause();audio.onended=null;curRec.stop()}}
 async function startRec(live){
   if(exporting){stopRec(!live);return}
-  if(!loaded)return;initAudio();await ac.resume();
+  const LV=live&&LIVE;window._recLV=LV;if(!loaded&&!LV)return;initAudio();await ac.resume();
   const mt=['video/mp4;codecs=avc1.640033,mp4a.40.2','video/mp4;codecs=avc1,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t));
   if(!mt){st('Your browser does not support video recording. Try Chrome or Safari.');return}
   if(window.psFull)psFull();const stream=cv.captureStream(60);stream.addTrack(dest.stream.getAudioTracks()[0]);
@@ -1770,9 +1770,9 @@ async function startRec(live){
   rec.ondataavailable=e=>e.data.size&&ch.push(e.data);
   rec.onstop=async()=>{
     clearInterval(recTimer);document.body.classList.remove('lock');
-    exporting=false;curRec=null;audio.onended=()=>{if(!exporting)$('#play').textContent='▶ Play'};
+    exporting=false;curRec=null;window._recLV=false;audio.onended=()=>{if(!exporting)$('#play').textContent='▶ Play'};
     const dis=discardRec;discardRec=false;
-    $('#exp').classList.remove('busy');$('#exp').disabled=$('#expl').disabled=$('#play').disabled=false;$('#exp').textContent='Export video';$('#expl').textContent='● Live export';$('#play').textContent='▶ Play';
+    $('#exp').classList.remove('busy');$('#exp').disabled=$('#play').disabled=!loaded;$('#expl').disabled=!loaded&&!LIVE;$('#exp').textContent='Export video';$('#expl').textContent='● Live export';$('#play').textContent='▶ Play';
     if(dis){st('Export stopped. Nothing was saved.');return}
     const blob=new Blob(ch,{type:mt.split(';')[0]}),ext=mt.includes('mp4')?'mp4':'webm';
     if(DL){try{await DL.save({filename:'afterhours-video.'+ext,data:blob});{const fps=Math.round(efr/((performance.now()-eT)/1000));st('Done! The video is saved. Average '+fps+' frames/s'+(fps<50?'. Your machine could not keep up with 60, try 720p for a smoother video.':'.'))}}catch(e){st('Saving was cancelled. Press export to try again.')}}
@@ -1781,10 +1781,11 @@ async function startRec(live){
         if(r&&r.ok){st('Done! Saved to '+r.out);AH.reveal(r.out)}else if(r&&r.canceled)st('Saving was cancelled.');else st('Could not save the video: '+(r&&r.log||'unknown error'))}catch(e){st('Could not save the video: '+(e&&e.message||e))}}
     else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='afterhours-video.'+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);st('Done! Your download should start now.')}
   };
-  const CRL=clipRange(audio.duration||0);audio.currentTime=CRL.a;exporting=true;efr=0;eT=performance.now();$('#play').disabled=true;other.disabled=true;if(live)btn.textContent='■ Stop and save';else{btn.textContent='Exporting… click to stop';btn.classList.add('busy')}
+  const CRL=LV?{a:0,b:0,part:false}:clipRange(audio.duration||0);if(!LV)audio.currentTime=CRL.a;else if(!audio.paused)audio.pause();exporting=true;efr=0;eT=performance.now();$('#play').disabled=true;other.disabled=true;if(live)btn.textContent='■ Stop and save';else{btn.textContent='Exporting… click to stop';btn.classList.add('busy')}
   if(!live)document.body.classList.add('lock');
-  const upd=()=>st((live?'Live recording ':'Exporting ')+mmss(audio.currentTime)+' / '+mmss(audio.duration)+(live?' · change anything you like, it is recorded as you go. Press “Stop and save” to finish.':' · settings are locked. The file is saved when it is done. Keep this tab in the foreground.'));
+  const t0r=performance.now(),upd=()=>st(LV?'Recording the live sound '+mmss((performance.now()-t0r)/1000)+' · change anything you like. Press “Stop and save” to finish.':(live?'Live recording ':'Exporting ')+mmss(audio.currentTime)+' / '+mmss(audio.duration)+(live?' · change anything you like, it is recorded as you go. Press “Stop and save” to finish.':' · settings are locked. The file is saved when it is done. Keep this tab in the foreground.'));
   upd();recTimer=setInterval(upd,500);
+  if(LV){rec.start(500);return}
   audio.onended=()=>rec.stop();if(CRL.part){const ck=setInterval(()=>{if(!exporting||rec.state==='inactive'){clearInterval(ck);return}if(audio.currentTime>=CRL.b){clearInterval(ck);audio.pause();rec.stop()}},40)}rec.start(500);await audio.play();
 }
 /* Minivisning i hjørnet (smal skjerm) når forhåndsvisningen er scrollet ut av syne */
