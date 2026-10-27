@@ -1,11 +1,18 @@
 <title>Afterhours</title>
+<meta name="description" content="Drop in a beat and get a video that moves with it. Afterhours turns kick, snare and melody into 3D visuals, lyrics and title cards for YouTube, TikTok and Reels.">
+<meta property="og:title" content="Afterhours – beat-synced music visuals">
+<meta property="og:description" content="Drop in a beat. Get a video that moves with it – 3D scenes, filters, lyrics and export up to 4K.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#05070d">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap">
 <style>
 /* Layout: poster-style hero with a live tunnel, then a strip of six looks, then a plain web-vs-desktop comparison. */
 :root{
-  --bg:#07030d;--ink:#f3eefc;--mut:#a597c4;--pink:#ff2bd6;--cyan:#2bd9ff;--line:#2a1b45;--card:#110a1d;
+  --bg:#05070d;--ink:#eef3fc;--mut:#97a6c4;--pink:#3d6dff;--cyan:#a9d2ff;--line:#1b2745;--card:#0a1020;
   --display:'Unbounded','Arial Black',system-ui,sans-serif;--body:'Manrope','Segoe UI',system-ui,sans-serif;
   color-scheme:dark;
 }
@@ -19,19 +26,16 @@ nav{display:flex;gap:20px;font-size:14px;color:var(--mut)}
 nav a{text-decoration:none}
 nav a:hover{color:var(--ink)}
 .hero{position:relative;border:1px solid var(--line);border-radius:22px;overflow:hidden;min-height:440px;display:flex;align-items:flex-end;background:#000}
-.hero canvas,.hero video{position:absolute;inset:0;width:100%;height:100%;display:block}
-.hero video{object-fit:cover;background:#000}
-.badge{display:inline-flex;align-items:center;gap:8px;font:500 11px/1 var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);background:#07030daa;border:1px solid var(--line);border-radius:999px;padding:7px 12px;margin-bottom:16px}
-.badge i{width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink)}
-.hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,#07030dcc 78%,#07030d)}
+.hero canvas,.hero video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,#05070dcc 78%,#05070d)}
 .hero .in{position:relative;padding:clamp(20px,4vw,44px);max-width:720px}
 h1{font:700 clamp(30px,6vw,60px)/1.04 var(--display);margin:0 0 16px;text-wrap:balance;letter-spacing:-.01em}
 h1 em{font-style:normal;background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{font-size:clamp(16px,2vw,19px);color:#d8cdf0;margin:0 0 22px;max-width:56ch}
+.lead{font-size:clamp(16px,2vw,19px);color:#cdd8f0;margin:0 0 22px;max-width:56ch}
 .cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .btn{display:inline-block;padding:14px 22px;border-radius:12px;font-weight:700;text-decoration:none;border:1px solid transparent;font-size:15px}
-.btn.p{background:linear-gradient(90deg,var(--pink),#7b2bff 55%,var(--cyan));color:#fff}
-.btn.s{border-color:#5a3a96;background:#150c25}
+.btn.p{background:linear-gradient(90deg,#2a52e0,#4f86ff 55%,#8fc2ff);color:#fff}
+.btn.s{border-color:#33508f;background:#0c1428}
 .btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
 .note{font-size:13px;color:var(--mut)}
 section{padding-block:64px 8px}
@@ -39,7 +43,7 @@ h2{font:700 clamp(22px,3.4vw,32px)/1.15 var(--display);margin:0 0 10px;text-wrap
 .sub{color:var(--mut);margin:0 0 28px;max-width:60ch}
 .looks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
 .look{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
-.look canvas{width:100%;aspect-ratio:16/9;display:block;background:#000}
+.look canvas,.look video{width:100%;aspect-ratio:16/9;display:block;background:#000;object-fit:cover}
 .look div{padding:14px 16px 18px}
 .look h3{margin:0 0 4px;font:500 14px/1.3 var(--display);letter-spacing:.04em}
 .look p{margin:0;color:var(--mut);font-size:14px}
@@ -49,13 +53,30 @@ h2{font:700 clamp(22px,3.4vw,32px)/1.15 var(--display);margin:0 0 10px;text-wrap
 .feat b{display:block;font:500 12px/1 var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
 .tbl{border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .tbl .r{display:grid;grid-template-columns:1.1fr 1fr 1fr;border-top:1px solid var(--line)}
-.tbl .r:first-child{border-top:0;background:#150c25;font-weight:700}
+.tbl .r:first-child{border-top:0;background:#0c1428;font-weight:700}
 .tbl .r>*{padding:12px 16px;min-width:0}
 .tbl .r>*:first-child{color:var(--mut)}
 .tbl .r:first-child>*:first-child{color:var(--ink)}
 @media(max-width:560px){.tbl .r{grid-template-columns:1fr 1fr}.tbl .r>*:first-child{grid-column:1/-1;padding-bottom:0;font-size:12px;letter-spacing:.1em;text-transform:uppercase}.tbl .r:first-child>*:first-child{display:none}}
 footer{margin-top:72px;padding-block:28px 40px;border-top:1px solid var(--line);color:var(--mut);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
 a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.mobopen{display:none}
+@media(max-width:700px){
+  nav{gap:14px;font-size:13px}nav a{white-space:nowrap}nav a[href="#why"]{display:none}
+  .logo{font-size:13px;letter-spacing:.22em}
+  .hero{min-height:520px;border-radius:18px}.hero .shade{background:linear-gradient(180deg,#05070d55 0%,#05070d99 40%,#05070df2 75%,#05070d)}
+  h1{font-size:34px}.lead{font-size:16px}
+  .cta .btn{flex:1 1 100%;text-align:center}
+  section{padding-block:48px 4px}
+  .looks{gap:12px}.look div{padding:12px 14px 14px}
+  #app,#try .note{display:none!important}
+  .mobopen{display:block;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
+  .mobopen video{width:100%;aspect-ratio:16/9;display:block;object-fit:cover}
+  .mobopen div{padding:14px 16px 18px}.mobopen .btn{display:block;text-align:center;margin-top:10px}
+  .tbl .r>*{padding:10px 12px}
+  footer{margin-top:48px}
+}
+.news{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:12px 16px;background:var(--card);color:var(--mut);font-size:14px}.news summary{cursor:pointer;color:var(--ink);font-weight:700}.news ul{margin:10px 0 0;padding-left:20px}
 </style>
 
 <div class="wrap">
@@ -65,40 +86,37 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 </header>
 
 <div class="hero">
-  <canvas id="hero" aria-hidden="true"></canvas>
-  <!-- Demo video: upload a file named demo.mp4 next to index.html. Until it exists, the animated tunnel shows instead. -->
-  <video id="demo" src="demo.mp4" autoplay muted loop playsinline preload="auto" aria-label="Afterhours demo video" hidden></video>
+  <canvas id="hero" aria-hidden="true"></canvas><video id="herov" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="clips/hero.mp4" type="video/mp4"><source src="clips/hero.webm" type="video/webm"></video>
   <div class="shade"></div>
   <div class="in">
-    <span class="badge" id="demobadge" hidden><i></i>Made with Afterhours</span>
     <h1>Drop in a beat.<br><em>Get a video that moves with it.</em></h1>
     <p class="lead">Afterhours reads the kick, snare, claps and melody of your track and turns them into immersive 3D visuals, ready to post on YouTube, TikTok and Reels.</p>
     <div class="cta">
-      <a class="btn p" href="#try" data-goatcounter-click="cta-try-free-hero" data-goatcounter-title="Try it free (hero)">Try it free</a>
-      <a class="btn s" href="#get" data-goatcounter-click="cta-desktop-hero" data-goatcounter-title="Get the desktop app (hero)">Get the desktop app</a>
+      <a class="btn p" href="#try">Try it now</a>
+      <a class="btn s" href="#get">Get the desktop app</a>
     </div>
-    <p class="note" style="margin:12px 0 0">Runs in your browser. No sign-up.</p>
   </div>
 </div>
 
 <section id="looks">
-  <h2>Six looks, one beat</h2>
-  <p class="sub">Pick one, or let Auto switch scene when the drop hits. Everything reacts to what is actually playing.</p>
+  <h2>One beat, endless looks</h2>
+  <p class="sub">Real clips from the app. Pick a scene, add one of 14 filters, or let Auto (or your own timeline) switch scene when the drop hits.</p>
   <div class="looks">
-    <article class="look"><canvas data-k="tunnel"></canvas><div><h3>Tunnel</h3><p>Glowing rings you fly through, restyled as the track develops.</p></div></article>
-    <article class="look"><canvas data-k="atom"></canvas><div><h3>Organic</h3><p>An atom of light. Electrons speed up with the melody, the core pulses on every kick.</p></div></article>
-    <article class="look"><canvas data-k="particles"></canvas><div><h3>Particles</h3><p>A vivid swarm that shakes off echoes on the beat.</p></div></article>
-    <article class="look"><canvas data-k="orbits"></canvas><div><h3>Orbits</h3><p>Mirrored dot patterns in layers, with sine and saw waves that appear on clear tones.</p></div></article>
-    <article class="look"><canvas data-k="hyper"></canvas><div><h3>Hyperspace</h3><p>From still stars to a full jump to lightspeed. You set how far with Intensity.</p></div></article>
-    <article class="look"><canvas data-k="image"></canvas><div><h3>Media</h3><p>Upload a cover, photo, GIF or video, move and zoom it, and put a filter on top.</p></div></article>
+    <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/tunnel.mp4" type="video/mp4"><source src="clips/tunnel.webm" type="video/webm"></video><div><h3>Tunnel</h3><p>Glowing rings you fly through, restyled as the track develops.</p></div></article>
+    <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/organic.mp4" type="video/mp4"><source src="clips/organic.webm" type="video/webm"></video><div><h3>Organic · Thermal</h3><p>An atom of light that breathes with the melody, here through the heat-camera filter.</p></div></article>
+    <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/particles.mp4" type="video/mp4"><source src="clips/particles.webm" type="video/webm"></video><div><h3>Particles · Handheld</h3><p>A vivid swarm on the beat, on a 90s pocket-console screen.</p></div></article>
+    <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/orbits.mp4" type="video/mp4"><source src="clips/orbits.webm" type="video/webm"></video><div><h3>Orbits · Kaleido</h3><p>Sacred-geometry layers you fly through, mirrored into eight slices.</p></div></article>
+    <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/hyper.mp4" type="video/mp4"><source src="clips/hyper.webm" type="video/webm"></video><div><h3>Hyperspace + text</h3><p>Stars to lightspeed, with your own words or timed lyrics on top.</p></div></article>
+    <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/void.mp4" type="video/mp4"><source src="clips/void.webm" type="video/webm"></video><div><h3>Void</h3><p>Fast title cards, lightning and an eclipse, cut on every kick and snare.</p></div></article>
   </div>
 </section>
 
 <section id="try">
   <h2>Try it right here</h2>
   <p class="sub">Drop in a song, pick a look, and watch it move. This is the full web version, with a watermark. Exporting works in Chrome and Edge.</p>
-  <iframe id="app" src="app.html" allow="fullscreen" allowfullscreen title="Afterhours web version" loading="lazy" style="width:min(1500px,calc(100vw - 40px));height:calc(100vh - 24px);height:min(960px,calc(100svh - 24px));min-height:560px;border:0;border-radius:18px;background:#07030d;display:block;position:relative;left:50%;transform:translateX(-50%);box-shadow:0 0 0 1px #2a1b45"></iframe>
-  <p class="note" style="margin-top:10px">Prefer a bigger view? <a href="app.html" data-goatcounter-click="open-fullscreen" data-goatcounter-title="Open app full screen">Open it full screen</a>.</p>
+  <div class="mobopen"><video autoplay muted loop playsinline preload="metadata"><source src="clips/hero.mp4" type="video/mp4"><source src="clips/hero.webm" type="video/webm"></video><div><p class="note" style="margin:0">On a phone the app works best in its own tab, in landscape or portrait.</p><a class="btn p" href="app.html">Open the web app</a></div></div>
+  <iframe id="app" src="app.html" allow="fullscreen" allowfullscreen title="Afterhours web version" loading="lazy" style="width:min(1500px,calc(100vw - 40px));height:calc(100vh - 24px);height:min(960px,calc(100svh - 24px));min-height:560px;border:0;border-radius:18px;background:#05070d;display:block;position:relative;left:50%;transform:translateX(-50%);box-shadow:0 0 0 1px #1b2745"></iframe>
+  <p class="note" style="margin-top:10px">Prefer a bigger view? <a href="app.html">Open it full screen</a>.</p>
 </section>
 
 <section id="why">
@@ -106,11 +124,13 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
   <p class="sub">The controls you need and nothing you have to learn first.</p>
   <div class="feat">
     <div><b>Synced</b><h3>Kick, snare, claps, melody</h3><p>Each part of the track drives its own movement, so the picture follows the music instead of a metronome.</p></div>
-    <div><b>Filters</b><h3>VHS, CRT, Glitch, Film</h3><p>Add grain, scanlines and tape wobble to any look, with a strength slider.</p></div>
+    <div><b>Filters</b><h3>14 filters</h3><p>VHS, CRT, Glitch, Film, Handheld, Thermal, Night vision, ASCII, Halftone, Infrared, Security cam, Kaleido, LED wall – each with a strength knob.</p></div>
+    <div><b>Lyrics</b><h3>Timed lyrics, auto-detected</h3><p>Load an .lrc, tap the timing, or let the desktop app listen to the vocals and write them for you. Show them on any scene with 11 text effects.</p></div>
+    <div><b>Timeline</b><h3>Your own scene changes</h3><p>Set which scene comes when in the song, and export just a 15–30 s clip for TikTok or Reels.</p></div>
     <div><b>Color</b><h3>Your palette, 60-30-10</h3><p>Choose one, two or three colors, white included. Three colors are balanced 60-30-10.</p></div>
     <div><b>Intensity</b><h3>One slider</h3><p>From calm to wild without touching anything else.</p></div>
     <div><b>Formats</b><h3>16:9 and 9:16</h3><p>Landscape for YouTube, vertical for TikTok and Reels.</p></div>
-    <div><b>Export</b><h3>Smooth video, up to 4K</h3><p>The desktop app renders frame by frame, so the video stays smooth even when the scene is heavy.</p></div>
+    <div><b>Export</b><h3>Smooth video, up to 4K</h3><p>Rendered frame by frame on your graphics card, in H.264 or HEVC, with optional extra sharpness. Save any frame as a PNG thumbnail.</p></div>
   </div>
 </section>
 
@@ -121,16 +141,30 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     <div class="r" role="row"><span></span><span>Web version</span><span>Desktop app</span></div>
     <div class="r"><span>Runs on</span><span>Any modern browser</span><span>Windows</span></div>
     <div class="r"><span>Watermark</span><span>Yes</span><span>No</span></div>
-    <div class="r"><span>Video export</span><span>Recorded live while it plays</span><span>Rendered frame by frame</span></div>
+    <div class="r"><span>Video export</span><span>Fast export in Chrome/Edge, or recorded live</span><span>Rendered frame by frame</span></div>
     <div class="r"><span>Resolution</span><span>720p, 1080p</span><span>Up to 4K, 60 or 30 fps</span></div>
-    <div class="r"><span>Encoding</span><span>In the browser</span><span>On your graphics card, or the CPU</span></div>
+    <div class="r"><span>Encoding</span><span>In the browser</span><span>On your graphics card (H.264 or HEVC)</span></div>
+    <div class="r"><span>Auto-detect lyrics</span><span>–</span><span>Yes</span></div>
   </div>
   <div class="cta" style="margin-top:24px">
-    <a class="btn s" href="#try" id="webbtn" data-goatcounter-click="cta-try-free-bottom" data-goatcounter-title="Try it free (bottom)">Try it free</a>
+    <a class="btn s" href="#try" id="webbtn">Try the web version</a>
     <!-- TODO: replace # with the download link when the desktop app is ready -->
     <a class="btn p" href="#" aria-disabled="true" id="dlbtn">Download for Windows</a>
-    <span class="note">The desktop app is coming soon.</span>
+    <span class="note">Windows 10/11 · version 1.64 · coming soon</span>
   </div>
+  <details class="news"><summary>What’s new in 1.64</summary><ul>
+    <li>Live audio: react to Spotify, YouTube or a microphone – no file needed</li>
+    <li>Party mode for TVs and projectors, remembers your setup, add it to your home screen</li>
+    <li>Demo track built in – try everything without a song</li>
+    <li>One-click TikTok / Reels and YouTube export setup</li>
+    <li>Shorter controls on phones, with dropdowns for filters and colors</li>
+    <li>Text and lyrics on every scene, with 11 effects (scramble, glitch, chrome, typewriter …)</li>
+    <li>Scene timeline, clip export (15/30 s) and Save frame as PNG</li>
+    <li>8 new filters, all with a working strength knob</li>
+    <li>HEVC export and 1.5× sharpness, smoother anti-aliased 3D</li>
+    <li>Undo / redo, starter presets and keyboard shortcuts (press ?)</li>
+    <li>Auto-detect lyrics (desktop), photoreal Void, simpler controls on phones</li>
+  </ul></details>
 </section>
 
 <footer>
@@ -202,15 +236,11 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     items.forEach(function(it){if(n>3&&!vis.has(it.c))return;var s=fit(it.c);it.f(it.g,s.w,s.h,t)});
     if(!reduce)requestAnimationFrame(frame)
   }
+  var hv=document.getElementById('herov');if(hv){hv.addEventListener('playing',function(){hero.style.display='none'});if(reduce){hv.removeAttribute('autoplay');hv.pause()}}
+  if('IntersectionObserver' in window){var vio=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;if(e.isIntersecting&&!reduce){var p=v.play();p&&p.catch&&p.catch(function(){})}else v.pause()})},{threshold:.15});document.querySelectorAll('.look video').forEach(function(v){vio.observe(v)})}
   requestAnimationFrame(frame);
   if(reduce)addEventListener('resize',function(){requestAnimationFrame(frame)});
   /* Appen har fast høyde og scroller inni seg, så forhåndsvisningen kan stå fast mens du justerer */
   document.getElementById('dlbtn').addEventListener('click',function(e){e.preventDefault()});
-  /* Show the demo video once it can play; the tunnel canvas stays as fallback */
-  var v=document.getElementById('demo'),badge=document.getElementById('demobadge');
-  v.addEventListener('canplay',function(){v.hidden=false;badge.hidden=false;var p=v.play();if(p&&p.catch)p.catch(function(){})});
-  v.addEventListener('error',function(){v.remove()});
 })();
 </script>
-<!-- Visitor counter (GoatCounter: free, no cookies). Replace "afterhours" with your own GoatCounter code if it differs. -->
-<script data-goatcounter="https://afterhours.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
