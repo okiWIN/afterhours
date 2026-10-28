@@ -435,6 +435,12 @@ label.t input[type=checkbox]:checked::after{background:radial-gradient(circle at
 .db{flex-wrap:wrap}.live{flex:1 1 100%;display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px;padding:8px 12px;border-radius:10px;background:#0b0b0d;box-shadow:inset 0 1px 4px #000,0 1px 0 #ffffff12}.live .lb{margin:0 4px 0 0}.live .chip.on{border-color:#6fa8ff;color:#fff;box-shadow:0 0 10px #3a7bff66}#lst{font:11px var(--mono);color:#9fb6e8;letter-spacing:.04em}#lst i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4f86ff;margin-right:6px;box-shadow:0 0 8px #4f86ff;animation:recb 1s steps(2) infinite}
 body.party{overflow:hidden}body.party #stage{position:fixed;inset:0;z-index:9500;width:100vw!important;height:100vh;height:100dvh;max-width:none;border-radius:0;box-shadow:none;display:flex;align-items:center;justify-content:center;background:#000;margin:0}body.party #stage::before,body.party #bar,body.party #fsb,body.party .info,body.party #mini,body.party #minitab{display:none!important}body.party #cv{width:100%;height:100%;object-fit:contain}
 #partyx{display:none;position:fixed;inset:0;z-index:9600;cursor:none;-webkit-tap-highlight-color:transparent}body.party #partyx{display:block}#party.on{border-color:#6fa8ff;color:#fff}
+/* paneler under enheten: kolonner som fylles jevnt, flyttbare via tittelen */
+.drawer{display:flex!important;flex-wrap:wrap;gap:16px;align-items:flex-start}.drawer>#moreb{flex:1 1 100%}
+.mcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px}
+.drawer .card>h2{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.drawer .card>h2::after{content:'⠿';float:right;opacity:.28;font-size:.8em;letter-spacing:0;margin-top:2px}.drawer .card>h2:hover::after{opacity:.7}
+.drawer .card.drag{opacity:.55;outline:2px dashed #6fa8ff;outline-offset:3px}.drawer.dragging .card>h2{cursor:grabbing}.drawer.dragging .mcol{min-height:80px}
+.exgo{display:flex;gap:10px;margin-top:14px}.exgo .led{flex:1;min-width:0}
 #demob{position:absolute;right:8px;top:8px;padding:5px 9px;border:1px solid #2b3d6e;border-radius:7px;background:linear-gradient(180deg,#14203f,#0b1124);color:#cfe3ff;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;z-index:2}#demob:hover{border-color:#6fa8ff;color:#fff}#demob:disabled{opacity:.5}
 #onb{position:fixed;inset:0;z-index:9000;background:#02040acc;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
 #onb .ob{max-width:420px;width:100%;background:linear-gradient(180deg,#121a30,#090d18);border:1px solid #2b3d6e;border-radius:14px;padding:22px 22px 18px;color:#e6eeff;box-shadow:0 20px 60px #000c;font:14px/1.5 var(--mono)}
@@ -495,7 +501,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div id="stage"><canvas id="cv"></canvas><button id="fsb" type="button" aria-label="Full screen" data-tip="FULL SCREEN: show the video on the whole screen. Press Esc or F to exit."><svg viewBox="0 0 20 20" aria-hidden="true"><g class="in" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5"/></g><g class="out" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 3v4.5H3M17 7.5h-4.5V3M12.5 17v-4.5H17M3 12.5h4.5V17"/></g></svg></button><div id="tag" style="display:none">demo · 120 bpm</div><div id="bar"></div></div>
 <div class="cells">
 <div class="field fcell" data-tip="Filter laid over the whole picture. Turn the knob to set how strong it is."><div class="fl"><span class="lb">Filter</span><div class="row"><button class="chip on" data-fl="0">None</button><button class="chip" data-fl="1">VHS</button><button class="chip" data-fl="2">CRT</button><button class="chip" data-fl="3">Glitch</button><button class="chip" data-fl="4">Film</button><button class="chip" data-fl="5" data-tip="HANDHELD: 90s pocket console LCD – chunky pixels, four shades of green with dithering, a visible pixel grid and glare on the screen.">Handheld</button><button class="chip" data-fl="6" data-tip="THERMAL: heat camera – dark purple to red, yellow and white by brightness.">Thermal</button><button class="chip" data-fl="7" data-tip="NIGHT VISION: grainy green night scope with a round mask.">Night vision</button><button class="chip" data-fl="8" data-tip="ASCII: the picture is built from text characters, like an old terminal.">ASCII</button><button class="chip" data-fl="9" data-tip="HALFTONE: printed magazine dots.">Halftone</button><button class="chip" data-fl="10" data-tip="INFRARED: pink and red false colors like infrared film.">Infrared</button><button class="chip" data-fl="11" data-tip="SECURITY CAM: low-res black and white CCTV with fisheye and a blinking REC light.">Security cam</button><button class="chip" data-fl="12" data-tip="KALEIDOSCOPE: the picture mirrored into 8 slices around the center.">Kaleido</button><button class="chip" data-fl="13" data-tip="LED WALL: the picture shown as glowing LED dots, like a big club screen.">LED wall</button></div><select id="flsel" aria-label="Filter"></select></div><div class="kin"><div class="knob xs" id="kFa" data-def="100" tabindex="0" role="slider" aria-label="Filter strength" data-for="fa" data-tip="FILTER STRENGTH: how strong the chosen filter is – 0 is the normal picture, 100 is the full effect."><div class="cap"></div></div><span class="lb">Strength</span><span class="kv" id="vFa">100</span></div></div>
-<div class="field fx3"><span class="lb">Effects</span><div class="fxg"><div class="fxc"><label class="t" data-tip="LASERS: thin beams from the center that flash on snares, claps and hi-hats (Particles, Orbits, Organic)."><input type="checkbox" id="laser"> Lasers</label><div class="kin2"><div class="knob xs" id="kLb" data-def="0" tabindex="0" role="slider" data-for="lzb" data-tip="LASER BLUR: echo only on the laser beams. Double-click to turn it off."><div class="cap"></div></div><span class="lb">Blur</span><span class="kv" id="vLb">100</span></div></div><div class="fxc"><label class="t" data-tip="STROBE: the background flashes on snares and claps."><input type="checkbox" id="strobe" checked> Strobe</label></div><div class="fxc"><label class="t" data-tip="GLOW: the soft light around everything (bloom)."><input type="checkbox" id="fxon" checked> Glow</label><div class="kin2"><div class="knob xs" id="kGl" data-def="100" tabindex="0" role="slider" data-for="glw" data-tip="GLOW AMOUNT: how much light bleeds around the shapes. Double-click for default."><div class="cap"></div></div><span class="lb">Amount</span><span class="kv" id="vGl">100</span></div></div></div></div>
+<div class="field fx3"><span class="lb">Effects</span><div class="fxg"><div class="fxc"><label class="t" data-tip="LASERS: thin beams from the center that flash on snares, claps and hi-hats (Particles, Orbits, Organic)."><input type="checkbox" id="laser"> Lasers</label><div class="kin2"><div class="knob xs" id="kLb" data-def="0" tabindex="0" role="slider" data-for="lzb" data-tip="LASER BLUR: echo only on the laser beams. Double-click to turn it off."><div class="cap"></div></div><span class="lb">Blur</span><span class="kv" id="vLb">100</span></div></div><div class="fxc"><label class="t" data-tip="STROBE: the background flashes on snares and claps."><input type="checkbox" id="strobe" checked> Strobe</label></div><div class="fxc"><label class="t" data-tip="GLOW: the soft light around everything (bloom)."><input type="checkbox" id="fxon" checked> Glow</label><div class="kin2"><div class="knob xs" id="kGl" data-def="0" tabindex="0" role="slider" data-for="glw" data-tip="GLOW AMOUNT: how much light bleeds around the shapes. Double-click for default."><div class="cap"></div></div><span class="lb">Amount</span><span class="kv" id="vGl">0</span></div></div></div></div>
 <div class="field colf" style="grid-column:1/-1" data-tip="Color palette. Custom lets you pick 1 to 3 colors of your own."><span class="lb">Colors</span><div id="orbpw" data-tip="ORBITS PRESET: Classic is the dot patterns. Geometry draws sacred geometry (Flower of Life, Metatron, Sri Yantra…)."><span class="lb">Preset</span><div class="row"><button class="chip on" data-op="classic">Classic</button><button class="chip" data-op="geo">Geometry</button></div></div><div><div class="row" id="pals"><button class="chip on" data-p="rave">Rave</button><button class="chip" data-p="inferno">Inferno</button><button class="chip" data-p="toxic">Toxic</button><button class="chip" data-p="ice">Ice</button><button class="chip" data-p="synth">Synth</button><button class="chip" data-p="bw">B&amp;W</button><button class="chip" data-p="custom">Custom</button></div><select id="palsel" aria-label="Colors"></select>
 <div class="row" id="cust" style="display:none;margin-top:8px;gap:10px"><span class="lb">Count</span><button class="chip" data-cn="1">1</button><button class="chip" data-cn="2">2</button><button class="chip on" data-cn="3">3</button><label class="t"><span id="cl1">60 %</span><input type="color" id="c1" value="#ff2bd6"></label><label class="t" id="cw2"><span id="cl2">30 %</span><input type="color" id="c2" value="#2bd9ff"></label><label class="t" id="cw3"><span id="cl3">10 %</span><input type="color" id="c3" value="#ffffff"></label><button class="chip" id="crnd" data-tip="Random: picks a well-known 60-30-10 color combination.">Random</button><span id="cname" class="lb" style="letter-spacing:.08em"></span></div></div></div>
 </div>
@@ -517,8 +523,8 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="kl"><div class="knob big" id="kInt" tabindex="0" role="slider" aria-label="Intensity" data-for="int" data-tip="INTENSITY: how hard everything reacts to the music. Drag up or down, scroll, or use the arrow keys. Double-click to reset."><div class="cap"></div></div><span class="etch">Intensity</span></div>
 <div class="ks">
 <div class="kl"><div class="knob sm" id="kBl" tabindex="0" role="slider" aria-label="Blur and echo" data-for="bl" data-tip="BLUR / ECHO: leaves fading copies of the picture, like a reverb for the visuals."><div class="cap"></div></div><span class="etch">Blur</span><span class="kv" id="vBl">0</span></div>
-<div class="kl" id="kflw"><div class="knob sm" id="kFl" data-def="0" tabindex="0" role="slider" aria-label="Flash" data-for="fl" data-tip="FLASH: how much this scene lights up on hits (Tunnel, Particles, Orbits and Organic each remember their own). Works on its own, separate from Intensity. Double-click to turn it off."><div class="cap"></div></div><span class="etch">Flash</span><span class="kv" id="vFl">0</span></div>
-<div class="kl" id="kptw"><div class="knob sm" id="kPt" data-def="3" tabindex="0" role="slider" aria-label="Particles" data-for="ptc" data-tip="PARTICLES: how many floating particles there are in Orbits and Particles. 0 removes the dust in Orbits. Each of the two scenes remembers its own amount. Double-click for the default."><div class="cap"></div></div><span class="etch">Particles</span><span class="kv" id="vPt">3</span></div>
+<div class="kl" id="kflw"><div class="knob sm" id="kFl" data-def="0" tabindex="0" role="slider" aria-label="Flash" data-for="fl" data-tip="FLASH: how much this scene lights up on hits (Tunnel, Particles, Orbits and Organic each remember their own). Works on its own, separate from Intensity. Double-click to turn it off."><div class="cap"></div></div><span class="etch">Flash</span><span class="kv" id="vFl">50</span></div>
+<div class="kl" id="kptw"><div class="knob sm" id="kPt" data-def="0" tabindex="0" role="slider" aria-label="Particles" data-for="ptc" data-tip="PARTICLES: how many floating particles there are in Orbits and Particles. 0 removes the dust in Orbits. Each of the two scenes remembers its own amount. Double-click for the default."><div class="cap"></div></div><span class="etch">Particles</span><span class="kv" id="vPt">0</span></div>
 
 </div>
 <div class="mtrw" data-tip="Levels: LOW follows the kick and bass, MID the snare and clap, HIGH the hats and cymbals."><div class="mtr"><b class="msc"><span>0</span><span>-6</span><span>-12</span><span>-24</span><span>-∞</span></b><i id="mL"></i><i id="mM"></i><i id="mH"></i></div><div class="mtrl etch"><span>Low</span><span>Mid</span><span>High</span></div></div>
@@ -537,7 +543,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 </div>
 <div class="live" id="livew" data-tip="LIVE AUDIO: the show reacts to sound playing somewhere else – Spotify, YouTube, a DJ set – instead of a loaded song."><span class="lb">Live audio</span><button class="chip" type="button" id="lsys">◉ System sound</button><button class="chip" type="button" id="lmic">🎙 Microphone</button><button class="chip" type="button" id="lstop" style="display:none">■ Stop</button><span id="lst"></span></div>
 </div>
-<div class="hid"><input type="range" id="int" min="30" max="160" value="30"><input type="range" id="bl" min="0" max="100" value="0"><input type="range" id="fa" min="10" max="100" value="100"><input type="range" id="fl" min="0" max="100" value="0"><input type="range" id="lzb" min="0" max="100" value="100"><input type="range" id="stb" min="0" max="100" value="100"><input type="range" id="glw" min="0" max="100" value="100"><input type="range" id="ptc" min="0" max="100" value="3"></div>
+<div class="hid"><input type="range" id="int" min="30" max="160" value="30"><input type="range" id="bl" min="0" max="100" value="0"><input type="range" id="fa" min="10" max="100" value="100"><input type="range" id="fl" min="0" max="100" value="50"><input type="range" id="lzb" min="0" max="100" value="100"><input type="range" id="stb" min="0" max="100" value="100"><input type="range" id="glw" min="0" max="100" value="0"><input type="range" id="ptc" min="0" max="100" value="0"></div>
 </div>
 
 <div class="info"><span id="tip">Hover a control to see what it does.</span><div id="st">Upload a song to start. Until then you see a demo.</div></div>
@@ -584,12 +590,14 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 </div>
 </div>
 
-<div class="card">
+<div class="card" id="excard">
 <h2>Export</h2>
 <div class="field" data-tip="CLIP: export only a part of the song, e.g. 15–30 seconds for TikTok or Reels. Leave both empty for the whole song. Use m:ss or seconds."><span class="lb">Clip</span><div class="row" style="align-items:center;gap:6px"><input id="xs" type="text" placeholder="start" style="width:64px;background:linear-gradient(180deg,#07080c,#10121a);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:12px var(--mono);padding:5px 7px;box-shadow:inset 0 1px 3px #000"><span style="color:#7c86b0">→</span><input id="xe" type="text" placeholder="end" style="width:64px;background:linear-gradient(180deg,#07080c,#10121a);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:12px var(--mono);padding:5px 7px;box-shadow:inset 0 1px 3px #000"><button class="chip" id="xsnow" type="button" data-tip="Set the start to where the song is now.">Start = now</button><button class="chip" id="xenow" type="button" data-tip="Set the end to where the song is now.">End = now</button><button class="chip" id="x15" type="button" data-tip="15 seconds from the start point.">15 s</button><button class="chip" id="x30" type="button" data-tip="30 seconds from the start point.">30 s</button><button class="chip" id="xclr" type="button">Full song</button></div></div>
 <div class="field" data-tip="QUICK SETUP: one click sets format, resolution and clip. Then press Export video."><span class="lb">Quick setup</span><div class="row"><button class="chip" id="qtt" type="button" data-tip="TIKTOK / REELS / SHORTS: 9:16, 1080p and a 30 s clip starting where the song is now (or from the start).">TikTok / Reels · 30 s</button><button class="chip" id="qtt15" type="button" data-tip="Same as TikTok / Reels, but a 15 s clip.">15 s</button><button class="chip" id="qyt" type="button" data-tip="YOUTUBE: 16:9, 1080p, the whole song.">YouTube · full song</button></div></div>
 <div class="field"><span class="lb">Format</span><div class="row"><button class="chip on" data-f="h">16:9</button><button class="chip" data-f="v">9:16</button><button class="chip" id="xpng" type="button" style="margin-left:auto" data-tip="SAVE FRAME: saves the picture you see right now as a PNG – for YouTube thumbnails, covers or posts.">⤓ Save frame (PNG)</button></div></div>
 <div class="field"><span class="lb">Resolution</span><div class="row"><button class="chip" data-q="720">720p</button><button class="chip on" data-q="1080">1080p</button></div></div>
+<div class="exgo"><button class="led p" type="button" id="exp2">Export video</button><button class="led r" type="button" id="expl2">● Live export</button></div>
+</div>
 
 <div class="card adv" id="mtcard">
 <h2>Meters</h2>
@@ -608,7 +616,6 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <label class="t"><input type="checkbox" id="prm" checked> Include image, video and overlay files</label></div>
 <div id="prl"></div>
 <p class="note" id="prnote">Presets are saved on this device. Load one to get the whole setup back.</p>
-</div>
 </div>
 </div>
 </div>
@@ -763,7 +770,7 @@ for(let lv=0;lv<NLV;lv++){
   OG.add(g);ORB.push({g,subs});
 }
 const SZB=[.2,.28,.38,.5,.62,.8];
-var ORBP='classic',PTM=.06,curPS='orbits',PTKS={orbits:3,particles:50};const PTKD={orbits:3,particles:50};
+var ORBP='classic',PTM=0,curPS='orbits',PTKS={orbits:0,particles:50};const PTKD={orbits:3,particles:50};
 function regen(lv){
   const o=ORB[lv],c=new Array(NSB).fill(0),R=Math.random,TAU=6.2832;
   const put=(j,x,y)=>{
@@ -1106,7 +1113,7 @@ function tunnelUpdate(dt,hit){
 
 /* Auto-scener og flash */
 let autoOn=true,eS=0,eL=0,lastDrop=0,flash=0,cur='rings';
-var flS=0,INTF=0,STM=2,GLM=2,kB=0,kBv=0,cB=0,cBv=0,sB=0,sBv=0,bB=0,bBv=0,snJs=0,snJv=0;let INT=Math.pow(.3,1.7),SPD=.45,MOV=INT,FL=0,FLK=0,FT=0,FLKS={rings:0,particles:0,orbits:0,organic:0},curFS='rings';
+var flS=0,INTF=0,STM=2,GLM=0,kB=0,kBv=0,cB=0,cBv=0,sB=0,sBv=0,bB=0,bBv=0,snJs=0,snJv=0;let INT=Math.pow(.3,1.7),SPD=.45,MOV=INT,FL=0,FLK=0,FT=0,FLKS={rings:0,particles:0,orbits:.75,organic:0},curFS='rings';
 const SC=['rings','organic','particles','orbits','hyper'];
 function setScene(v){cur=v;$('#imgcard').style.display=v==='image'?'block':'none';{const vc=$('#voidcard');if(vc)vc.style.display='block'}$('#stage').style.cursor=v==='image'||OVon?'grab':'';if(v==='club'){mode='club';cam.up.set(0,1,0)}else if(v==='drift'){mode='drift';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=0;if(window.driftEnter)driftEnter()}else if(v==='void'){mode='void';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=0;if(window.voidEnter)voidEnter()}else if(v==='image'){mode='image';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=Math.max(flash,.25)}else{mode='tunnel';tstyle=v;if(v==='hyper'){flash=Math.max(flash,.7);/* hyper starter rent: ingen rester fra forrige modul (partikler, orbits, ringer, ekko/etterslep) */pv=0;ov=0;at=0;og=0;rwS=0;if(trail)trail.fresh=true;if(typeof lzFresh!=='undefined')lzFresh=true;if(typeof PA!=='undefined'){PA.p.visible=PB.p.visible=false}if(typeof OG!=='undefined')OG.visible=false}newPhase();ver++;swT=T}
   document.querySelectorAll('[data-m]').forEach(x=>x.classList.toggle('on',autoOn?x.dataset.m==='auto':x.dataset.m===v));if(typeof orbKeys==='function')orbKeys();}
@@ -1651,8 +1658,8 @@ var LIVE=false;
   window.liveStop=quiet=>{if(!ls)return;clearInterval(agc);ls.getTracks().forEach(t=>{t.onended=null;t.stop()});try{lsrc.disconnect();lg.disconnect()}catch(e){}ls=lsrc=lg=null;LIVE=false;try{an.connect(ac.destination);an.connect(dest)}catch(e){}if(window.mtHook&&window._fsrc)mtHook(ac,_fsrc);ui(null);if(exporting&&curRec&&curRec.state!=='inactive'&&window._recLV)stopRec(false);else if(!exporting)$('#expl').disabled=!loaded;if(!quiet&&!window._recLV)st('Live audio stopped.')};
   const start=async k=>{if(exporting)return;try{initAudio();await ac.resume();const C={echoCancellation:false,noiseSuppression:false,autoGainControl:false};let s;
       if(k==='mic')s=await md.getUserMedia({audio:C});
-      else{s=await md.getDisplayMedia({video:true,audio:window.AH?true:C,systemAudio:'include'});if(!s.getAudioTracks().length){s.getTracks().forEach(t=>t.stop());st('No sound was shared. Try again and turn on “Share tab audio” or “Share system audio”.');return}s.getVideoTracks().forEach(t=>{t.enabled=false})}
-      liveStop(true);if(!audio.paused){audio.pause();$('#play').textContent='▶ Play'}
+      else{s=await md.getDisplayMedia({video:true,audio:C,systemAudio:'include'});if(!s.getAudioTracks().length){s.getTracks().forEach(t=>t.stop());st('No sound was shared. Try again and turn on “Share tab audio” or “Share system audio”.');return}s.getVideoTracks().forEach(t=>{t.enabled=false})}
+      /* ingen automatisk volumkontroll, støyfilter eller ekkofjerning fra nettleseren – det senker lyden gradvis */s.getAudioTracks().forEach(t=>{try{t.applyConstraints(C).catch(()=>{})}catch(e){}});liveStop(true);if(!audio.paused){audio.pause();$('#play').textContent='▶ Play'}
       ls=s;lsrc=ac.createMediaStreamSource(s);lg=ac.createGain();lg.gain.value=1.5;lsrc.connect(lg);lg.connect(an);lg.connect(an2);try{an.disconnect(ac.destination)}catch(e){}
       /* recording gets the untouched sound; the automatic level below only feeds the analysis */try{an.disconnect(dest)}catch(e){}lsrc.connect(dest);if(window.mtHook)mtHook(ac,lg);
       LIVE=true;s.getAudioTracks()[0].onended=()=>liveStop();ui(k);if(!exporting)$('#expl').disabled=false;
@@ -1681,6 +1688,37 @@ var LIVE=false;
   document.addEventListener('keydown',e=>{if(on&&e.key==='Escape')off()})})();
 
 
+/* ===== Panelene under enheten: side om side i 1–3 kolonner etter bredden, og kan flyttes ved å dra i tittelen ===== */
+(function(){const D=document.querySelector('.drawer');if(!D)return;const MB=$('#moreb');
+  const ids=['voidcard','imgcard','excard','prcard','tlcard','ovcard','mtcard'].filter(id=>document.getElementById(id));
+  [...D.querySelectorAll('.card')].forEach((c,i)=>{if(!c.id)c.id='pcard'+i;if(!ids.includes(c.id))ids.push(c.id)});
+  let L={};try{L=JSON.parse(localStorage.getItem('ah_layout')||'{}')||{}}catch(e){}
+  const save=()=>{try{localStorage.setItem('ah_layout',JSON.stringify(L))}catch(e){}};
+  const byId=id=>document.getElementById(id),nFor=()=>{const w=D.clientWidth||innerWidth;return w>=1020?3:w>=640?2:1};let N=0,cols=[];
+  function build(force){const n=nFor();if(n===N&&!force)return;N=n;
+    let plan=L[n]&&Array.isArray(L[n])&&L[n].length===n?L[n].map(c=>c.filter(id=>byId(id))):null;
+    if(!plan){plan=Array.from({length:n},()=>[]);const h=new Array(n).fill(0);ids.forEach(id=>{const c=byId(id);const hh=c.offsetHeight||(c.style.display==='none'?120:300);let k=0;for(let i=1;i<n;i++)if(h[i]<h[k]-8)k=i;plan[k].push(id);h[k]+=hh+16})}
+    ids.forEach(id=>{if(!plan.some(c=>c.includes(id))){let k=0;plan.forEach((c,i)=>{if(c.length<plan[k].length)k=i});plan[k].push(id)}});
+    const old=cols;cols=plan.map(c=>{const d=document.createElement('div');d.className='mcol';c.forEach(id=>d.appendChild(byId(id)));return d});
+    old.forEach(o=>o.remove());cols.forEach(c=>D.appendChild(c));if(MB)D.insertBefore(MB,D.firstChild)}
+  build(true);setTimeout(()=>{if(!L[N])build(true)},1300);let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>build(),120)});
+  /* dra i tittelen for å flytte; dobbeltklikk for å nullstille */
+  let dr=null;
+  D.addEventListener('pointerdown',e=>{const h=e.target.closest&&e.target.closest('.card>h2');if(!h||e.button!==0||!D.contains(h))return;const c=h.parentNode;dr={c,h,id:e.pointerId,y:e.clientY,moved:false};try{h.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+  D.addEventListener('pointermove',e=>{if(!dr||e.pointerId!==dr.id)return;if(!dr.moved){if(Math.abs(e.clientY-dr.y)<4&&true)return;dr.moved=true;dr.c.classList.add('drag');D.classList.add('dragging')}
+    if(e.clientY<70)scrollBy(0,-14);else if(e.clientY>innerHeight-90)scrollBy(0,14);
+    const el=document.elementFromPoint(e.clientX,e.clientY);if(!el)return;const col=el.closest('.mcol');if(!col||!D.contains(col))return;const t=el.closest('.card');
+    if(t===dr.c)return;if(t&&t.parentNode===col){const r=t.getBoundingClientRect(),bef=e.clientY<r.top+r.height/2;const ref=bef?t:t.nextSibling;if(ref!==dr.c&&dr.c.nextSibling!==ref||dr.c.parentNode!==col)col.insertBefore(dr.c,ref)}
+    else if(!t){const last=[...col.children].filter(x=>x.offsetHeight).pop();if(!last||e.clientY>last.getBoundingClientRect().bottom)col.appendChild(dr.c)}});
+  const end=e=>{if(!dr||e.pointerId!==dr.id)return;const m=dr.moved;dr.c.classList.remove('drag');D.classList.remove('dragging');dr=null;if(m){L[N]=cols.map(c=>[...c.children].map(x=>x.id));save()}};
+  D.addEventListener('pointerup',end);D.addEventListener('pointercancel',end);
+  D.addEventListener('dblclick',e=>{const h=e.target.closest&&e.target.closest('.card>h2');if(!h)return;L={};save();build(true);st('Panel layout reset.')});
+  D.querySelectorAll('.card>h2').forEach(h=>{h.dataset.tip='Drag the title to move this panel anywhere. Double-click a title to reset the layout.'});
+})();
+/* ===== Eksport-knapper nederst i Export-panelet (speiler de store knappene) ===== */
+(function(){const pairs=[['#exp2','#exp'],['#expl2','#expl']];pairs.forEach(([a,b])=>{const A=$(a),B=$(b);if(!A||!B)return;A.dataset.tip=B.dataset.tip||'';A.onclick=()=>B.click();
+  const sync=()=>{A.disabled=B.disabled;A.textContent=B.textContent;A.classList.toggle('busy',B.classList.contains('busy'))};sync();new MutationObserver(sync).observe(B,{attributes:true,childList:true,characterData:true,subtree:true})})})();
+
 /* ===== First visit: 3 quick steps ===== */
 (function(){let seen=false;try{seen=localStorage.getItem('ah_onb')==='1'}catch(e){}if(seen)return;
   const d=document.createElement('div');d.id='onb';d.innerHTML='<div class="ob"><b>Welcome to Afterhours</b><ol><li><span>1</span>Load a song – or try the demo track.</li><li><span>2</span>Pick a scene, colors and a filter. The info line at the bottom explains every control.</li><li><span>3</span>Export the video, or a 15–30 s clip.</li></ol><div class="obb"><button type="button" id="onbd">▶ Try the demo</button><button type="button" id="onbx">Got it</button></div></div>';
@@ -1706,10 +1744,11 @@ if(v==='image')['#laser','#strobe','#fxon'].forEach(q=>{const el=$(q);if(el.chec
 $('#int').oninput=e=>{const v=e.target.value/100,t=Math.max(0,Math.min(1,(v-.3)/1.3));INTF=t;const lo=Math.pow(.3,1.7);/* treff: sterkere tidlig. fart: rolig stigning, samme makspunkt som før */INT=lo+(1.6-lo)*Math.pow(t,.7);MOV=lo+(1.05-lo)*Math.pow(t,2.2);SPD=.45+.45*Math.pow(t,1.6);FL=Math.pow(Math.max(0,Math.min(1,(INT-.3)/1.0)),1.4)};document.querySelectorAll('[data-q]').forEach(c=>c.onclick=()=>{if(exporting)return;QH=+c.dataset.q;document.querySelectorAll('[data-q]').forEach(x=>x.classList.toggle('on',x===c));setFmt(fmtV)});
 $('#fxon').onchange=e=>fxOn=e.target.checked;
 const faVis=()=>{const k=$('#kFa'),w=k&&(k.closest('.kin')||k.parentNode);if(w)w.style.display=FM===0?'none':''};
-document.querySelectorAll('[data-fl]').forEach(c=>c.onclick=()=>{FM=+c.dataset.fl;document.querySelectorAll('[data-fl]').forEach(x=>x.classList.toggle('on',x===c));faVis()});faVis();
+document.querySelectorAll('[data-fl]').forEach(c=>c.onclick=()=>{FM=+c.dataset.fl;document.querySelectorAll('[data-fl]').forEach(x=>x.classList.toggle('on',x===c));faVis();if(FM){const fi=$('#fa'),v=FAK[FM]!=null?FAK[FM]:100;if(+fi.value!==v){fi.value=v;fi.dispatchEvent(new Event('input'))}}});faVis();
 function chipSel(id,q,k){const sel=$(id);if(!sel)return;const F=[...document.querySelectorAll(q)];F.forEach(c=>{const o=document.createElement('option');o.value=c.dataset[k];o.textContent=c.textContent;sel.appendChild(o);c.addEventListener('click',()=>{sel.value=c.dataset[k]})});const on=F.find(c=>c.classList.contains('on'));if(on)sel.value=on.dataset[k];sel.onchange=()=>{const c=F.find(x=>x.dataset[k]===sel.value);if(c)c.click()};sel.addEventListener('keydown',e=>e.stopPropagation())}
 chipSel('#flsel','[data-fl]','fl');setTimeout(()=>chipSel('#palsel','#pals .chip','p'),0);
-$('#fa').oninput=e=>FA=e.target.value/100;
+/* hvert filter husker sin egen styrke (LED wall starter på 50, resten på 100) */
+var FAK={13:50};$('#fa').oninput=e=>{FA=e.target.value/100;if(FM)FAK[FM]=+e.target.value};
 $('#stb').oninput=()=>{STM=2};$('#glw').oninput=e=>GLM=e.target.value/50;$('#ptc').oninput=e=>{PTM=e.target.value/50;PTKS[curPS]=+e.target.value};
 $('#lzb').oninput=e=>{const v=e.target.value/100;if(LZBL<.01&&v>=.01)lzFresh=true;LZBL=v};
 $('#fl').oninput=e=>{FLK=e.target.value/100*1.5;FLKS[curFS]=FLK};
@@ -2046,7 +2085,7 @@ const onOf=a=>{const e=document.querySelector('['+a+'].on');return e?e.getAttrib
 const pack=f=>f?{name:f.name||'file',type:f.type||'',blob:f}:null;
 function capture(withFiles){
   const r={};RG.forEach(k=>{const e=$('#'+k);if(e)r[k]=+e.value});
-  return{scene:autoOn?'auto':cur,ovs:OVshow,lyr:{txt:VLRC,m:VLM},vf:window.VFONT,vw:window.VOIDW,txo:{on:!!window.TXON,p:window.TXPOS||'c',fx:window.TXFX||'mix'},tl:window.tlGet?tlGet():null,r,mt:JSON.parse(JSON.stringify(MT)),flks:Object.assign({},FLKS),ptks:Object.assign({},PTKS),ck:{laser:$('#laser').checked,strobe:$('#strobe').checked,fxon:$('#fxon').checked},
+  return{scene:autoOn?'auto':cur,ovs:OVshow,lyr:{txt:VLRC,m:VLM},vf:window.VFONT,vw:window.VOIDW,txo:{on:!!window.TXON,p:window.TXPOS||'c',fx:window.TXFX||'mix'},tl:window.tlGet?tlGet():null,r,mt:JSON.parse(JSON.stringify(MT)),flks:Object.assign({},FLKS),faks:Object.assign({},FAK),ptks:Object.assign({},PTKS),ck:{laser:$('#laser').checked,strobe:$('#strobe').checked,fxon:$('#fxon').checked},
     fl:onOf('data-fl'),p:onOf('data-p'),cn:onOf('data-cn'),c:[$('#c1').value,$('#c2').value,$('#c3').value],op:ORBP,ic:ICN,ob:onOf('data-ob'),
     f:onOf('data-f'),q:onOf('data-q'),rr:onOf('data-r'),img:withFiles?pack(window._imgFile):null,ov:withFiles?pack(window._ovFile):null,files:!!withFiles}}
 const clk=(a,v)=>{if(v==null)return;const e=document.querySelector('['+a+'="'+v+'"]');if(e&&!e.classList.contains('on'))e.click()};
@@ -2061,6 +2100,7 @@ async function apply(P,quiet){
   if(S.op&&S.op!==ORBP)clk('data-op',S.op);
   Object.keys(S.ck||{}).forEach(k=>{const e=$('#'+k);if(e&&e.checked!==S.ck[k]){e.checked=S.ck[k];e.dispatchEvent(new Event('change'))}});
   if(S.ptks){Object.assign(PTKS,S.ptks);const pi=$('#ptc');pi.value=PTKS[curPS];pi.dispatchEvent(new Event('input'))}
+  if(S.faks)Object.assign(FAK,S.faks);
   if(S.flks){Object.assign(FLKS,S.flks);const fi=$('#fl');fi.value=Math.round((FLKS[curFS]||0)/1.5*100);fi.dispatchEvent(new Event('input'))}
   if(S.files){
     if(S.img&&S.img.blob){await loadImg(new File([S.img.blob],S.img.name,{type:S.img.type}))}else if(window._imgFile||IMGON){imgClear();IMGON=false}
@@ -2115,7 +2155,7 @@ setTimeout(uSnap,1500);
 async function uGo(d){const j=UI+d;if(j<0||j>=UH.length){st(d<0?'Nothing more to undo.':'Nothing to redo.');return}clearTimeout(uTm);uLock=true;UI=j;try{await apply({id:curP,name:'',s:JSON.parse(UH[j])},d<0?'Undone ('+j+' more step'+(j===1?'':'s')+' back).':'Redone.')}finally{setTimeout(()=>{uLock=false},600)}}
 window.afUndo=()=>uGo(-1);window.afRedo=()=>uGo(1);
 /* ===== Remember the last setup between visits (per browser) ===== */
-(function(){const K='ah_last';let saved=null;try{saved=localStorage.getItem(K)}catch(e){}
+(function(){const K='ah_last3';let saved=null;try{saved=localStorage.getItem(K)}catch(e){}
   const save=()=>{if(exporting)return;try{const S=capture(false);if(S.vw===window.VOIDW_DEF)delete S.vw;localStorage.setItem(K,JSON.stringify(S))}catch(e){}};let t=0;
   ['input','change','click'].forEach(ev=>document.addEventListener(ev,()=>{clearTimeout(t);t=setTimeout(save,900)},true));
   if(saved)setTimeout(async()=>{try{const S=JSON.parse(saved);if(S&&typeof S==='object')await apply({id:null,name:'',s:S},'Welcome back – your last setup is restored.')}catch(e){}},1100)})();
@@ -2234,10 +2274,14 @@ function drawWave(m,w,h,S,sr,nNew){const top=20*S,H=h-top-6*S,W=Math.max(1,Math.
 let oscG=4;
 function drawOsc(m,w,h,S){const g=m.g,top=20*S,H=h-top-6*S,x0=6*S,W=w-12*S,N=Math.min(NFFT-900,Math.round(1400));for(let i=0;i<NFFT;i++)mono[i]=(tdL[i]+tdR[i])*.5;
   let st=NFFT-N-1;for(let i=NFFT-N-1;i>NFFT-N-860&&i>1;i--){if(mono[i-1]<0&&mono[i]>=0){st=i;break}}
-  let mxa=.02;for(let i=0;i<N;i++)mxa=Math.max(mxa,Math.abs(mono[st+i]||0));oscG+=((.82/mxa)-oscG)*.12;
-  g.fillStyle='rgba(255,255,255,.07)';g.fillRect(x0,top+H/2,W,1);
-  g.beginPath();for(let i=0;i<N;i++){const v=mono[st+i]||0,px=x0+i/(N-1)*W,py=top+H/2-Math.max(-1,Math.min(1,v*oscG))*H*.46;i?g.lineTo(px,py):g.moveTo(px,py)}
-  const B=cB();g.lineJoin='round';g.strokeStyle=css(B,.2);g.lineWidth=3*S;g.stroke();g.strokeStyle=css(B,.97);g.lineWidth=1.15*S;g.stroke()}
+  let mxa=.02;for(let i=0;i<N;i++)mxa=Math.max(mxa,Math.abs(mono[st+i]||0));oscG+=((.9/mxa)-oscG)*.18;
+  /* rutenett, så formen leses tydelig */
+  g.fillStyle='rgba(255,255,255,.05)';for(let k=1;k<4;k++)g.fillRect(x0,top+H*k/4,W,1);for(let k=1;k<8;k++)g.fillRect(x0+W*k/8,top,1,H);g.fillStyle='rgba(255,255,255,.12)';g.fillRect(x0,top+H/2,W,1);
+  /* jevnere kurve: snitt over små grupper av samples (mindre flimmer, skarpere linje) */
+  const P=Math.max(64,Math.min(N,Math.round(W/1.6))),step=N/P;
+  g.beginPath();for(let j=0;j<=P;j++){const a0=Math.floor(j*step),a1=Math.max(a0+1,Math.floor((j+1)*step));let v=0;for(let i=a0;i<a1;i++)v+=mono[st+i]||0;v/=(a1-a0);const px=x0+j/P*W,py=top+H/2-Math.max(-1,Math.min(1,v*oscG))*H*.46;j?g.lineTo(px,py):g.moveTo(px,py)}
+  const B=cB();g.lineJoin='round';g.lineCap='round';
+  g.strokeStyle=css(B,.10);g.lineWidth=9*S;g.stroke();g.strokeStyle=css(B,.28);g.lineWidth=4.5*S;g.stroke();g.strokeStyle=css(B,1);g.lineWidth=2.2*S;g.stroke();g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=.9*S;g.stroke()}
 let stG=3;
 function drawStereo(m,w,h,S){const top=20*S,H=h-top-14*S,W=w-12*S,sz=Math.round(Math.min(W,H)),g=hist(m,sz,sz),R=sz*.47,cx=sz/2,cy=sz/2;
   g.globalCompositeOperation='destination-out';g.fillStyle='rgba(0,0,0,.35)';g.fillRect(0,0,sz,sz);g.globalCompositeOperation='lighter';
