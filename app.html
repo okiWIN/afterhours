@@ -440,6 +440,8 @@ body.party{overflow:hidden}body.party #stage{position:fixed;inset:0;z-index:9500
 .mcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px}
 .drawer .card>h2{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.drawer .card>h2::after{content:'⠿';float:right;opacity:.28;font-size:.8em;letter-spacing:0;margin-top:2px}.drawer .card>h2:hover::after{opacity:.7}
 .drawer .card.drag{opacity:.55;outline:2px dashed #6fa8ff;outline-offset:3px}.drawer.dragging .card>h2{cursor:grabbing}.drawer.dragging .mcol{min-height:80px}
+.fwin{position:absolute;margin:0}#flayer{position:absolute;left:0;top:0;width:0;height:0;z-index:6}.drawer.floating{min-height:0}body.pdrag{user-select:none;-webkit-user-select:none}body.pdrag .card.drag{box-shadow:0 30px 70px #000e,0 0 0 1px #6fa8ff66}
+body.lock #flayer{pointer-events:none;opacity:.45}
 .exgo{display:flex;gap:10px;margin-top:14px}.exgo .led{flex:1;min-width:0}
 #demob{position:absolute;right:8px;top:8px;padding:5px 9px;border:1px solid #2b3d6e;border-radius:7px;background:linear-gradient(180deg,#14203f,#0b1124);color:#cfe3ff;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;z-index:2}#demob:hover{border-color:#6fa8ff;color:#fff}#demob:disabled{opacity:.5}
 #onb{position:fixed;inset:0;z-index:9000;background:#02040acc;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
@@ -1688,32 +1690,58 @@ var LIVE=false;
   document.addEventListener('keydown',e=>{if(on&&e.key==='Escape')off()})})();
 
 
-/* ===== Panelene under enheten: side om side i 1–3 kolonner etter bredden, og kan flyttes ved å dra i tittelen ===== */
-(function(){const D=document.querySelector('.drawer');if(!D)return;const MB=$('#moreb');
+/* ===== Panelene: på brede skjermer er de frie vinduer som kan dras hvor som helst (også ved siden av enheten), kan overlappe,
+   og trekkes svakt mot kanter i nærheten (magnet). På smale skjermer: jevne kolonner som kan sorteres. ===== */
+(function(){const D=document.querySelector('.drawer'),DEV=document.querySelector('.dev');if(!D||!DEV)return;const MB=$('#moreb');
   const ids=['voidcard','imgcard','excard','prcard','tlcard','ovcard','mtcard'].filter(id=>document.getElementById(id));
   [...D.querySelectorAll('.card')].forEach((c,i)=>{if(!c.id)c.id='pcard'+i;if(!ids.includes(c.id))ids.push(c.id)});
-  let L={};try{L=JSON.parse(localStorage.getItem('ah_layout')||'{}')||{}}catch(e){}
-  const save=()=>{try{localStorage.setItem('ah_layout',JSON.stringify(L))}catch(e){}};
+  const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'null')||d}catch(e){return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+  let L=ld('ah_layout',{}),FP=ld('ah_float',{}),Z=Object.values(FP).reduce((m,p)=>Math.max(m,p.z||0),10);
   const byId=id=>document.getElementById(id),nFor=()=>{const w=D.clientWidth||innerWidth;return w>=1020?3:w>=640?2:1};let N=0,cols=[];
-  function build(force){const n=nFor();if(n===N&&!force)return;N=n;
+  const LAY=document.createElement('div');LAY.id='flayer';document.body.appendChild(LAY);
+  const wantFloat=()=>innerWidth>=1200&&!matchMedia('(pointer:coarse)').matches;let FLOAT=false;
+  /* kolonner */
+  function build(force){const n=nFor();if(n===N&&!force&&cols.length)return;N=n;
     let plan=L[n]&&Array.isArray(L[n])&&L[n].length===n?L[n].map(c=>c.filter(id=>byId(id))):null;
     if(!plan){plan=Array.from({length:n},()=>[]);const h=new Array(n).fill(0);ids.forEach(id=>{const c=byId(id);const hh=c.offsetHeight||(c.style.display==='none'?120:300);let k=0;for(let i=1;i<n;i++)if(h[i]<h[k]-8)k=i;plan[k].push(id);h[k]+=hh+16})}
     ids.forEach(id=>{if(!plan.some(c=>c.includes(id))){let k=0;plan.forEach((c,i)=>{if(c.length<plan[k].length)k=i});plan[k].push(id)}});
-    const old=cols;cols=plan.map(c=>{const d=document.createElement('div');d.className='mcol';c.forEach(id=>d.appendChild(byId(id)));return d});
+    const old=cols;cols=plan.map(c=>{const d=document.createElement('div');d.className='mcol';c.forEach(id=>{const e=byId(id);e.classList.remove('fwin');e.style.left=e.style.top=e.style.width=e.style.zIndex='';d.appendChild(e)});return d});
     old.forEach(o=>o.remove());cols.forEach(c=>D.appendChild(c));if(MB)D.insertBefore(MB,D.firstChild)}
-  build(true);setTimeout(()=>{if(!L[N])build(true)},1300);let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>build(),120)});
-  /* dra i tittelen for å flytte; dobbeltklikk for å nullstille */
+  /* frie vinduer: posisjon lagres relativt til enhetens midtlinje og topp, så de følger med når vinduet endrer størrelse */
+  const anc=()=>{const r=DEV.getBoundingClientRect();return{cx:r.left+scrollX+r.width/2,y0:r.top+scrollY,l:r.left+scrollX,r:r.right+scrollX,t:r.top+scrollY,b:r.bottom+scrollY}};
+  function place(){const A=anc();ids.forEach(id=>{const p=FP[id],e=byId(id);if(!p||!e)return;let x=A.cx+p.dx;x=Math.max(scrollX+4,Math.min(x,scrollX+innerWidth-60));e.style.left=Math.round(x)+'px';e.style.top=Math.round(Math.max(0,A.y0+p.dy))+'px';e.style.width=Math.round(p.w)+'px';e.style.zIndex=p.z||10})}
+  function enterFloat(){if(FLOAT)return;FLOAT=true;const A=anc();
+    if(!ids.every(id=>FP[id])){build(true);ids.forEach(id=>{if(FP[id])return;const e=byId(id),r=e.getBoundingClientRect(),col=e.parentNode;let top=r.top+scrollY,left=r.left+scrollX,w=r.width;
+        if(!e.offsetParent){const cr=col.getBoundingClientRect();left=cr.left+scrollX;w=cr.width;let y=cr.top+scrollY;for(const s of col.children){if(s===e)break;if(s.offsetParent)y=s.getBoundingClientRect().bottom+scrollY+16}top=y}
+        FP[id]={dx:left-A.cx,dy:top-A.y0,w,z:10}})}
+    ids.forEach(id=>{const e=byId(id);e.classList.add('fwin');LAY.appendChild(e)});cols.forEach(c=>c.remove());cols=[];N=0;D.classList.add('floating');place()}
+  function exitFloat(){if(!FLOAT)return;FLOAT=false;D.classList.remove('floating');build(true)}
+  const mode=()=>{if(wantFloat())enterFloat();else{exitFloat();build()}};
+  build(true);setTimeout(()=>{if(!L[N]&&!FLOAT)build(true);mode()},1300);let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{mode();if(FLOAT)place()},120)});
+  /* magnet: svak tiltrekning mot kanter på andre paneler, enheten og skjermkanten */
+  function snap(e,x,y){const T=11,G=14,w=e.offsetWidth,h=e.offsetHeight,A=anc(),R=[{l:A.l,r:A.r,t:A.t,b:A.b}];
+    ids.forEach(id=>{const o=byId(id);if(o===e||!o.offsetParent)return;const r=o.getBoundingClientRect();R.push({l:r.left+scrollX,r:r.right+scrollX,t:r.top+scrollY,b:r.bottom+scrollY})});
+    let bx=x,by=y,dx=T,dy=T;const near=r=>x<r.r+60&&x+w>r.l-60&&y<r.b+60&&y+h>r.t-60;
+    R.forEach(r=>{if(!near(r))return;[r.l,r.r-w,r.r+G,r.l-G-w].forEach(v=>{const d=Math.abs(v-x);if(d<dx){dx=d;bx=v}});[r.t,r.b-h,r.b+G,r.t-G-h].forEach(v=>{const d=Math.abs(v-y);if(d<dy){dy=d;by=v}})});
+    [scrollX+8,scrollX+innerWidth-8-w].forEach(v=>{const d=Math.abs(v-x);if(d<dx){dx=d;bx=v}});return[bx,by]}
+  const raise=e=>{if(!FLOAT)return;const p=FP[e.id];if(!p)return;p.z=++Z;e.style.zIndex=Z};
+  LAY.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('.card');if(c)raise(c)},true);
+  /* dra i tittelen */
   let dr=null;
-  D.addEventListener('pointerdown',e=>{const h=e.target.closest&&e.target.closest('.card>h2');if(!h||e.button!==0||!D.contains(h))return;const c=h.parentNode;dr={c,h,id:e.pointerId,y:e.clientY,moved:false};try{h.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
-  D.addEventListener('pointermove',e=>{if(!dr||e.pointerId!==dr.id)return;if(!dr.moved){if(Math.abs(e.clientY-dr.y)<4&&true)return;dr.moved=true;dr.c.classList.add('drag');D.classList.add('dragging')}
-    if(e.clientY<70)scrollBy(0,-14);else if(e.clientY>innerHeight-90)scrollBy(0,14);
+  document.addEventListener('pointerdown',e=>{const h=e.target.closest&&e.target.closest('.card>h2');if(!h||e.button!==0)return;const c=h.parentNode;if(!ids.includes(c.id))return;const r=c.getBoundingClientRect();dr={c,h,id:e.pointerId,y:e.clientY,x:e.clientX,ox:e.clientX-r.left,oy:e.clientY-r.top,moved:false};try{h.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+  document.addEventListener('pointermove',e=>{if(!dr||e.pointerId!==dr.id)return;if(!dr.moved){if(Math.hypot(e.clientX-dr.x,e.clientY-dr.y)<4)return;dr.moved=true;dr.c.classList.add('drag');D.classList.add('dragging');document.body.classList.add('pdrag')}
+    if(e.clientY<60)scrollBy(0,-14);else if(e.clientY>innerHeight-80)scrollBy(0,14);
+    if(FLOAT){let x=e.clientX-dr.ox+scrollX,y=e.clientY-dr.oy+scrollY;[x,y]=snap(dr.c,x,y);dr.c.style.left=Math.round(x)+'px';dr.c.style.top=Math.round(Math.max(0,y))+'px';return}
     const el=document.elementFromPoint(e.clientX,e.clientY);if(!el)return;const col=el.closest('.mcol');if(!col||!D.contains(col))return;const t=el.closest('.card');
-    if(t===dr.c)return;if(t&&t.parentNode===col){const r=t.getBoundingClientRect(),bef=e.clientY<r.top+r.height/2;const ref=bef?t:t.nextSibling;if(ref!==dr.c&&dr.c.nextSibling!==ref||dr.c.parentNode!==col)col.insertBefore(dr.c,ref)}
+    if(t===dr.c)return;if(t&&t.parentNode===col){const r=t.getBoundingClientRect(),ref=e.clientY<r.top+r.height/2?t:t.nextSibling;if(ref!==dr.c&&(dr.c.nextSibling!==ref||dr.c.parentNode!==col))col.insertBefore(dr.c,ref)}
     else if(!t){const last=[...col.children].filter(x=>x.offsetHeight).pop();if(!last||e.clientY>last.getBoundingClientRect().bottom)col.appendChild(dr.c)}});
-  const end=e=>{if(!dr||e.pointerId!==dr.id)return;const m=dr.moved;dr.c.classList.remove('drag');D.classList.remove('dragging');dr=null;if(m){L[N]=cols.map(c=>[...c.children].map(x=>x.id));save()}};
-  D.addEventListener('pointerup',end);D.addEventListener('pointercancel',end);
-  D.addEventListener('dblclick',e=>{const h=e.target.closest&&e.target.closest('.card>h2');if(!h)return;L={};save();build(true);st('Panel layout reset.')});
-  D.querySelectorAll('.card>h2').forEach(h=>{h.dataset.tip='Drag the title to move this panel anywhere. Double-click a title to reset the layout.'});
+  const end=e=>{if(!dr||e.pointerId!==dr.id)return;const m=dr.moved,c=dr.c;c.classList.remove('drag');D.classList.remove('dragging');document.body.classList.remove('pdrag');dr=null;if(!m)return;
+    if(FLOAT){const A=anc(),p=FP[c.id]||(FP[c.id]={w:c.offsetWidth,z:++Z});p.dx=parseFloat(c.style.left)-A.cx;p.dy=parseFloat(c.style.top)-A.y0;sv('ah_float',FP)}else{L[N]=cols.map(x=>[...x.children].map(y=>y.id));sv('ah_layout',L)}};
+  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  document.addEventListener('dblclick',e=>{const h=e.target.closest&&e.target.closest('.card>h2');if(!h||!ids.includes(h.parentNode.id))return;L={};FP={};sv('ah_layout',L);sv('ah_float',FP);const f=FLOAT;if(f){FLOAT=false;D.classList.remove('floating')}build(true);if(f)enterFloat();st('Panel layout reset.')});
+  ids.forEach(id=>{const h=byId(id).querySelector(':scope>h2');if(h)h.dataset.tip='Drag the title to move this panel anywhere – it snaps gently to nearby edges. Double-click a title to reset the layout.'});
+  /* et panel som dukker opp (f.eks. Media) legges øverst */
+  const mo=new MutationObserver(ms=>{ms.forEach(m=>{const c=m.target;if(FLOAT&&c.offsetParent&&m.oldValue&&/display:\s*none/.test(m.oldValue))raise(c)})});ids.forEach(id=>mo.observe(byId(id),{attributes:true,attributeFilter:['style'],attributeOldValue:true}));
 })();
 /* ===== Eksport-knapper nederst i Export-panelet (speiler de store knappene) ===== */
 (function(){const pairs=[['#exp2','#exp'],['#expl2','#expl']];pairs.forEach(([a,b])=>{const A=$(a),B=$(b);if(!A||!B)return;A.dataset.tip=B.dataset.tip||'';A.onclick=()=>B.click();
