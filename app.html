@@ -438,7 +438,8 @@ body.party{overflow:hidden}body.party #stage{position:fixed;inset:0;z-index:9500
 /* paneler under enheten: kolonner som fylles jevnt, flyttbare via tittelen */
 .drawer{display:flex!important;flex-wrap:wrap;gap:16px;align-items:flex-start}.drawer>#moreb{flex:1 1 100%}
 .mcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px}
-.drawer .card>h2{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.drawer .card>h2::after{content:'⠿';float:right;opacity:.28;font-size:.8em;letter-spacing:0;margin-top:2px}.drawer .card>h2:hover::after{opacity:.7}
+.drawer .card>h2{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.drawer .card>h2::after{content:'⠿';float:right;opacity:.28;font-size:.8em;letter-spacing:0;margin-top:2px}
+/* sammenleggbare paneler: lukket viser bare tittelen, klikk åpner */.card.foldable>h2::before{content:'';display:inline-block;width:.42em;height:.42em;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-.18em) rotate(45deg);margin-right:.55em;opacity:.55}.card.foldable.fold>h2::before{transform:translateY(-.02em) rotate(-45deg)}.card.foldable.fold>:not(h2){display:none!important}.card.foldable.fold>h2{margin-bottom:0}.card.foldable.fold{cursor:pointer}.card.foldable>h2:hover::before{opacity:1}.drawer .card>h2:hover::after{opacity:.7}
 .drawer .card.drag{opacity:.55;outline:2px dashed #6fa8ff;outline-offset:3px}.fwin.drag{opacity:1!important;outline:none!important}.drawer.dragging .card>h2{cursor:grabbing}.drawer.dragging .mcol{min-height:80px}
 .fwin{position:absolute;margin:0}#flayer{position:absolute;left:0;top:0;width:0;height:0;z-index:6}.drawer.floating{min-height:0}body.pdrag{user-select:none;-webkit-user-select:none}body.pdrag .card.drag{transition:none}.fwin{will-change:transform;cursor:grab}.fwin input,.fwin select,.fwin textarea{cursor:auto}body.pdrag,body.pdrag *{cursor:grabbing!important}
 body.lock #flayer{pointer-events:none;opacity:.45}
@@ -1791,9 +1792,13 @@ var LIVE=false;
     const el=document.elementFromPoint(e.clientX,e.clientY);if(!el)return;const col=el.closest('.mcol');if(!col||!D.contains(col))return;const t=el.closest('.card');
     if(t===dr.c)return;if(t&&t.parentNode===col){const r=t.getBoundingClientRect(),ref=e.clientY<r.top+r.height/2?t:t.nextSibling;if(ref!==dr.c&&(dr.c.nextSibling!==ref||dr.c.parentNode!==col))col.insertBefore(dr.c,ref)}
     else if(!t){const last=[...col.children].filter(x=>x.offsetHeight).pop();if(!last||e.clientY>last.getBoundingClientRect().bottom)col.appendChild(dr.c)}});
-  const end=e=>{if(!dr||e.pointerId!==dr.id)return;const m=dr.moved,c=dr.c;window.__pdrag=false;if(dr.raf)cancelAnimationFrame(dr.raf);if(FLOAT&&m){c.style.left=Math.round(dr.nx)+'px';c.style.top=Math.round(dr.ny)+'px';c.style.transform=''}c.classList.remove('drag');D.classList.remove('dragging');document.body.classList.remove('pdrag');dr=null;if(!m)return;
+  const end=e=>{if(!dr||e.pointerId!==dr.id)return;const m=dr.moved,c=dr.c;window.__pdrag=false;if(dr.raf)cancelAnimationFrame(dr.raf);if(FLOAT&&m){c.style.left=Math.round(dr.nx)+'px';c.style.top=Math.round(dr.ny)+'px';c.style.transform=''}c.classList.remove('drag');D.classList.remove('dragging');document.body.classList.remove('pdrag');dr=null;if(!m)return;window.__pdragT=performance.now();
     if(FLOAT){const A=anc(),p=FP[c.id]||(FP[c.id]={w:c.offsetWidth,z:++Z});p.dx=parseFloat(c.style.left)-A.cx;p.dy=parseFloat(c.style.top)-A.y0;p.ab=parseFloat(c.style.top)>=A.b-4?1:0;p.db=parseFloat(c.style.top)-A.b;extraDrag=0;room();sv('ah_float',FP)}else{L[N]=cols.map(x=>[...x.children].map(y=>y.id));sv('ah_layout',L)}};
   document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  /* Export, Text & lyrics, Meters og Presets starter lukket – klikk på tittelen (eller det lukkede panelet) åpner/lukker */
+  ['excard','voidcard','mtcard','prcard'].forEach(id=>{const c=byId(id);if(!c)return;c.classList.add('foldable','fold');
+    c.addEventListener('click',e=>{if(window.__pdragT&&performance.now()-window.__pdragT<350)return;const onH=e.target.closest('.card>h2');if(!onH&&!c.classList.contains('fold'))return;
+      c.classList.toggle('fold');if(typeof resolve==='function')requestAnimationFrame(()=>{try{resolve();room()}catch(_){}})})});
   /* standardplass for hvert panel (samme kolonneoppsett som første gang) */
   function defaults(){const A=anc(),dr0=D.getBoundingClientRect(),W=dr0.width||D.clientWidth,n=nFor(),G=16,cw=(W-(n-1)*G)/n,top=dr0.top+scrollY+(MB&&MB.offsetParent?MB.offsetHeight+G:0),h=new Array(n).fill(0),R={};
     ids.forEach(id=>{const c=byId(id);const hh=c.offsetParent?c.offsetHeight:(c.style.display==='none'?120:300);let k=0;for(let i=1;i<n;i++)if(h[i]<h[k]-8)k=i;const x=dr0.left+scrollX+k*(cw+G),y=top+h[k];R[id]={dx:x-A.cx,dy:y-A.y0,w:cw,ab:1,db:y-A.b};h[k]+=hh+G});
@@ -2000,6 +2005,8 @@ function miniDraw(){if(!miniOn||!mini.width)return;if(Math.abs(mini.width/mini.h
     ['Ocean','#1e6fd9','#19c2d6','#e8fbff'],['Forest','#2e9b57','#a3d977','#f6e7b4'],['Royal','#6a3cc9','#d76d77','#ffaf7b'],['Matrix','#00ff41','#008f11','#d0ffd6'],
     ['Red, White & Blue','#c1121f','#fdf0d5','#669bbc'],['Gold & Black','#d4af37','#f5e6b8','#ffffff'],['Mint & Coral','#3eb489','#ff6f61','#fff4e6'],['Lavender Haze','#9d8cff','#f4b6ff','#ffffff']];
   let lastC=-1;
+  /* navnet (og plassen i lista) følger fargene – brukes når angre/forhåndsvalg setter fargene tilbake */
+  window.cmbSync=()=>{const v=['#c1','#c2','#c3'].map(q=>$(q).value.toLowerCase());const i=CMB.findIndex(c=>c[1]===v[0]&&c[2]===v[1]&&c[3]===v[2]);lastC=i;$('#cname').textContent=i<0?'':CMB[i][0]};
   window.applyCombo=nm=>{const i=CMB.findIndex(c=>c[0]===nm);if(i<0)return;lastC=i;const c=CMB[i];const n3=document.querySelector('[data-cn="3"]');if(n3&&!n3.classList.contains('on'))n3.click();['#c1','#c2','#c3'].forEach((q,k)=>{const el=$(q);el.value=c[k+1];el.dispatchEvent(new Event('input'))});$('#cname').textContent=c[0];custTouched=false};
   $('#crnd').onclick=()=>{let i;do{i=Math.floor(Math.random()*CMB.length)}while(i===lastC&&CMB.length>1);lastC=i;const c=CMB[i];
     const n3=document.querySelector('[data-cn="3"]');if(n3&&!n3.classList.contains('on'))n3.click();
@@ -2212,7 +2219,7 @@ async function apply(P,quiet){
   const S=P.s;window._orgBW=true;custTouched=true;
   /* scene først, fordi Media-knappen slår av effektene */
   const sk=document.querySelector('[data-m="'+S.scene+'"]');if(sk)sk.click();
-  ['c1','c2','c3'].forEach((id,i)=>{const e=$('#'+id);if(S.c&&S.c[i]){e.value=S.c[i];e.dispatchEvent(new Event('input'))}});
+  ['c1','c2','c3'].forEach((id,i)=>{const e=$('#'+id);if(S.c&&S.c[i]){e.value=S.c[i];e.dispatchEvent(new Event('input'))}});if(window.cmbSync)cmbSync();
   clk('data-cn',S.cn);clk('data-p',S.p);clk('data-fl',S.fl);clk('data-ob',S.ob);clk('data-f',S.f);clk('data-q',S.q);clk('data-r',S.rr);
   if(S.op&&S.op!==ORBP)clk('data-op',S.op);
   Object.keys(S.ck||{}).forEach(k=>{const e=$('#'+k);if(e&&e.checked!==S.ck[k]){e.checked=S.ck[k];e.dispatchEvent(new Event('change'))}});
