@@ -1,4 +1,10 @@
-<title>Afterhours</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="icon-192.png">
+<title>Afterhours Web</title>
 <meta name="description" content="Drop in a beat and get a video that moves with it. Afterhours turns kick, snare and melody into 3D visuals, lyrics and title cards for YouTube, TikTok and Reels.">
 <meta property="og:title" content="Afterhours – beat-synced music visuals">
 <meta property="og:description" content="Drop in a beat. Get a video that moves with it – 3D scenes, filters, lyrics and export up to 4K.">
@@ -44,6 +50,7 @@ h2{font:700 clamp(22px,3.4vw,32px)/1.15 var(--display);margin:0 0 10px;text-wrap
 .looks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
 .look{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
 .look canvas,.look video{width:100%;aspect-ratio:16/9;display:block;background:#000;object-fit:cover}
+.look.wide{grid-column:1/-1}.look.wide video{aspect-ratio:64/27}
 .look div{padding:14px 16px 18px}
 .look h3{margin:0 0 4px;font:500 14px/1.3 var(--display);letter-spacing:.04em}
 .look p{margin:0;color:var(--mut);font-size:14px}
@@ -100,7 +107,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 
 <section id="looks">
   <h2>One beat, endless looks</h2>
-  <p class="sub">Real clips from the app. Pick a scene, add one of 14 filters, or let Auto (or your own timeline) switch scene when the drop hits.</p>
+  <p class="sub">Real clips from the app. Pick a scene, add one of 14 filters and a few meters, or let Auto (or your own timeline) switch scene when the drop hits.</p>
   <div class="looks">
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/tunnel.mp4" type="video/mp4"><source src="clips/tunnel.webm" type="video/webm"></video><div><h3>Tunnel</h3><p>Glowing rings you fly through, restyled as the track develops.</p></div></article>
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/organic.mp4" type="video/mp4"><source src="clips/organic.webm" type="video/webm"></video><div><h3>Organic · Thermal</h3><p>An atom of light that breathes with the melody, here through the heat-camera filter.</p></div></article>
@@ -108,6 +115,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/orbits.mp4" type="video/mp4"><source src="clips/orbits.webm" type="video/webm"></video><div><h3>Orbits · Kaleido</h3><p>Sacred-geometry layers you fly through, mirrored into eight slices.</p></div></article>
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/hyper.mp4" type="video/mp4"><source src="clips/hyper.webm" type="video/webm"></video><div><h3>Hyperspace + text</h3><p>Stars to lightspeed, with your own words or timed lyrics on top.</p></div></article>
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/void.mp4" type="video/mp4"><source src="clips/void.webm" type="video/webm"></video><div><h3>Void</h3><p>Fast title cards, lightning and an eclipse, cut on every kick and snare.</p></div></article>
+    <article class="look wide"><video autoplay muted loop playsinline preload="metadata"><source src="clips/vectorscope.mp4" type="video/mp4"><source src="clips/vectorscope.webm" type="video/webm"></video><div><h3>Vectorscope</h3><p>Your stereo field as one glowing thread that tangles with the music – drop it on top of any scene and spin it by hand.</p></div></article>
   </div>
 </section>
 
@@ -128,6 +136,9 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     <div><b>Lyrics</b><h3>Timed lyrics, auto-detected</h3><p>Load an .lrc, tap the timing, or let the desktop app listen to the vocals and write them for you. Show them on any scene with 11 text effects.</p></div>
     <div><b>Timeline</b><h3>Your own scene changes</h3><p>Set which scene comes when in the song, and export just a 15–30 s clip for TikTok or Reels.</p></div>
     <div><b>Color</b><h3>Your palette, 60-30-10</h3><p>Choose one, two or three colors, white included. Three colors are balanced 60-30-10.</p></div>
+    <div><b>Live</b><h3>React to anything playing</h3><p>Point it at Spotify, YouTube or a microphone and the show follows along – then record it straight to video.</p></div>
+    <div><b>Meters</b><h3>Scopes on top of the picture</h3><p>Spectrum, waveform, oscilloscope, LUFS and a glowing vectorscope you can spin by hand – all part of the exported video.</p></div>
+    <div><b>Party</b><h3>Party mode</h3><p>Full screen, scenes change by themselves on the drops and the screen stays on. Made for a TV or projector.</p></div>
     <div><b>Intensity</b><h3>One slider</h3><p>From calm to wild without touching anything else.</p></div>
     <div><b>Formats</b><h3>16:9 and 9:16</h3><p>Landscape for YouTube, vertical for TikTok and Reels.</p></div>
     <div><b>Export</b><h3>Smooth video, up to 4K</h3><p>Rendered frame by frame on your graphics card, in H.264 or HEVC, with optional extra sharpness. Save any frame as a PNG thumbnail.</p></div>
@@ -150,9 +161,14 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     <a class="btn s" href="#try" id="webbtn">Try the web version</a>
     <!-- TODO: replace # with the download link when the desktop app is ready -->
     <a class="btn p" href="#" aria-disabled="true" id="dlbtn">Download for Windows</a>
-    <span class="note">Windows 10/11 · version 1.64 · coming soon</span>
+    <span class="note">Windows 10/11 · version 1.70 · coming soon</span>
   </div>
-  <details class="news"><summary>What’s new in 1.64</summary><ul>
+  <details class="news"><summary>What’s new in 1.70</summary><ul>
+    <li>Vectorscope meter – a glowing stereo thread you can spin right on the picture</li>
+    <li>Panels you can drag anywhere, side by side with the visuals</li>
+    <li>Quick Intensity and Blur faders next to Effects, own strength for every filter</li>
+    <li>Live export records the sound from Spotify, YouTube or a microphone</li>
+    <li>Write * in any word for a star – L*VE</li>
     <li>Live audio: react to Spotify, YouTube or a microphone – no file needed</li>
     <li>Party mode for TVs and projectors, remembers your setup, add it to your home screen</li>
     <li>Demo track built in – try everything without a song</li>
@@ -169,7 +185,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 
 <footer>
   <span>Afterhours, made by Oscar.</span>
-  <span>Your music stays on your computer. Nothing is uploaded.</span>
+  <span>Your music stays on your device – nothing is uploaded. The microphone is only used when you turn on Live audio.</span>
 </footer>
 </div>
 
@@ -244,3 +260,5 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
   document.getElementById('dlbtn').addEventListener('click',function(e){e.preventDefault()});
 })();
 </script>
+
+</html>

@@ -1,0 +1,17 @@
+AFTERHOURS – NETTSIDEN, KLAR TIL OPPLASTING
+
+Denne mappen er hele nettsiden: landingssiden (index.html) og web-appen (app.html),
+med klipp, ikoner og delingsbilde.
+
+Raskeste måte (gratis, ca. 2 minutter):
+1. Gå til https://app.netlify.com/drop
+2. Dra hele mappen «1-nettside» inn i vinduet.
+3. Du får en adresse som https://noe-tilfeldig.netlify.app – den kan endres under
+   Site settings → Change site name (f.eks. afterhours.netlify.app), eller kobles til eget domene.
+
+Etter opplasting:
+- Live audio (Spotify/YouTube/mikrofon), «Legg til på hjem-skjerm» og fullskjerm virker her,
+  i motsetning til inne i Claude-appen.
+- Delingsbildet: bytt content="og.jpg" i index.html til hele adressen,
+  f.eks. content="https://afterhours.netlify.app/og.jpg", så vises bildet når lenken deles.
+- Nedlastingsknappen: bytt href="#" på «Download for Windows» til lenken til exe-filen.
