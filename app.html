@@ -484,7 +484,7 @@ body[data-th=chrome] .dr .kv,body[data-th=mwhite] .dr .kv{color:#0f1216!importan
 body[data-th=metal] .dr .etch,body[data-th=metal] .dr .badge{color:#0d0f12!important;text-shadow:0 1px 0 #ffffff55!important}
 body[data-th=metal] .dr .kv{color:#0b0d10!important;text-shadow:0 1px 0 #ffffff60!important}
 body[data-th=metal] .plate{background:linear-gradient(180deg,#1c1f24,#454a52 50%,#121417)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 #ffffff70)!important}
-#thbar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 2px;margin:34px auto 0;padding:10px 0;font:10.5px var(--mono);letter-spacing:.08em;color:#4c5470;position:relative;z-index:2}
+#thbar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 2px;margin:10px auto 0;padding:10px 0;font:10.5px var(--mono);letter-spacing:.08em;color:#4c5470;position:relative;z-index:2}
 #thbar span{margin-right:6px;text-transform:uppercase;letter-spacing:.2em;font-size:9.5px}
 #thbar button{background:none;border:0;padding:3px 7px;font:inherit;letter-spacing:inherit;color:#5d6788;cursor:pointer;border-radius:4px}
 #thbar button:hover{color:#b9c8ea}#thbar button.on{color:#cfe0ff;text-decoration:underline;text-underline-offset:4px;text-decoration-color:#6fa8ff99}
@@ -584,7 +584,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="leds">
 <div class="ledw"><button class="led w" id="play" disabled data-tip="Play or pause the song with the show.">▶ Play</button><small>Preview with sound</small></div>
 <div class="ledw"><button class="led p" id="exp" disabled data-tip="Renders the whole song with your current settings and saves the video. Settings are locked while it runs.">Export video</button><small>Whole song · locked</small></div>
-<div class="ledw"><button class="led r" id="expl" disabled data-tip="Plays the song in real time and records it. Keep changing scenes and knobs while it records.">● Live export</button><small>Record live · tweak</small></div>
+<div class="ledw"><button class="led r" id="expl" disabled data-tip="Plays the song in real time and records it, starting from where the song is now. Keep changing scenes and knobs while it records.">● Live export</button><small>Record live · tweak</small></div>
 </div>
 <div class="live" id="livew" data-tip="LIVE AUDIO: the show reacts to sound playing somewhere else – Spotify, YouTube, a DJ set – instead of a loaded song."><span class="lb">Live audio</span><button class="chip" type="button" id="lsys">◉ System sound</button><button class="chip" type="button" id="lmic">🎙 Microphone</button><button class="chip" type="button" id="lstop" style="display:none">■ Stop</button><span id="lst"></span></div>
 </div>
@@ -1566,7 +1566,7 @@ function frame(){requestAnimationFrame(frame);if(OFF)return;skN++;if(!exporting)
    Eksport rendres alltid i full oppløsning. */
 var PS=1;let psBW=0,psBH=0,psW=0,psH=0,psT=performance.now(),psBest=1e9,psN=0,psSum=0,psCalm=0;
 function psApply(k){if(!psBW)return;PS=k;FW=Math.round(psBW*k/2)*2;FH=Math.round(psBH*k/2)*2;R.setSize(FW,FH,false);if(comp)comp.setSize(FW,FH);psW=FW;psH=FH}
-window.psFull=()=>{if(PS<1)psApply(1)};
+window.psFull=()=>{if(FW!==psW||FH!==psH){psBW=FW;psBH=FH;psW=FW;psH=FH;PS=1;return}if(PS<1)psApply(1)};
 function psWatch(){const now=performance.now(),d=now-psT;psT=now;
   if(FW!==psW||FH!==psH){psBW=FW;psBH=FH;psW=FW;psH=FH;PS=1;psN=psSum=psCalm=0;if(LOWP&&!exporting){const sw=($('#stage')&&$('#stage').clientWidth)||400,k=Math.max(.3,Math.min(.5,sw*Math.min(devicePixelRatio||1,2)/Math.max(psBW,psBH)));psApply(+k.toFixed(2))}return}
   if(exporting){if(PS<1)psApply(1);psN=psSum=0;return}
@@ -1762,7 +1762,7 @@ var LIVE=false;
   function place(){const A=anc();ids.forEach(id=>{const p=FP[id],e=byId(id);if(!p||!e)return;let x=A.cx+p.dx;x=Math.max(scrollX+4,Math.min(x,scrollX+innerWidth-60));e.style.left=Math.round(x)+'px';e.style.top=Math.round(Math.max(0,p.ab?A.b+p.db:A.y0+p.dy))+'px';e.style.width=Math.round(p.w)+'px';e.style.zIndex=p.z||10});room()}
   /* alltid god plass under panelene: siden er minst så lang som det nederste panelet + et halvt skjermbilde (litt mer mens man drar) */
   let extraDrag=0,roomMax=0;function room(){if(!FLOAT){D.style.minHeight='';return}const dt=D.getBoundingClientRect().top+scrollY;let mb=0;ids.forEach(id=>{const e=byId(id);if(e&&e.offsetParent)mb=Math.max(mb,e.getBoundingClientRect().bottom+scrollY)});
-    const want=Math.max(0,mb+Math.max(innerHeight*.6,extraDrag)-dt);roomMax=Math.max(roomMax,want);D.style.minHeight=Math.round(roomMax)+'px'}
+    const want=Math.max(0,mb+Math.max(120,extraDrag)-dt);roomMax=extraDrag?Math.max(roomMax,want):want;D.style.minHeight=Math.round(roomMax)+'px'}
   const ro=typeof ResizeObserver!=='undefined'?new ResizeObserver(()=>room()):null;ids.forEach(id=>ro&&ro.observe(byId(id)));
   function enterFloat(){if(FLOAT)return;FLOAT=true;const A=anc();
     if(!ids.every(id=>FP[id])){build(true);ids.forEach(id=>{if(FP[id])return;const e=byId(id),r=e.getBoundingClientRect(),col=e.parentNode;let top=r.top+scrollY,left=r.left+scrollX,w=r.width;
@@ -1771,7 +1771,7 @@ var LIVE=false;
     ids.forEach(id=>{const e=byId(id);e.classList.add('fwin');LAY.appendChild(e)});cols.forEach(c=>c.remove());cols=[];N=0;D.classList.add('floating');place()}
   function exitFloat(){if(!FLOAT)return;FLOAT=false;D.classList.remove('floating');D.style.minHeight='';build(true)}
   const mode=()=>{if(wantFloat())enterFloat();else{exitFloat();build()}};
-  build(true);setTimeout(()=>{if(!L[N]&&!FLOAT)build(true);mode();setTimeout(resolve,60)},1300);setTimeout(()=>{if(FLOAT){place();resolve()}},3200);
+  build(true);setTimeout(()=>{if(!L[N]&&!FLOAT)build(true);mode();setTimeout(()=>{if(typeof phSync==='function')phSync();resolve()},60)},1300);setTimeout(()=>{if(FLOAT){place();resolve()}},3200);
   if(typeof ResizeObserver!=='undefined'){let dh=0;new ResizeObserver(()=>{const h=DEV.offsetHeight;if(FLOAT&&!dr&&Math.abs(h-dh)>2){dh=h;place();resolve()}}).observe(DEV)}let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{mode();if(FLOAT)place()},120)});
   /* magnet: svak tiltrekning mot kanter på andre paneler, enheten og skjermkanten */
   function rectsFor(e){const A=anc(),R=[{l:A.l,r:A.r,t:A.t,b:A.b}];ids.forEach(id=>{const o=byId(id);if(o===e||!o.offsetParent)return;const r=o.getBoundingClientRect();R.push({l:r.left+scrollX,r:r.right+scrollX,t:r.top+scrollY,b:r.bottom+scrollY})});return R}
@@ -1795,10 +1795,23 @@ var LIVE=false;
   const end=e=>{if(!dr||e.pointerId!==dr.id)return;const m=dr.moved,c=dr.c;window.__pdrag=false;if(dr.raf)cancelAnimationFrame(dr.raf);if(FLOAT&&m){c.style.left=Math.round(dr.nx)+'px';c.style.top=Math.round(dr.ny)+'px';c.style.transform=''}c.classList.remove('drag');D.classList.remove('dragging');document.body.classList.remove('pdrag');dr=null;if(!m)return;window.__pdragT=performance.now();
     if(FLOAT){const A=anc(),p=FP[c.id]||(FP[c.id]={w:c.offsetWidth,z:++Z});p.dx=parseFloat(c.style.left)-A.cx;p.dy=parseFloat(c.style.top)-A.y0;p.ab=parseFloat(c.style.top)>=A.b-4?1:0;p.db=parseFloat(c.style.top)-A.b;extraDrag=0;room();sv('ah_float',FP)}else{L[N]=cols.map(x=>[...x.children].map(y=>y.id));sv('ah_layout',L)}};
   document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
-  /* Export, Text & lyrics, Meters og Presets starter lukket – klikk på tittelen (eller det lukkede panelet) åpner/lukker */
-  ['excard','voidcard','mtcard','prcard'].forEach(id=>{const c=byId(id);if(!c)return;c.classList.add('foldable','fold');
+  /* Alle paneler unntatt Media og Overlay starter lukket – klikk på tittelen (eller det lukkede panelet) åpner/lukker */
+  /* panelene som henger fast under (magnet, avstand ~14–16 px) følger med når et panel åpnes eller lukkes */
+  const fr=e=>{const x=parseFloat(e.style.left)||0,y=parseFloat(e.style.top)||0;return{e,x,y,w:e.offsetWidth,h:e.offsetHeight}};
+  function savePos(e){const A=anc(),y=parseFloat(e.style.top)||0,f=FP[e.id];if(f){f.dy=y-A.y0;f.ab=y>=A.b-4?1:0;f.db=y-A.b}}
+  ['excard','voidcard','mtcard','prcard','tlcard'].forEach(id=>{const c=byId(id);if(!c)return;c.classList.add('foldable','fold');
     c.addEventListener('click',e=>{if(window.__pdragT&&performance.now()-window.__pdragT<350)return;const onH=e.target.closest('.card>h2');if(!onH&&!c.classList.contains('fold'))return;
-      c.classList.toggle('fold');if(typeof resolve==='function')requestAnimationFrame(()=>{try{resolve();room()}catch(_){}})})});
+      c.classList.toggle('fold')})});
+  /* når et panel endrer høyde (åpnes/lukkes, eller Media-panelet vises/skjules) flyttes panelene som henger under det like mye */
+  /* husker høyden hvert panel hadde (0 = skjult) – også mellom økter, så hull etter lukkede paneler tettes ved oppstart */
+  let phT=0;
+  function adj(c){if(!FLOAT||dr||!c.classList.contains('fwin'))return false;const f=FP[c.id];if(!f)return false;const h=c.offsetParent?c.offsetHeight:0,h0=f.vh;f.vh=h;if(h0==null||Math.abs(h0-h)<2)return false;
+    const d=h0===0?h+16:h===0?-(h0+16):h-h0,y=parseFloat(c.style.top)||0,x0=parseFloat(c.style.left)||0,w=c.offsetWidth||parseFloat(c.style.width)||300;
+    const all=ids.map(byId).filter(e=>e&&e!==c&&e.offsetParent&&e.classList.contains('fwin')).map(fr),out=[],q=[{x:x0,y,w,h:h0}];
+    while(q.length){const a=q.shift();all.forEach(b=>{if(out.includes(b))return;const gap=b.y-(a.y+a.h);if(gap>=-2&&gap<=30&&b.x<a.x+a.w-8&&b.x+b.w>a.x+8){out.push(b);q.push(b)}})}
+    out.forEach(b=>{b.y=Math.max(0,b.y+d);b.e.style.top=Math.round(b.y)+'px';savePos(b.e)});return true}
+  function phSync(list){if(!FLOAT)return;(list||ids.map(byId).filter(Boolean)).sort((a,b)=>(parseFloat(a.style.top)||0)-(parseFloat(b.style.top)||0)).forEach(adj);sv('ah_float',FP);clearTimeout(phT);phT=setTimeout(()=>{try{resolve();room()}catch(_){}},30)}
+  if(typeof ResizeObserver!=='undefined'){const rh=new ResizeObserver(en=>{if(!FLOAT||dr)return;phSync(en.map(x=>x.target))});ids.forEach(id=>{const e=byId(id);if(e)rh.observe(e)})}
   /* standardplass for hvert panel (samme kolonneoppsett som første gang) */
   function defaults(){const A=anc(),dr0=D.getBoundingClientRect(),W=dr0.width||D.clientWidth,n=nFor(),G=16,cw=(W-(n-1)*G)/n,top=dr0.top+scrollY+(MB&&MB.offsetParent?MB.offsetHeight+G:0),h=new Array(n).fill(0),R={};
     ids.forEach(id=>{const c=byId(id);const hh=c.offsetParent?c.offsetHeight:(c.style.display==='none'?120:300);let k=0;for(let i=1;i<n;i++)if(h[i]<h[k]-8)k=i;const x=dr0.left+scrollX+k*(cw+G),y=top+h[k];R[id]={dx:x-A.cx,dy:y-A.y0,w:cw,ab:1,db:y-A.b};h[k]+=hh+G});
@@ -1943,7 +1956,7 @@ async function startRec(live){
         if(r&&r.ok){st('Done! Saved to '+r.out);AH.reveal(r.out)}else if(r&&r.canceled)st('Saving was cancelled.');else st('Could not save the video: '+(r&&r.log||'unknown error'))}catch(e){st('Could not save the video: '+(e&&e.message||e))}}
     else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='afterhours-video.'+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);st('Done! Your download should start now.')}
   };
-  const CRL=LV?{a:0,b:0,part:false}:clipRange(audio.duration||0);if(!LV)audio.currentTime=CRL.a;else if(!audio.paused)audio.pause();exporting=true;efr=0;eT=performance.now();$('#play').disabled=true;other.disabled=true;if(live)btn.textContent='■ Stop and save';else{btn.textContent='Exporting… click to stop';btn.classList.add('busy')}
+  const CRL=LV?{a:0,b:0,part:false}:clipRange(audio.duration||0);/* Live export tar opp fra der sangen står nå (med mindre et klipp er valgt); Export video starter alltid fra starten */if(!LV){if(live&&!CRL.part){if(audio.currentTime>=(audio.duration||0)-.3)audio.currentTime=0}else audio.currentTime=CRL.a}else if(!audio.paused)audio.pause();exporting=true;efr=0;eT=performance.now();$('#play').disabled=true;other.disabled=true;if(live)btn.textContent='■ Stop and save';else{btn.textContent='Exporting… click to stop';btn.classList.add('busy')}
   if(!live)document.body.classList.add('lock');
   const t0r=performance.now(),upd=()=>st(LV?'Recording the live sound '+mmss((performance.now()-t0r)/1000)+' · change anything you like. Press “Stop and save” to finish.':(live?'Live recording ':'Exporting ')+mmss(audio.currentTime)+' / '+mmss(audio.duration)+(live?' · change anything you like, it is recorded as you go. Press “Stop and save” to finish.':' · settings are locked. The file is saved when it is done. Keep this tab in the foreground.'));
   upd();recTimer=setInterval(upd,500);
@@ -2103,7 +2116,7 @@ async function fastExport(){if(window.psFull)psFull();
     const sr=dec.sampleRate,len=dec.length,L=dec.getChannelData(0),R=dec.numberOfChannels>1?dec.getChannelData(1):L,mono=new Float32Array(len);
     for(let i=0;i<len;i++)mono[i]=(L[i]+R[i])/2;
     const CR=clipRange(dec.duration),n0=Math.floor(CR.a*60),total=Math.ceil(CR.b*60),s0=Math.floor(CR.a*sr),s1=Math.min(len,Math.ceil(CR.b*sr));
-    const br=Math.min(160e6,Math.round(W*H*60*.4));
+    const br=Math.min(100e6,Math.round(W*H*60*.3));
     let vc=null;
     for(const [c,mx] of [['avc1.64002A','avc'],['avc1.640033','avc'],['avc1.4D0033','avc'],['vp09.00.40.08','vp9'],['vp09.00.10.08','vp9']]){
       const cfg={codec:c,width:W,height:H,bitrate:br,framerate:60};
@@ -2282,7 +2295,7 @@ window.afUndo=()=>uGo(-1);window.afRedo=()=>uGo(1);
 (function(){const K='ah_last3';let saved=null;try{saved=localStorage.getItem(K)}catch(e){}
   const save=()=>{if(exporting||window.__noSave)return;try{const S=capture(false);delete S.vw;localStorage.setItem(K,JSON.stringify(S))}catch(e){}};let t=0;
   ['input','change','click'].forEach(ev=>document.addEventListener(ev,()=>{clearTimeout(t);t=setTimeout(save,900)},true));
-  if(saved)setTimeout(async()=>{try{const S=JSON.parse(saved);if(S)delete S.vw;try{if(!localStorage.getItem('ah_mig_fa25')){if(S&&S.faks){if(S.faks[13]==null||S.faks[13]===50)S.faks[13]=25;if(S.faks[9]==null||S.faks[9]===100)S.faks[9]=25;if(S.r&&S.fl==='13'&&S.r.fa==50)S.r.fa=25;if(S.r&&S.fl==='9'&&S.r.fa==100)S.r.fa=25}localStorage.setItem('ah_mig_fa25','1')}if(!localStorage.getItem('ah_mig_mtbg')){if(S&&S.mt)S.mt.bg=false;localStorage.setItem('ah_mig_mtbg','1')}}catch(e){}if(S&&typeof S==='object')await apply({id:null,name:'',s:S},'Welcome back – your last setup is restored.')}catch(e){}},1100)})();
+  if(saved)setTimeout(async()=>{try{const S=JSON.parse(saved);if(S)delete S.vw;try{if(!localStorage.getItem('ah_mig_fa25')){if(S&&S.faks){if(S.faks[13]==null||S.faks[13]===50)S.faks[13]=25;if(S.faks[9]==null||S.faks[9]===100)S.faks[9]=25;if(S.r&&S.fl==='13'&&S.r.fa==50)S.r.fa=25;if(S.r&&S.fl==='9'&&S.r.fa==100)S.r.fa=25}localStorage.setItem('ah_mig_fa25','1')}if(!localStorage.getItem('ah_mig_mtbg')){if(S&&S.mt)S.mt.bg=false;localStorage.setItem('ah_mig_mtbg','1')}}catch(e){}if(S&&typeof S==='object'){S.scene='orbits';S.op='classic';await apply({id:null,name:'',s:S},'Welcome back – your last setup is restored.')}}catch(e){}},1100)})();
 /* ===== Tastatursnarveier ===== */
 const HELP=document.createElement('div');HELP.id='kbhelp';HELP.innerHTML='<div class="kbb"><h3>Shortcuts</h3><table>'+[['1 – 8','Switch scene (Auto, Tunnel, Organic, Particles, Orbits, Hyper, Void, Media)'],['Space','Play / pause'],['X / Shift+X','Next / previous filter'],['C','Next color palette'],['F','Full screen'],['O','Show / hide overlay'],['Ctrl+Z','Undo'],['Ctrl+Shift+Z / Ctrl+Y','Redo'],['?','Show / hide this list']].map(r=>'<tr><td><kbd>'+r[0]+'</kbd></td><td>'+r[1]+'</td></tr>').join('')+'</table><small>Press ? or Esc to close</small></div>';document.body.appendChild(HELP);
 HELP.onclick=()=>HELP.classList.remove('on');
