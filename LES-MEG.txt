@@ -15,3 +15,6 @@ Etter opplasting:
 - Delingsbildet: bytt content="og.jpg" i index.html til hele adressen,
   f.eks. content="https://afterhours.netlify.app/og.jpg", så vises bildet når lenken deles.
 - Nedlastingsknappen: bytt href="#" på «Download for Windows» til lenken til exe-filen.
+- Donasjonsknappen («♥ Support»): åpne index.html, finn linjen  var DONATE_URL='';
+  og lim inn PayPal-lenken mellom fnuttene, f.eks. var DONATE_URL='https://paypal.me/brukernavn';
+  Knappene vises øverst og nederst så snart lenken er fylt inn. Tom lenke = ingen knapp.

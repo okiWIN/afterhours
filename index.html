@@ -50,7 +50,7 @@ h2{font:700 clamp(22px,3.4vw,32px)/1.15 var(--display);margin:0 0 10px;text-wrap
 .looks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
 .look{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
 .look canvas,.look video{width:100%;aspect-ratio:16/9;display:block;background:#000;object-fit:cover}
-.look.wide{grid-column:1/-1}.look.wide video{aspect-ratio:64/27}
+.look.wide{grid-column:1/-1}.look.wide video{aspect-ratio:64/27}.look.wide{display:grid;grid-template-columns:minmax(0,440px) 1fr;align-items:center}.look.wide div{padding:16px 22px}@media(max-width:640px){.look.wide{grid-template-columns:1fr}}
 .look div{padding:14px 16px 18px}
 .look h3{margin:0 0 4px;font:500 14px/1.3 var(--display);letter-spacing:.04em}
 .look p{margin:0;color:var(--mut);font-size:14px}
@@ -84,12 +84,14 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
   footer{margin-top:48px}
 }
 .news{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:12px 16px;background:var(--card);color:var(--mut);font-size:14px}.news summary{cursor:pointer;color:var(--ink);font-weight:700}.news ul{margin:10px 0 0;padding-left:20px}
+.donate{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;font-size:13px;font-weight:700;background:var(--card);transition:border-color .2s,background .2s}.donate:hover{border-color:var(--pink);background:#101a36}.donate b{color:#ff6b9a;font-weight:700}.donate[hidden]{display:none}
+.soc{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;width:100%}.soc a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;border-bottom:1px solid transparent}.soc a:hover{border-bottom-color:var(--pink)}.soc span{color:var(--mut)}
 </style>
 
 <div class="wrap">
 <header class="top">
   <span class="logo">Afterhours</span>
-  <nav><a href="#looks">Looks</a><a href="#try">Try it</a><a href="#why">Features</a><a href="#get">Get it</a></nav>
+  <nav><a href="#looks">Looks</a><a href="#try">Try it</a><a href="#why">Features</a><a href="#get">Get it</a><a class="donate" data-donate hidden target="_blank" rel="noopener"><b>♥</b> Support</a></nav>
 </header>
 
 <div class="hero">
@@ -115,7 +117,6 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/orbits.mp4" type="video/mp4"><source src="clips/orbits.webm" type="video/webm"></video><div><h3>Orbits · Kaleido</h3><p>Sacred-geometry layers you fly through, mirrored into eight slices.</p></div></article>
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/hyper.mp4" type="video/mp4"><source src="clips/hyper.webm" type="video/webm"></video><div><h3>Hyperspace + text</h3><p>Stars to lightspeed, with your own words or timed lyrics on top.</p></div></article>
     <article class="look"><video autoplay muted loop playsinline preload="metadata"><source src="clips/void.mp4" type="video/mp4"><source src="clips/void.webm" type="video/webm"></video><div><h3>Void</h3><p>Fast title cards, lightning and an eclipse, cut on every kick and snare.</p></div></article>
-    <article class="look wide"><video autoplay muted loop playsinline preload="metadata"><source src="clips/vectorscope.mp4" type="video/mp4"><source src="clips/vectorscope.webm" type="video/webm"></video><div><h3>Vectorscope</h3><p>Your stereo field as one glowing thread that tangles with the music – drop it on top of any scene and spin it by hand.</p></div></article>
   </div>
 </section>
 
@@ -137,7 +138,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
     <div><b>Timeline</b><h3>Your own scene changes</h3><p>Set which scene comes when in the song, and export just a 15–30 s clip for TikTok or Reels.</p></div>
     <div><b>Color</b><h3>Your palette, 60-30-10</h3><p>Choose one, two or three colors, white included. Three colors are balanced 60-30-10.</p></div>
     <div><b>Live</b><h3>React to anything playing</h3><p>Point it at Spotify, YouTube or a microphone and the show follows along – then record it straight to video.</p></div>
-    <div><b>Meters</b><h3>Scopes on top of the picture</h3><p>Spectrum, waveform, oscilloscope, LUFS and a glowing vectorscope you can spin by hand – all part of the exported video.</p></div>
+    <div><b>Meters</b><h3>Scopes on top of the picture</h3><p>Spectrum, waveform, oscilloscope, stereo width, vectorscope (spin it by hand), spectrogram and a LUFS loudness meter measured to the broadcast standard (EBU R128) – in palette, RGB, white or your own color, all part of the exported video.</p></div>
     <div><b>Party</b><h3>Party mode</h3><p>Full screen, scenes change by themselves on the drops and the screen stays on. Made for a TV or projector.</p></div>
     <div><b>Intensity</b><h3>One slider</h3><p>From calm to wild without touching anything else.</p></div>
     <div><b>Formats</b><h3>16:9 and 9:16</h3><p>Landscape for YouTube, vertical for TikTok and Reels.</p></div>
@@ -184,10 +185,16 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 </section>
 
 <footer>
-  <span>Afterhours, made by Oscar.</span>
+  <span>Afterhours, made by Oscar. <a class="donate" data-donate hidden target="_blank" rel="noopener" style="margin-left:10px"><b>♥</b> Support Afterhours on PayPal</a></span>
+  <span class="soc"><span>Follow &amp; contact:</span><a href="https://www.tiktok.com/@afterhours.visual" target="_blank" rel="noopener">TikTok @afterhours.visual</a><a href="https://www.instagram.com/afterhours.hyper.visual/" target="_blank" rel="noopener">Instagram @afterhours.hyper.visual</a><a href="mailto:afterhours.hyper.void@gmail.com">afterhours.hyper.void@gmail.com</a></span>
   <span>Your music stays on your device – nothing is uploaded. The microphone is only used when you turn on Live audio.</span>
 </footer>
 </div>
+<script>
+/* DONASJON: lim inn PayPal-lenken din her (f.eks. https://paypal.me/brukernavn). Tom = knappene vises ikke. */
+var DONATE_URL='https://paypal.me/oscarkilic';
+(function(){document.querySelectorAll('[data-donate]').forEach(function(a){if(DONATE_URL){a.href=DONATE_URL;a.hidden=false}})})();
+</script>
 
 <script>
 (function(){
