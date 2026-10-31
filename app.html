@@ -1754,15 +1754,18 @@ var LIVE=false;
   /* frie vinduer: posisjon lagres relativt til enhetens midtlinje og topp, så de følger med når vinduet endrer størrelse */
   const anc=()=>{const r=DEV.getBoundingClientRect();return{cx:r.left+scrollX+r.width/2,y0:r.top+scrollY,l:r.left+scrollX,r:r.right+scrollX,t:r.top+scrollY,b:r.bottom+scrollY}};
   /* ingen overlapp ved oppstart: paneler som ligger oppå enheten eller hverandre skyves ned til nærmeste ledige plass */
-  function resolve(){if(!FLOAT)return;const A=anc(),G=16,L=ids.map(byId).filter(e=>e&&e.offsetParent&&e.classList.contains('fwin')).map(e=>({e,x:parseFloat(e.style.left)||0,y:parseFloat(e.style.top)||0,w:e.offsetWidth,h:e.offsetHeight}));
+  /* «hjem» = der brukeren la panelet (lagret i FP). Skyving for å unngå overlapp er bare midlertidig, så panelene går tilbake når plassen blir ledig */
+  const homeY=e=>{const p=FP[e.id];if(!p)return parseFloat(e.style.top)||0;const A=anc();return Math.max(0,p.ab?A.b+p.db:A.y0+p.dy)};
+  function setHome(e,y){const A=anc(),f=FP[e.id];if(f){f.dy=y-A.y0;f.ab=y>=A.b-4?1:0;f.db=y-A.b}}
+  function resolve(){if(!FLOAT)return;const A=anc(),G=16,L=ids.map(byId).filter(e=>e&&e.offsetParent&&e.classList.contains('fwin')).map(e=>({e,x:parseFloat(e.style.left)||0,y:homeY(e),w:e.offsetWidth,h:e.offsetHeight}));
     L.sort((a,b)=>a.y-b.y||a.x-b.x);const P=[{x:A.l,y:A.t,w:A.r-A.l,h:A.b-A.t}];let ch=false;
     for(const p of L){let mv=true,n=0;while(mv&&n++<60){mv=false;for(const q of P){if(p.x<q.x+q.w&&p.x+p.w>q.x&&p.y<q.y+q.h+G&&p.y+p.h>q.y-G+1){const ny=q.y+q.h+G;if(ny>p.y){p.y=ny;mv=true;ch=true}}}}
-      P.push(p);p.e.style.top=Math.round(p.y)+'px';const f=FP[p.e.id];if(f){f.dy=p.y-A.y0;f.ab=p.y>=A.b-4?1:0;f.db=p.y-A.b}}
-    if(ch){sv('ah_float',FP);room()}}
+      P.push(p);p.e.style.top=Math.round(p.y)+'px'}
+    room()}
   function place(){const A=anc();ids.forEach(id=>{const p=FP[id],e=byId(id);if(!p||!e)return;let x=A.cx+p.dx;x=Math.max(scrollX+4,Math.min(x,scrollX+innerWidth-60));e.style.left=Math.round(x)+'px';e.style.top=Math.round(Math.max(0,p.ab?A.b+p.db:A.y0+p.dy))+'px';e.style.width=Math.round(p.w)+'px';e.style.zIndex=p.z||10});room()}
   /* alltid god plass under panelene: siden er minst så lang som det nederste panelet + et halvt skjermbilde (litt mer mens man drar) */
   let extraDrag=0,roomMax=0;function room(){if(!FLOAT){D.style.minHeight='';return}const dt=D.getBoundingClientRect().top+scrollY;let mb=0;ids.forEach(id=>{const e=byId(id);if(e&&e.offsetParent)mb=Math.max(mb,e.getBoundingClientRect().bottom+scrollY)});
-    const want=Math.max(0,mb+Math.max(120,extraDrag)-dt);roomMax=extraDrag?Math.max(roomMax,want):want;D.style.minHeight=Math.round(roomMax)+'px'}
+    const want=Math.max(0,mb+120-dt);roomMax=extraDrag?Math.max(roomMax,want):want;D.style.minHeight=Math.round(roomMax)+'px'}
   const ro=typeof ResizeObserver!=='undefined'?new ResizeObserver(()=>room()):null;ids.forEach(id=>ro&&ro.observe(byId(id)));
   function enterFloat(){if(FLOAT)return;FLOAT=true;const A=anc();
     if(!ids.every(id=>FP[id])){build(true);ids.forEach(id=>{if(FP[id])return;const e=byId(id),r=e.getBoundingClientRect(),col=e.parentNode;let top=r.top+scrollY,left=r.left+scrollX,w=r.width;
@@ -1793,33 +1796,31 @@ var LIVE=false;
     if(t===dr.c)return;if(t&&t.parentNode===col){const r=t.getBoundingClientRect(),ref=e.clientY<r.top+r.height/2?t:t.nextSibling;if(ref!==dr.c&&(dr.c.nextSibling!==ref||dr.c.parentNode!==col))col.insertBefore(dr.c,ref)}
     else if(!t){const last=[...col.children].filter(x=>x.offsetHeight).pop();if(!last||e.clientY>last.getBoundingClientRect().bottom)col.appendChild(dr.c)}});
   const end=e=>{if(!dr||e.pointerId!==dr.id)return;const m=dr.moved,c=dr.c;window.__pdrag=false;if(dr.raf)cancelAnimationFrame(dr.raf);if(FLOAT&&m){c.style.left=Math.round(dr.nx)+'px';c.style.top=Math.round(dr.ny)+'px';c.style.transform=''}c.classList.remove('drag');D.classList.remove('dragging');document.body.classList.remove('pdrag');dr=null;if(!m)return;window.__pdragT=performance.now();
-    if(FLOAT){const A=anc(),p=FP[c.id]||(FP[c.id]={w:c.offsetWidth,z:++Z});p.dx=parseFloat(c.style.left)-A.cx;p.dy=parseFloat(c.style.top)-A.y0;p.ab=parseFloat(c.style.top)>=A.b-4?1:0;p.db=parseFloat(c.style.top)-A.b;extraDrag=0;room();sv('ah_float',FP)}else{L[N]=cols.map(x=>[...x.children].map(y=>y.id));sv('ah_layout',L)}};
+    if(FLOAT){const A=anc(),p=FP[c.id]||(FP[c.id]={w:c.offsetWidth,z:++Z});p.dx=parseFloat(c.style.left)-A.cx;p.dy=parseFloat(c.style.top)-A.y0;p.ab=parseFloat(c.style.top)>=A.b-4?1:0;p.db=parseFloat(c.style.top)-A.b;extraDrag=0;sv('ah_float',FP);resolve()}else{L[N]=cols.map(x=>[...x.children].map(y=>y.id));sv('ah_layout',L)}};
   document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
   /* Alle paneler unntatt Media og Overlay starter lukket – klikk på tittelen (eller det lukkede panelet) åpner/lukker */
   /* panelene som henger fast under (magnet, avstand ~14–16 px) følger med når et panel åpnes eller lukkes */
   const fr=e=>{const x=parseFloat(e.style.left)||0,y=parseFloat(e.style.top)||0;return{e,x,y,w:e.offsetWidth,h:e.offsetHeight}};
   function savePos(e){const A=anc(),y=parseFloat(e.style.top)||0,f=FP[e.id];if(f){f.dy=y-A.y0;f.ab=y>=A.b-4?1:0;f.db=y-A.b}}
   ['excard','voidcard','mtcard','prcard','tlcard'].forEach(id=>{const c=byId(id);if(!c)return;c.classList.add('foldable','fold');
-    c.addEventListener('click',e=>{if(window.__pdragT&&performance.now()-window.__pdragT<350)return;const onH=e.target.closest('.card>h2');if(!onH&&!c.classList.contains('fold'))return;
+    c.addEventListener('click',e=>{if(e.detail>1||window.__pdragT&&performance.now()-window.__pdragT<350)return;const onH=e.target.closest('.card>h2');if(!onH&&!c.classList.contains('fold'))return;
       c.classList.toggle('fold')})});
   /* når et panel endrer høyde (åpnes/lukkes, eller Media-panelet vises/skjules) flyttes panelene som henger under det like mye */
   /* husker høyden hvert panel hadde (0 = skjult) – også mellom økter, så hull etter lukkede paneler tettes ved oppstart */
   let phT=0;
   function adj(c){if(!FLOAT||dr||!c.classList.contains('fwin'))return false;const f=FP[c.id];if(!f)return false;const h=c.offsetParent?c.offsetHeight:0,h0=f.vh;f.vh=h;if(h0==null||Math.abs(h0-h)<2)return false;
-    const d=h0===0?h+16:h===0?-(h0+16):h-h0,y=parseFloat(c.style.top)||0,x0=parseFloat(c.style.left)||0,w=c.offsetWidth||parseFloat(c.style.width)||300;
-    const all=ids.map(byId).filter(e=>e&&e!==c&&e.offsetParent&&e.classList.contains('fwin')).map(fr),out=[],q=[{x:x0,y,w,h:h0}];
+    const d=h0===0?h+16:h===0?-(h0+16):h-h0,y=homeY(c),x0=parseFloat(c.style.left)||0,w=c.offsetWidth||parseFloat(c.style.width)||300;
+    const all=ids.map(byId).filter(e=>e&&e!==c&&e.offsetParent&&e.classList.contains('fwin')).map(e=>{const r=fr(e);r.y=homeY(e);return r}),out=[],q=[{x:x0,y,w,h:h0}];
     while(q.length){const a=q.shift();all.forEach(b=>{if(out.includes(b))return;const gap=b.y-(a.y+a.h);if(gap>=-2&&gap<=30&&b.x<a.x+a.w-8&&b.x+b.w>a.x+8){out.push(b);q.push(b)}})}
-    out.forEach(b=>{b.y=Math.max(0,b.y+d);b.e.style.top=Math.round(b.y)+'px';savePos(b.e)});return true}
+    out.forEach(b=>{b.y=Math.max(0,b.y+d);setHome(b.e,b.y)});return true}
   function phSync(list){if(!FLOAT)return;(list||ids.map(byId).filter(Boolean)).sort((a,b)=>(parseFloat(a.style.top)||0)-(parseFloat(b.style.top)||0)).forEach(adj);sv('ah_float',FP);clearTimeout(phT);phT=setTimeout(()=>{try{resolve();room()}catch(_){}},30)}
   if(typeof ResizeObserver!=='undefined'){const rh=new ResizeObserver(en=>{if(!FLOAT||dr)return;phSync(en.map(x=>x.target))});ids.forEach(id=>{const e=byId(id);if(e)rh.observe(e)})}
   /* standardplass for hvert panel (samme kolonneoppsett som første gang) */
   function defaults(){const A=anc(),dr0=D.getBoundingClientRect(),W=dr0.width||D.clientWidth,n=nFor(),G=16,cw=(W-(n-1)*G)/n,top=dr0.top+scrollY+(MB&&MB.offsetParent?MB.offsetHeight+G:0),h=new Array(n).fill(0),R={};
     ids.forEach(id=>{const c=byId(id);const hh=c.offsetParent?c.offsetHeight:(c.style.display==='none'?120:300);let k=0;for(let i=1;i<n;i++)if(h[i]<h[k]-8)k=i;const x=dr0.left+scrollX+k*(cw+G),y=top+h[k];R[id]={dx:x-A.cx,dy:y-A.y0,w:cw,ab:1,db:y-A.b};h[k]+=hh+G});
     const S0=ld('ah_float_def',null);if(S0)ids.forEach(id=>{if(S0[id])R[id]=S0[id]});return R}
-  document.addEventListener('dblclick',e=>{const h=e.target.closest&&e.target.closest('.card>h2');if(!h||!ids.includes(h.parentNode.id))return;const c=h.parentNode;
-    if(FLOAT){const d=defaults()[c.id];if(d){FP[c.id]=Object.assign({},d,{z:++Z});place();setTimeout(resolve,20);sv('ah_float',FP);st('“'+(h.textContent||'Panel').trim()+'” is back in its place.')}return}
-    L={};sv('ah_layout',L);build(true);st('Panel layout reset.')});
-  ids.forEach(id=>{const h=byId(id).querySelector(':scope>h2');if(h)h.dataset.tip='Drag the title (or any empty spot) to move this panel anywhere – it snaps gently to nearby edges. Double-click the title to put just this panel back.'});
+  /* (dobbeltklikk på tittelen flytter ikke lenger panelet – bruk «Reset to default» nederst) */
+  ids.forEach(id=>{const h=byId(id).querySelector(':scope>h2');if(h)h.dataset.tip='Drag the title (or any empty spot) to move this panel anywhere – it snaps gently to nearby edges.'});
   /* et panel som dukker opp (f.eks. Media) legges øverst */
   const mo=new MutationObserver(ms=>{ms.forEach(m=>{const c=m.target;if(FLOAT&&c.offsetParent&&m.oldValue&&/display:\s*none/.test(m.oldValue)){raise(c);setTimeout(resolve,30)}})});ids.forEach(id=>mo.observe(byId(id),{attributes:true,attributeFilter:['style'],attributeOldValue:true}));
 })();
