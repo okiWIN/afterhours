@@ -1275,8 +1275,8 @@ function lzRender(){
 }
 /* Vannmerke (kun i nettversjonen; skrivebordsappen setter WATERMARK=false) */
 const WATERMARK=true;
-/* KJØP: lim inn Gumroad-lenken til desktop-appen her (f.eks. https://oscarkilic.gumroad.com/l/afterhours). Tom = ingen kjøpslenker. */
-var BUY_URL='https://oscarsordal.gumroad.com/l/afterhours';
+/* KJØP: lim inn Gumroad-lenken til desktop-appen her (f.eks. https://afterhoursvisual.gumroad.com/l/afterhours). Tom = ingen kjøpslenker. */
+var BUY_URL='https://afterhoursvisual.gumroad.com/l/afterhours';
 const WMS=new THREE.Scene(),WMT=(()=>{const c=document.createElement('canvas');c.width=640;c.height=120;const g=c.getContext('2d');g.textAlign='right';g.textBaseline='middle';g.shadowColor='#000a';g.shadowBlur=10;g.font='700 54px system-ui,sans-serif';g.fillStyle='#ffffff';g.fillText('AFTERHOURS',628,44);g.font='500 28px system-ui,sans-serif';g.fillStyle='#ffffffcc';g.fillText('Made with Afterhours · web version',628,92);const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;return t})();
 const WMM=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:WMT,transparent:true,depthTest:false,depthWrite:false,opacity:.62}));WMS.add(WMM);
 var TXON=false,TXPOS='c';const TXS=new THREE.Scene();let TXT=null,TXM=null;
