@@ -18,3 +18,6 @@ Etter opplasting:
 - Donasjonsknappen («♥ Support»): åpne index.html, finn linjen  var DONATE_URL='';
   og lim inn PayPal-lenken mellom fnuttene, f.eks. var DONATE_URL='https://paypal.me/brukernavn';
   Knappene vises øverst og nederst så snart lenken er fylt inn. Tom lenke = ingen knapp.
+- Kjøpsknappen (desktop-appen via Gumroad): finn  var BUY_URL='';  i index.html OG app.html
+  og lim inn Gumroad-lenken. Prisen som står på knappen settes i  var BUY_PRICE='$9.99';  (index.html).
+  Tom lenke = «coming soon» som før.

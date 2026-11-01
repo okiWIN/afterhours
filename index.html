@@ -160,9 +160,8 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
   </div>
   <div class="cta" style="margin-top:24px">
     <a class="btn s" href="#try" id="webbtn">Try the web version</a>
-    <!-- TODO: replace # with the download link when the desktop app is ready -->
     <a class="btn p" href="#" aria-disabled="true" id="dlbtn">Download for Windows</a>
-    <span class="note">Windows 10/11 · version 1.70 · coming soon</span>
+    <span class="note" id="dlnote">Windows 10/11 · version 1.70 · coming soon</span>
   </div>
   <details class="news"><summary>What’s new in 1.70</summary><ul>
     <li>Vectorscope meter – a glowing stereo thread you can spin right on the picture</li>
@@ -193,6 +192,9 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 <script>
 /* DONASJON: lim inn PayPal-lenken din her (f.eks. https://paypal.me/brukernavn). Tom = knappene vises ikke. */
 var DONATE_URL='https://paypal.me/oscarkilic';
+/* KJØP: lim inn Gumroad-lenken til desktop-appen her (f.eks. https://oscarkilic.gumroad.com/l/afterhours). Tom = «coming soon». */
+var BUY_URL='';
+var BUY_PRICE='$9.99';
 (function(){document.querySelectorAll('[data-donate]').forEach(function(a){if(DONATE_URL){a.href=DONATE_URL;a.hidden=false}})})();
 </script>
 
@@ -264,7 +266,10 @@ var DONATE_URL='https://paypal.me/oscarkilic';
   requestAnimationFrame(frame);
   if(reduce)addEventListener('resize',function(){requestAnimationFrame(frame)});
   /* Appen har fast høyde og scroller inni seg, så forhåndsvisningen kan stå fast mens du justerer */
-  document.getElementById('dlbtn').addEventListener('click',function(e){e.preventDefault()});
+  (function(){var b=document.getElementById('dlbtn'),n=document.getElementById('dlnote');
+    if(BUY_URL){b.href=BUY_URL;b.target='_blank';b.rel='noopener';b.removeAttribute('aria-disabled');b.textContent='Get Afterhours Desktop – '+BUY_PRICE;n.textContent='Windows 10/11 · instant download · license key included';
+      document.querySelectorAll('a[href="#get"].btn').forEach(function(a){a.textContent='Get the desktop app – '+BUY_PRICE})}
+    else b.addEventListener('click',function(e){e.preventDefault()})})();
 })();
 </script>
 
