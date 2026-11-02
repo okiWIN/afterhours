@@ -292,7 +292,7 @@ body.lock #stage{pointer-events:none}
 
 /* ===== v68: samlet oppsett ===== */
 .dev{grid-template-columns:minmax(0,1fr) 220px;grid-template-areas:"c r" "s s" "b b"}
-#scn{grid-template-columns:repeat(8,1fr);grid-auto-flow:row;grid-template-rows:none;margin-top:12px;gap:8px;padding:8px}
+#scn{grid-template-columns:repeat(9,1fr);grid-auto-flow:row;grid-template-rows:none;margin-top:12px;gap:8px;padding:8px}
 .key{height:50px}
 .db{justify-self:stretch;display:flex;align-items:center;gap:16px;padding:0;background:none;box-shadow:none;margin-top:16px;border-radius:0}
 .db .slot{width:230px;flex:none;min-height:58px;padding:9px 12px}
@@ -303,7 +303,7 @@ body.lock #stage{pointer-events:none}
 #trk{max-width:22%}
 :root{--sh:clamp(240px,calc(100vh - 540px),600px)}
 @media(max-width:1180px){.db{flex-wrap:wrap}.db .trk{flex:1 1 300px}.leds{flex:1 1 100%;justify-content:center}}
-@media(max-width:980px){.dev{grid-template-columns:minmax(0,1fr);grid-template-areas:"c" "r" "s" "b"}.dev>*{min-width:0}#scn{grid-template-columns:repeat(4,1fr)}.db .slot{width:100%}.db .trk{flex:1 1 100%}.leds .ledw{width:auto;flex:1}:root{--sh:clamp(200px,52vh,480px)}}
+@media(max-width:980px){.dev{grid-template-columns:minmax(0,1fr);grid-template-areas:"c" "r" "s" "b"}.dev>*{min-width:0}#scn{grid-template-columns:repeat(3,1fr)}.db .slot{width:100%}.db .trk{flex:1 1 100%}.leds .ledw{width:auto;flex:1}:root{--sh:clamp(200px,52vh,480px)}}
 .ks{gap:20px}
 
 /* ===== v79: renderte knotter og tastaturknapper ===== */
@@ -523,15 +523,15 @@ img,svg,canvas{-webkit-user-drag:none}
 .mth:hover .rt,.mth.act .rt{opacity:1}.mth.rot{cursor:grabbing}.mth.rot .rt{cursor:grabbing}
 body.lock .mth{pointer-events:none}
 
-#scn{grid-template-columns:repeat(8,1fr)}
-@media(max-width:980px){#scn{grid-template-columns:repeat(4,1fr)}}
+#scn{grid-template-columns:repeat(9,1fr)}
+@media(max-width:980px){#scn{grid-template-columns:repeat(3,1fr)}}
 
 #odz.ovoff{opacity:.55}
 html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}html.lowp .card,html.lowp .cells>.field{contain:layout style}html.lowp .slot b,html.lowp #ttl,html.lowp .kv{animation:none!important}
 #kbhelp{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:#000a;backdrop-filter:blur(3px)}#kbhelp.on{display:flex}#kbhelp .kbb{background:linear-gradient(180deg,#14161e,#0b0c11);border:1px solid #2b3150;border-radius:12px;padding:18px 22px;box-shadow:0 20px 60px #000c;color:#dfe6ff;font:12px/1.6 var(--mono);max-width:560px}#kbhelp h3{margin:0 0 10px;font:600 13px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#9fb0ff}#kbhelp td{padding:3px 14px 3px 0;vertical-align:top}#kbhelp kbd{display:inline-block;padding:1px 7px;border:1px solid #3a4266;border-radius:4px;background:#0c0e16;color:#fff;white-space:nowrap}#kbhelp small{display:block;margin-top:10px;color:#7c86b0}
 #moreb{display:none}
 @media(max-width:820px){.adv{display:none!important}body.showadv .adv{display:block!important}#moreb{display:block;width:100%;margin:10px 0;padding:12px;border:1px solid #2b3150;border-radius:9px;background:linear-gradient(180deg,#171a26,#0d0e14);color:#dfe6ff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
-.fxg{grid-template-columns:1fr 1fr!important}.fxc label.t{white-space:nowrap}.row{flex-wrap:wrap}#scn{grid-template-columns:repeat(4,1fr)!important}.key{height:48px}}
+.fxg{grid-template-columns:1fr 1fr!important}.fxc label.t{white-space:nowrap}.row{flex-wrap:wrap}#scn{grid-template-columns:repeat(3,1fr)!important}.key{height:48px}}
 </style>
 </head>
 <body>
@@ -559,6 +559,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <button class="key lt" data-m="rings" data-tip="Tunnel: glowing rings you fly through.">Tunnel</button>
 <button class="key lt" data-m="organic" data-tip="Organic: an atom of light that breathes with the melody.">Organic</button>
 <button class="key lt" data-m="orbits" data-tip="Orbits: patterns you fly through with sine and saw waves. Pick Geometry or Classic under Preset.">Orbits</button>
+<button class="key lt" data-m="topo" data-tip="Topo: glowing contour lines of a landscape that rises with the bass – seen from above (Flow) or flown over (Terrain).">Topo</button>
 <button class="key dk" data-m="hyper" data-tip="Hyperspace: from still stars to a jump to lightspeed.">Hyper</button>
 <button class="key dk" data-m="void" data-tip="Void: fast title cards, eclipse and flashes cut on the kicks and snares. Turn Intensity up for faster cuts. Warning: strong flashing.">Void</button><button class="key dk" data-m="image" data-tip="Media: show your own image, GIF or video, with filters and colors on top. Settings appear below the device.">Media</button>
 <button class="key dk" id="nxt" data-tip="Next scene.">Next ›</button>
@@ -599,7 +600,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="card" id="voidcard" style="display:none">
 <h2>Text &amp; lyrics</h2>
 <div id="vtl" style="display:none;margin:2px 0 12px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap"><span class="lb" style="margin:0">Timeline</span><button class="chip on" type="button" id="vtladd" data-tip="Add a text box where the song is now. You can also double-click anywhere on the timeline.">+ Text</button><span id="vtlinfo" style="flex:1;min-width:120px;font:11px var(--mono);color:#9fb3e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><button class="chip" type="button" id="vtlzo" title="Zoom out">−</button><button class="chip" type="button" id="vtlzi" title="Zoom in">+</button><button class="chip" type="button" id="vtlsel" title="Zoom to the selected line">Selected</button><button class="chip" type="button" id="vtlfit" title="Show the whole song">Fit</button></div><canvas id="vtlc" tabindex="0" aria-label="Lyrics timeline" style="width:100%;height:128px;display:block;border-radius:6px;cursor:pointer;outline:none;touch-action:none"></canvas><div class="note" style="margin:6px 0 0"><b style="color:#cfe0ff">Double-click the timeline to add text there</b> · double-click a box to edit it · drag a box to move it, its edges to change start and end · Ctrl+C / Ctrl+V or Ctrl+D duplicates · Delete removes · Shift+scroll or drag the empty area to move along · scroll to zoom</div></div>
-<div class="field txrow"><span class="lb">Text on other scenes</span><div class="row" style="gap:8px;align-items:center"><label class="t" data-tip="TEXT ON EVERY SCENE: shows the words or lyrics below on top of any scene (Tunnel, Orbits, Hyper, Media …). Void always shows them as big title cards."><input type="checkbox" id="txon"> Show on every scene</label><select id="txpos" data-tip="Where the text sits on the other scenes." style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px"><option value="c">Center</option><option value="b">Bottom</option><option value="t">Top</option></select><select id="txfx" data-tip="TEXT EFFECT for the lyrics and the text on other scenes. Mix picks a new one for every line." style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px"><option value="mix">Effect: Mix</option><option value="pump">Kick pump</option><option value="glitch">Glitch</option><option value="glow">Glow pulse</option><option value="type">Typewriter</option><option value="scramble">Scramble</option><option value="drop">Drop in</option><option value="blur">Blur in</option><option value="chrome">Chrome</option><option value="trail">Echo trail</option><option value="outline">Neon outline</option><option value="wave">Wave</option><option value="none">None</option></select></div><div class="row txcol" style="gap:6px;align-items:center;margin-top:8px" data-tip="TEXT COLOR for the text on other scenes. White stays white, RGB gives every new word a new color, Custom uses your own color."><span class="lb" style="margin-right:4px">Color</span><button class="chip on" type="button" data-tc="white">White</button><button class="chip" type="button" data-tc="rgb">RGB</button><button class="chip" type="button" data-tc="custom">Custom</button><input type="color" id="txcc" value="#7fb4ff" aria-label="Custom text color"></div></div>
+<div class="field txrow"><span class="lb">Text on other scenes</span><div class="row" style="gap:8px;align-items:center"><label class="t" data-tip="TEXT ON EVERY SCENE: shows the words or lyrics below on top of any scene (Tunnel, Orbits, Hyper, Media …). Void always shows them as big title cards."><input type="checkbox" id="txon"> Show on every scene</label><select id="txpos" data-tip="Where the text sits on the other scenes." style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px"><option value="c">Center</option><option value="b">Bottom</option><option value="t">Top</option></select><select id="txfx" data-tip="TEXT EFFECT for the lyrics and the text on other scenes. Mix picks a new one for every line." style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px"><option value="mix">Effect: Mix</option><option value="pump">Kick pump</option><option value="glitch">Glitch</option><option value="glow">Glow pulse</option><option value="type">Typewriter</option><option value="scramble">Scramble</option><option value="drop">Drop in</option><option value="blur">Blur in</option><option value="chrome">Chrome</option><option value="glass">Liquid glass</option><option value="trail">Echo trail</option><option value="outline">Neon outline</option><option value="wave">Wave</option><option value="none">None</option></select></div><div class="row txcol" style="gap:6px;align-items:center;margin-top:8px" data-tip="TEXT COLOR for the text on other scenes. White stays white, RGB gives every new word a new color, Custom uses your own color."><span class="lb" style="margin-right:4px">Color</span><button class="chip on" type="button" data-tc="white">White</button><button class="chip" type="button" data-tc="rgb">RGB</button><button class="chip" type="button" data-tc="custom">Custom</button><input type="color" id="txcc" value="#7fb4ff" aria-label="Custom text color"></div></div>
 <div class="field" data-tip="The words that flash on the title cards, separated by commas. Japanese and other scripts work too. Write * for a star, e.g. L*VE (the A in STAR becomes a star by itself)."><span class="lb">Words</span><input type="text" id="vwords" maxlength="300" style="width:100%;box-sizing:border-box;background:linear-gradient(180deg,#07080c,#10121a);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:12px var(--mono);padding:6px 9px;box-shadow:inset 0 1px 3px #000"></div>
 
 <div class="field" style="margin-top:12px" data-tip="Keep one font for all the text, or let it change on every card like the film intro."><span class="lb">Font</span><select id="vfont" style="width:100%;background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:12px var(--mono);padding:6px 8px"><option value="-1">Mix – new font on every card</option><option value="0">Rounded (M PLUS)</option><option value="1">Dela Gothic</option><option value="2">Brush (Yuji Syuku)</option><option value="3">Reggae One</option><option value="4">Futura Cond. (Jost)</option><option value="5">Slab Cond. (Alfa Slab)</option><option value="6">Neon (Monoton)</option><option value="7">Bungee Shade</option><option value="8">Techno (Orbitron)</option><option value="9">Blackletter metal</option><option value="10">Poster (Abril Fatface)</option><option value="11">Pixel (Press Start 2P)</option><option value="12">Georgia Italic</option><option value="13">Arial Black</option><option value="14">Poster condensed (Anton)</option><option value="15">Tall condensed (Bebas Neue)</option><option value="16">Japanese gothic (Zen Kaku)</option></select></div>
@@ -622,6 +623,11 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="field"><span class="lb">Media color</span><div class="row" id="icol"><button class="chip on" data-ic="none">Original</button><button class="chip" data-ic="bw">B&amp;W</button><button class="chip" data-ic="rave">Rave</button><button class="chip" data-ic="inferno">Inferno</button><button class="chip" data-ic="toxic">Toxic</button><button class="chip" data-ic="ice">Ice</button><button class="chip" data-ic="synth">Synth</button><button class="chip" data-ic="custom" title="Uses the Custom colors">Custom</button></div></div>
 <div class="field" id="icaw" style="display:none"><span class="lb">Color amount</span><input type="range" id="ica" min="0" max="100" value="100"></div>
 <div class="cbt"><span class="note" style="margin:0;flex:1">Drag the picture to move it, scroll to zoom.</span><button class="chip" id="irs">Reset</button></div>
+</div>
+
+<div class="card" id="xcard" style="display:none">
+<h2>Topo</h2>
+<div id="xs_topo"><div class="field"><span class="lb">View</span><div class="row"><button class="chip on" data-xt="0" data-tip="FLOW: contour map seen from straight above, slowly turning.">Flow</button><button class="chip" data-xt="1" data-tip="TERRAIN: fly low over the glowing landscape.">Terrain</button></div></div><p class="note" style="margin:6px 0 0">The landscape rises with the bass, and every kick sends a wave across it.</p></div>
 </div>
 
 <div class="card adv" id="tlcard">
@@ -1179,9 +1185,9 @@ function tunnelUpdate(dt,hit){
 
 /* Auto-scener og flash */
 let autoOn=true,eS=0,eL=0,lastDrop=0,flash=0,cur='rings';
-var flS=0,INTF=0,STM=2,GLM=0,kB=0,kBv=0,cB=0,cBv=0,sB=0,sBv=0,bB=0,bBv=0,snJs=0,snJv=0;let INT=Math.pow(.3,1.7),SPD=.45,MOV=INT,FL=0,FLK=0,FT=0,FLKS={rings:0,particles:0,orbits:.75,organic:0},curFS='rings';
-const SC=['rings','organic','orbits','hyper'];
-function setScene(v){cur=v;$('#imgcard').style.display=v==='image'?'block':'none';{const vc=$('#voidcard');if(vc)vc.style.display='block'}$('#stage').style.cursor=v==='image'||OVon?'grab':'';if(v==='club'){mode='club';cam.up.set(0,1,0)}else if(v==='drift'){mode='drift';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=0;if(window.driftEnter)driftEnter()}else if(v==='void'){mode='void';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=0;if(window.voidEnter)voidEnter()}else if(v==='image'){if(mode!=='image')window.__imT0=RT;mode='image';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=Math.max(flash,.25)}else{mode='tunnel';tstyle=v;if(v==='hyper'){flash=Math.max(flash,.7);/* hyper starter rent: ingen rester fra forrige modul (partikler, orbits, ringer, ekko/etterslep) */pv=0;ov=0;at=0;og=0;rwS=0;if(trail)trail.fresh=true;if(typeof lzFresh!=='undefined')lzFresh=true;if(typeof PA!=='undefined'){PA.p.visible=PB.p.visible=false}if(typeof OG!=='undefined')OG.visible=false}newPhase();ver++;swT=T}
+var flS=0,INTF=0,STM=2,GLM=0,kB=0,kBv=0,cB=0,cBv=0,sB=0,sBv=0,bB=0,bBv=0,snJs=0,snJv=0;let INT=Math.pow(.3,1.7),SPD=.45,MOV=INT,FL=0,FLK=0,FT=0,FLKS={rings:0,particles:0,orbits:.75,organic:0,topo:.75},curFS='rings';
+const SC=['rings','organic','orbits','hyper','topo'];
+function setScene(v){cur=v;if(window.xsCard)xsCard(v);$('#imgcard').style.display=v==='image'?'block':'none';{const vc=$('#voidcard');if(vc)vc.style.display='block'}$('#stage').style.cursor=v==='image'||OVon?'grab':'';if(v==='club'){mode='club';cam.up.set(0,1,0)}else if(v==='drift'){mode='drift';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=0;if(window.driftEnter)driftEnter()}else if(v==='void'){mode='void';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=0;if(window.voidEnter)voidEnter()}else if(window.XS&&XS[v]){if(mode!==v){mode=v;XS[v].enter()}hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=0;if(typeof PA!=='undefined'){PA.p.visible=PB.p.visible=false}}else if(v==='image'){if(mode!=='image')window.__imT0=RT;mode='image';hy=0;eng=0;ov=0;pv=0;at=0;hid=0;HY.visible=false;cam.up.set(0,1,0);flash=Math.max(flash,.25)}else{mode='tunnel';tstyle=v;if(v==='hyper'){flash=Math.max(flash,.7);/* hyper starter rent: ingen rester fra forrige modul (partikler, orbits, ringer, ekko/etterslep) */pv=0;ov=0;at=0;og=0;rwS=0;if(trail)trail.fresh=true;if(typeof lzFresh!=='undefined')lzFresh=true;if(typeof PA!=='undefined'){PA.p.visible=PB.p.visible=false}if(typeof OG!=='undefined')OG.visible=false}newPhase();ver++;swT=T}
   document.querySelectorAll('[data-m]').forEach(x=>x.classList.toggle('on',autoOn?x.dataset.m==='auto':x.dataset.m===v));if(typeof orbKeys==='function')orbKeys();}
 function autoUpdate(dt){
   const e=(bass+mid)/2;eS+=(e-eS)*(1-Math.exp(-dt*6));eL+=(e-eL)*(1-Math.exp(-dt*.25));
@@ -1684,10 +1690,10 @@ function tick(){if(exporting)efr++;if(window.tlTick)tlTick();
   const fov=(FW<FH?80:62)-kick*5;if(Math.abs(cam.fov-fov)>.01){cam.fov=fov;cam.updateProjectionMatrix()}
   bg.setHSL(hueAt(0),.9,(.015+snare*Math.max(INT,rwS*.9)*FT*(strobe?.022*STM:.006))*(1-hy));/* flash lyser nå mest opp figurene, bakgrunnen bare litt */R.setClearColor(bg);S.fog.color.copy(bg);
   autoUpdate(dt);
-  if(mode==='tunnel')tunnelUpdate(dt,hit);else if(mode==='image')imageUpdate(dt);else if(mode==='void'&&window.voidUpdate)voidUpdate(rdt);else if(mode==='drift'&&window.driftUpdate)driftUpdate(rdt);
-  const sc2=mode==='tunnel'?TS:mode==='image'?IS:mode==='void'?window.VOIDSC:mode==='drift'?window.DRIFTSC:S,rc=(mode==='image'||mode==='void'||mode==='drift')?ic:cam;
+  if(mode==='tunnel')tunnelUpdate(dt,hit);else if(mode==='image')imageUpdate(dt);else if(mode==='void'&&window.voidUpdate)voidUpdate(rdt);else if(mode==='drift'&&window.driftUpdate)driftUpdate(rdt);else if(window.XS&&XS[mode])XS[mode].update(rdt);
+  const xs=window.XS&&XS[mode];const sc2=xs?xs.sc:mode==='tunnel'?TS:mode==='image'?IS:mode==='void'?window.VOIDSC:mode==='drift'?window.DRIFTSC:S,rc=xs?(xs.cam||ic):(mode==='image'||mode==='void'||mode==='drift')?ic:cam;
   ovUpdate();lzRender();
-  if(comp&&(fxOn||FM>0||BL>.01||(OVon&&OVshow)||lzOn)){if(ovP)ovP.enabled=OVon&&OVshow;if(lzP)lzP.enabled=lzOn;if(trail){trail.enabled=BL>.01;trail.mat.uniforms.k.value=BL;trail.mat.uniforms.zm.value=BL*(.0035+.006*kick*Math.min(1,INT+.3))}rp.scene=sc2;rp.camera=rc;bloom.strength=(!fxOn?0:mode==='drift'?.35+kick*.15:mode==='void'?.05+kick*.05:mode==='image'?.18+(kick*.25+clap*.1)*IMI:(.45+((kick*(.55-.25*FT)+clap*.75+snare*.7)*(.25+.75*FT)+flS*(.14+1.3*FT))*(INT*(1-rwS)+Math.max(INT,.9)*rwS)+(energy*.1+mel*.04)*INT)*(1-hy)+hy*(.45+eng*.3))*GLM;const U=fx.uniforms;U.t.value=T%10;U.ft.value=T;U.k.value=fxOn?kick*INT*(1-hy*.8):0;U.vg.value=eng*hy;U.fm.value=FM;U.fa.value=FA;U.sn.value=snare;U.rs.value.set(FW,FH);comp.render(dt)}else{R.render(sc2,rc);if(lzOn){R.autoClear=false;R.render(LZC,oc);R.autoClear=true}if(OVon&&OVshow){R.autoClear=false;R.render(OVC,oc);R.autoClear=true}}
+  if(comp&&(fxOn||FM>0||BL>.01||(OVon&&OVshow)||lzOn)){if(ovP)ovP.enabled=OVon&&OVshow;if(lzP)lzP.enabled=lzOn;if(trail){trail.enabled=BL>.01;trail.mat.uniforms.k.value=BL;trail.mat.uniforms.zm.value=BL*(.0035+.006*kick*Math.min(1,INT+.3))}rp.scene=sc2;rp.camera=rc;bloom.strength=(!fxOn?0:xs?xs.bloom():mode==='drift'?.35+kick*.15:mode==='void'?.05+kick*.05:mode==='image'?.18+(kick*.25+clap*.1)*IMI:(.45+((kick*(.55-.25*FT)+clap*.75+snare*.7)*(.25+.75*FT)+flS*(.14+1.3*FT))*(INT*(1-rwS)+Math.max(INT,.9)*rwS)+(energy*.1+mel*.04)*INT)*(1-hy)+hy*(.45+eng*.3))*GLM;const U=fx.uniforms;U.t.value=T%10;U.ft.value=T;U.k.value=fxOn?kick*INT*(1-hy*.8):0;U.vg.value=eng*hy;U.fm.value=FM;U.fa.value=FA;U.sn.value=snare;U.rs.value.set(FW,FH);comp.render(dt)}else{R.render(sc2,rc);if(lzOn){R.autoClear=false;R.render(LZC,oc);R.autoClear=true}if(OVon&&OVshow){R.autoClear=false;R.render(OVC,oc);R.autoClear=true}}
   renderFlash();renderTxt();if(window.renderMeters)renderMeters(rdt);renderWM();
   if(loaded&&audio.duration&&(!LOWP||exporting||frN%6===0)){$('#bar').style.width=(audio.currentTime/audio.duration*100)+'%';if(!seeking){$('#seek').value=audio.currentTime/audio.duration*1000;$('#tcur').textContent=mmss(audio.currentTime)}$('#ttot').textContent=mmss(audio.duration);$('#seek').disabled=exporting&&document.body.classList.contains('lock')}
 }
@@ -2070,7 +2076,7 @@ addEventListener('resize',()=>{if(miniOn)miniPlace()});
 function miniDraw(){if(!miniOn||!mini.width)return;if(Math.abs(mini.width/mini.height-FW/FH)>.04)miniFit();try{mg.drawImage(cv,0,0,mini.width,mini.height)}catch(e){}}
 /* ===== Maskinvare-UI: knotter, skjermtittel, scenepiler og hjelpelinje ===== */
 (()=>{
-  const SN={auto:'Auto',rings:'Tunnel',organic:'Organic',particles:'Particles',orbits:'Orbits',hyper:'Hyperspace',void:'Void',drift:'Night Drift',image:'Media'};
+  const SN={auto:'Auto',rings:'Tunnel',organic:'Organic',particles:'Particles',orbits:'Orbits',hyper:'Hyperspace',void:'Void',drift:'Night Drift',topo:'Topo',image:'Media'};
   const keys=[...document.querySelectorAll('#scn [data-m]')];
   const step=d=>{if(exporting&&document.body.classList.contains('lock'))return;const i=keys.findIndex(k=>k.classList.contains('on'));keys[((i<0?0:i)+d+keys.length)%keys.length].click()};
   $('#nxt').onclick=()=>step(1);
@@ -2103,10 +2109,10 @@ function miniDraw(){if(!miniOn||!mini.width)return;if(Math.abs(mini.width/mini.h
   });
   const ttl=$('#ttl'),trk=$('#trk');let lastT='';
   setInterval(()=>{
-    const a=typeof autoOn!=='undefined'&&autoOn,sub=mode==='image'?'image':tstyle;
+    const a=typeof autoOn!=='undefined'&&autoOn,sub=mode==='image'?'image':(window.XS&&XS[mode])?mode:tstyle;
     const h=a?'Auto<small>'+(SN[sub]||'')+'</small>':(SN[cur]||'');
     if(h!==lastT){lastT=h;ttl.innerHTML=h}
-    const sty=(typeof autoOn!=='undefined'&&autoOn)?(mode==='tunnel'?tstyle:''):cur,tun=sty==='rings'||sty==='particles'||sty==='orbits'||sty==='organic';const kw=$('#kflw');if(kw&&kw.style.display!==(tun?'':'none'))kw.style.display=tun?'':'none';if((sty==='orbits'||sty==='particles')&&sty!==curPS){curPS=sty;const pi=$('#ptc'),kp=$('#kPt');if(kp)kp.dataset.def=PTKD[sty];pi.value=PTKS[sty];pi.dispatchEvent(new Event('input'))}const ptw=$('#kptw');if(ptw){const pd=(sty==='orbits'||sty==='particles')?'':'none';if(ptw.style.display!==pd)ptw.style.display=pd}const opw=$('#orbpw');if(opw){const od=sty==='orbits'?'flex':'none';if(opw.style.display!==od)opw.style.display=od}const lzc=_lzC||(_lzC=$('#laser')&&$('#laser').closest('.fxc'));if(lzc){const hz=sty==='hyper'||sty==='rings'||sty==='void'||sty==='drift'||sty==='image';if(lzc.style.display!==(hz?'none':''))lzc.style.display=hz?'none':''}
+    const sty=(typeof autoOn!=='undefined'&&autoOn)?(mode==='tunnel'?tstyle:''):cur,tun=sty==='rings'||sty==='particles'||sty==='orbits'||sty==='organic'||sty==='topo';const kw=$('#kflw');if(kw&&kw.style.display!==(tun?'':'none'))kw.style.display=tun?'':'none';if((sty==='orbits'||sty==='particles')&&sty!==curPS){curPS=sty;const pi=$('#ptc'),kp=$('#kPt');if(kp)kp.dataset.def=PTKD[sty];pi.value=PTKS[sty];pi.dispatchEvent(new Event('input'))}const ptw=$('#kptw');if(ptw){const pd=(sty==='orbits'||sty==='particles')?'':'none';if(ptw.style.display!==pd)ptw.style.display=pd}const opw=$('#orbpw');if(opw){const od=sty==='orbits'?'flex':'none';if(opw.style.display!==od)opw.style.display=od}const lzc=_lzC||(_lzC=$('#laser')&&$('#laser').closest('.fxc'));if(lzc){const hz=sty==='hyper'||sty==='rings'||sty==='void'||sty==='drift'||sty==='image';if(lzc.style.display!==(hz?'none':''))lzc.style.display=hz?'none':''}
     if(tun&&sty!==curFS){curFS=sty;const fi=$('#fl');fi.value=Math.round(FLKS[sty]/1.5*100);fi.dispatchEvent(new Event('input'))}
     const n=loaded?$('#fn').textContent.replace(/\.[^.]+$/,''):'none';if(trk.textContent!==n)trk.textContent=n;
   },250);
@@ -2286,7 +2292,7 @@ window.__cap=w=>capture(w);window.__apl=(S,q)=>apply({id:null,name:'',s:S},q||' 
 function capture(withFiles){
   const r={};RG.forEach(k=>{const e=$('#'+k);if(e)r[k]=+e.value});
   return{scene:autoOn?'auto':cur,ovs:OVshow,lyr:{txt:VLRC,m:VLM},vf:window.VFONT,vw:window.VOIDW,txo:{on:!!window.TXON,p:window.TXPOS||'c',fx:window.TXFX||'mix',c:window.TXCOL||'white',cc:window.TXCC||'#7fb4ff'},tl:window.tlGet?tlGet():null,r,mt:JSON.parse(JSON.stringify(MT)),flks:Object.assign({},FLKS),faks:Object.assign({},FAK),ptks:Object.assign({},PTKS),ck:{laser:$('#laser').checked,strobe:$('#strobe').checked,fxon:$('#fxon').checked,pfx:$('#pfx').checked},
-    fl:onOf('data-fl'),p:onOf('data-p'),cn:onOf('data-cn'),c:[$('#c1').value,$('#c2').value,$('#c3').value],op:ORBP,ic:ICN,ob:onOf('data-ob'),
+    xs:window.XS?{t:XS.topo.view}:null,fl:onOf('data-fl'),p:onOf('data-p'),cn:onOf('data-cn'),c:[$('#c1').value,$('#c2').value,$('#c3').value],op:ORBP,ic:ICN,ob:onOf('data-ob'),
     f:onOf('data-f'),q:onOf('data-q'),rr:onOf('data-r'),img:withFiles?pack(window._imgFile):null,ov:withFiles?pack(window._ovFile):null,ovt:window.ovtlGet?ovtlGet():null,ovm:withFiles&&typeof OVMED!=='undefined'?Object.keys(OVMED).map(Number).filter(m=>OVMED[m].file&&m!==ovCurMid).map(m=>({m,f:pack(OVMED[m].file)})):null,ovc:typeof ovCurMid!=='undefined'?ovCurMid:0,ovp:typeof OVMED!=='undefined'?(ovStore(),Object.fromEntries(Object.keys(OVMED).map(k=>[k,{x:OVMED[k].x,y:OVMED[k].y,sz:OVMED[k].sz,op:OVMED[k].op,int:OVMED[k].int,bl:OVMED[k].bl,bm:OVMED[k].bm,ord:OVMED[k].ord}]))):null,files:!!withFiles}}
 const clk=(a,v)=>{if(v==null)return;const e=document.querySelector('['+a+'="'+v+'"]');if(e&&!e.classList.contains('on'))e.click()};
 const setR=(k,v)=>{const e=$('#'+k);if(!e||v==null)return;e.value=v;e.dispatchEvent(new Event('input'))};
@@ -2296,6 +2302,7 @@ async function apply(P,quiet){
   /* scene først, fordi Media-knappen slår av effektene */
   const sk=document.querySelector('[data-m="'+S.scene+'"]');if(sk)sk.click();
   ['c1','c2','c3'].forEach((id,i)=>{const e=$('#'+id);if(S.c&&S.c[i]){e.value=S.c[i];e.dispatchEvent(new Event('input'))}});if(window.cmbSync)cmbSync();
+  if(S.xs&&window.XS){clk('data-xt',S.xs.t)}
   clk('data-cn',S.cn);clk('data-p',S.p);clk('data-fl',S.fl);clk('data-ob',S.ob);clk('data-f',S.f);clk('data-q',S.q);clk('data-r',S.rr);
   if(S.op&&S.op!==ORBP)clk('data-op',S.op);
   Object.keys(S.ck||{}).forEach(k=>{const e=$('#'+k);if(e&&e.checked!==S.ck[k]){e.checked=S.ck[k];e.dispatchEvent(new Event('change'))}});
@@ -2321,7 +2328,7 @@ async function apply(P,quiet){
 }
 let curP=null;
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const SN={auto:'Auto',rings:'Tunnel',organic:'Organic',particles:'Particles',orbits:'Orbits',hyper:'Hyper',void:'Void',drift:'Drift',image:'Media'};
+const SN={auto:'Auto',rings:'Tunnel',organic:'Organic',particles:'Particles',orbits:'Orbits',hyper:'Hyper',void:'Void',drift:'Drift',topo:'Topo',image:'Media'};
 async function render(){
   const L=(await all()).sort((a,b)=>b.ts-a.ts),box=$('#prl');
   box.innerHTML=L.length?L.map(P=>{const x=[SN[P.s.scene]||P.s.scene];if(P.s.img)x.push('media');if(P.s.ov)x.push('overlay');
@@ -2935,7 +2942,7 @@ function photo(g,W,H){const w=Math.ceil(W/6),h=Math.ceil(H/6),w3=Math.ceil(W/24)
   pb3.globalCompositeOperation='copy';pb3.fillStyle='#000';pb3.fillRect(0,0,w3,h3);pb3.globalCompositeOperation='source-over';pb3.filter='blur(1.5px)';pb3.drawImage(PB1,0,0,w3,h3);pb3.filter='none';pb3.globalCompositeOperation='multiply';pb3.fillStyle='#ff8a5a';pb3.fillRect(0,0,w3,h3);
   g.save();g.imageSmoothingQuality='high';g.globalCompositeOperation='screen';g.globalAlpha=.38;g.drawImage(PB1,0,0,W,H);g.globalAlpha=.45;g.drawImage(PB3,0,0,W,H);g.restore()}
 /* ===== Teksteffekter (Text & lyrics): brukes både på tekst over alle scener og på lyrics-kortene i Void ===== */
-window.TXFX=window.TXFX||'mix';const TXFXL=['pump','glitch','glow','type','scramble','drop','blur','chrome','trail','outline','wave'];
+window.TXFX=window.TXFX||'mix';const TXFXL=['pump','glitch','glow','type','scramble','drop','blur','chrome','glass','trail','outline','wave'];
 const SCR='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*+=?',SCRJ='アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン';
 function fxPick(seed){const v=window.TXFX||'mix';return v==='mix'?TXFXL[mul(seed+77)()*TXFXL.length|0]:v}
 /* tegner linjene sentrert rundt (0,0) i g sitt nåværende koordinatsystem. age = sekunder siden teksten kom */
@@ -2951,6 +2958,11 @@ function fxText(g,L,font,s,ls,rgb,age,fx,seed){{const key=font+'|'+L.join('');if
   /* tegn ett tegn med glød */
   const paint=(ch,x,y,w,ix)=>{
     if(fx==='outline'){g.shadowColor='rgba('+rgb+',.95)';g.shadowBlur=s*.35;g.lineWidth=Math.max(1.2,s*.035);g.strokeStyle='rgba(255,255,255,.95)';g.strokeText(ch,x,y);g.shadowBlur=s*.08;g.strokeText(ch,x,y);return}
+    if(fx==='glass'){/* flytende glass: lyset brytes i kantene (rødt/blått forskjøvet), blank kant og et lys som glir over */const off=s*(.022+.05*k);g.globalCompositeOperation='lighter';g.fillStyle='rgba(255,70,110,.2)';g.fillText(ch,x-off,y);g.fillStyle='rgba(70,150,255,.2)';g.fillText(ch,x+off,y);g.globalCompositeOperation='source-over';
+      const gr=g.createLinearGradient(0,y-s*.5,0,y+s*.5);gr.addColorStop(0,'rgba(255,255,255,.62)');gr.addColorStop(.38,'rgba('+rgb+',.2)');gr.addColorStop(.62,'rgba('+rgb+',.12)');gr.addColorStop(1,'rgba(255,255,255,.42)');
+      g.shadowColor='rgba('+rgb+',.65)';g.shadowBlur=s*.32;g.fillStyle=gr;g.fillText(ch,x,y);g.shadowBlur=0;
+      const sg=g.createLinearGradient(x,y-s*.5,x+w,y+s*.5);sg.addColorStop(0,'rgba(255,255,255,.95)');sg.addColorStop(.5,'rgba(255,255,255,.22)');sg.addColorStop(1,'rgba(255,255,255,.8)');g.lineWidth=Math.max(1,s*.022);g.strokeStyle=sg;g.strokeText(ch,x,y);
+      const sw=((RT*.4)%1.6-.3),px=(ix/Math.max(1,total-1));const a=Math.max(0,1-Math.abs(px-sw)*5);if(a>0){g.fillStyle='rgba(255,255,255,'+(a*.45).toFixed(3)+')';g.fillText(ch,x,y)}return}
     if(fx==='chrome'){const gr=g.createLinearGradient(0,y-s*.5,0,y+s*.5);gr.addColorStop(0,'#ffffff');gr.addColorStop(.42,'#b9c2d6');gr.addColorStop(.5,'#2b3040');gr.addColorStop(.62,'#e9eef8');gr.addColorStop(1,'#7c8496');
       g.shadowColor='rgba('+rgb+',.7)';g.shadowBlur=s*.35;g.fillStyle=gr;g.fillText(ch,x,y);g.shadowBlur=0;
       const sw=((RT*.45)%1.6-.3),px=(ix/Math.max(1,total-1));const a=Math.max(0,1-Math.abs(px-sw)*5);if(a>0){g.globalAlpha*=.9;g.fillStyle='rgba(255,255,255,'+a.toFixed(3)+')';g.fillText(ch,x,y);g.globalAlpha/=.9}return}
@@ -3525,6 +3537,76 @@ $('#vsync').onclick=()=>{if(!asrRun){const pl=ta.value.split(/\r?\n/).filter(l=>
     lyrSet(r.txt);if(VLM==='off')setMode('word');if(window.txAutoOn)txAutoOn();info.textContent='Synced – '+Math.round(r.hit*100)+' % of the words were heard directly, the rest are placed between them. Fine-tune on the timeline below.'})};
 if(!window.AH){const b2=$('#vsync');if(b2){b2.textContent='✦ Auto-sync my lyrics (desktop app)';b2.style.opacity='.55'}}
 })();
+</script>
+<script>
+/* ===== v253: ny scene – Topo (høydekurver). Orb og Logo 3D er tatt ut igjen (Logo 3D lagret som idé) =====
+   Hver scene registreres i window.XS: {sc, cam, enter(), update(rdt), bloom()} – hovedløkka tegner den som de andre. */
+(function(){
+const XS=window.XS={};
+const SN3='vec3 m289(vec3 x){return x-floor(x*(1./289.))*289.;}vec4 m289(vec4 x){return x-floor(x*(1./289.))*289.;}vec4 prm(vec4 x){return m289(((x*34.)+1.)*x);}vec4 tis(vec4 r){return 1.79284291400159-.85373472095314*r;}'+
+ 'float snoise(vec3 v){const vec2 C=vec2(1./6.,1./3.);const vec4 D=vec4(0.,.5,1.,2.);vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);'+
+ 'vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;i=m289(i);vec4 p=prm(prm(prm(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));'+
+ 'float n_=.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.*x_);vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.-abs(x)-abs(y);'+
+ 'vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);vec4 s0=floor(b0)*2.+1.;vec4 s1=floor(b1)*2.+1.;vec4 sh=-step(h,vec4(0.));vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;'+
+ 'vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);vec4 nm=tis(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));p0*=nm.x;p1*=nm.y;p2*=nm.z;p3*=nm.w;'+
+ 'vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);m=m*m;return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}';
+const _c=new THREE.Color();
+/* palettfarger: går gjennom setHSL, så Custom-paletten følges automatisk */
+const pc=(v,i,s,l)=>{_c.setHSL(((hueAt(i)%1)+1)%1,s,l);v.set(_c.r,_c.g,_c.b);return v};
+const kAmt=()=>Math.min(1.4,kick*Math.max(.35,INT));
+const FV='varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}';
+function quad(mat){const q=new THREE.Mesh(new THREE.PlaneGeometry(2,2),mat);q.frustumCulled=false;return q}
+let lk=-1;const kickNew=()=>{if(typeof lastK!=='undefined'&&lastK!==lk){lk=lastK;return true}return false};
+
+/* ---------------- TOPO ---------------- */
+{
+  const U={t:{value:0},amp:{value:4},fl:{value:0},ka:{value:new THREE.Vector4(9,9,9,9)},kw:{value:1},c1:{value:new THREE.Vector3()},c2:{value:new THREE.Vector3()},c3:{value:new THREE.Vector3()},dens:{value:.9},k:{value:0},fogd:{value:120},hl:{value:0}};
+  const mat=new THREE.ShaderMaterial({uniforms:U,extensions:{derivatives:true},
+    vertexShader:'uniform float t,amp,fl,kw;uniform vec4 ka;varying float vh;varying float vd;varying float vr;'+SN3+
+    'float hg(vec2 x){vec2 q=x*.02+vec2(0.,fl);return snoise(vec3(q,t*.05))+snoise(vec3(q*2.,t*.08+3.))*.35+snoise(vec3(q*4.,t*.11+7.))*.07;}'+
+    'float rip(float d,float a){return exp(-a*1.1)*exp(-pow(d-a*30.,2.)/70.);}'+
+    'void main(){vec3 p=vec3(position.x,0.,-position.y);float d=length(p.xz);'+
+    ' float h=hg(p.xz)*amp+kw*(rip(d,ka.x)+rip(d,ka.y)+rip(d,ka.z)+rip(d,ka.w))*3.2;p.y=h;vh=h;vr=d;'+
+    ' vec4 mv=modelViewMatrix*vec4(p,1.);vd=-mv.z;gl_Position=projectionMatrix*mv;}',
+    fragmentShader:'uniform vec3 c1,c2,c3;uniform float dens,amp,k,fogd,hl;varying float vh;varying float vd;varying float vr;'+
+    'void main(){float x=vh*dens;float f=fract(x);float w=max(fwidth(x),1e-4);float ln=1.-smoothstep(0.,w*1.6,min(f,1.-f));'+
+    ' float x5=x/5.;float f5=fract(x5);float w5=max(fwidth(x5),1e-4);float mj=1.-smoothstep(0.,w5*1.8,min(f5,1.-f5));'+
+    ' float hn=clamp(vh/(amp*1.5+.5)*.5+.5,0.,1.);vec3 c=hn<.5?mix(c1,c2,hn*2.):mix(c2,c3,(hn-.5)*2.);'+
+    ' float fade=clamp(1.-w*.9,0.,1.);'+
+    ' vec3 o=c*(ln*(.85+.7*k)*fade+mj*(1.5+1.*k)*clamp(1.-w5*2.,0.,1.))+c*(.03+.07*hn)+c*hl*exp(-vr*.05)*.6;'+
+    ' o*=exp(-vd/fogd);gl_FragColor=vec4(o,1.);}'});
+  const geo=new THREE.PlaneGeometry(320,320,320,320);const mesh=new THREE.Mesh(geo,mat);mesh.frustumCulled=false;
+  const sc=new THREE.Scene();sc.add(mesh);
+  const cam=new THREE.PerspectiveCamera(55,16/9,.5,600);
+  let tt=0,fl=0,amp=4,ks=[9,9,9,9],vw=0,vwS=0,ang=0;
+  XS.topo={sc,cam,view:0,enter(){ks=[9,9,9,9];vwS=this.view},
+    update(rdt){const dt=Math.min(.05,rdt);tt+=dt*(1+energy*.8);
+      const tgt=3.2+(Math.min(1.4,bassS)*5.5+energy*2.5)*Math.min(1.5,INT+.3);amp+=(tgt-amp)*(1-Math.exp(-dt*4));
+      if(kickNew()&&kick>.3){ks.unshift(0);ks.length=4}ks=ks.map(a=>a+dt);
+      vwS+=(this.view-vwS)*(1-Math.exp(-dt*2.2));
+      fl+=dt*(.035+.05*energy)*(vwS>.5?1.6:.6);ang+=dt*.02;
+      U.t.value=tt;U.amp.value=amp;U.fl.value=fl;U.ka.value.set(ks[0],ks[1],ks[2],ks[3]);U.kw.value=Math.min(1.6,INT+.3);U.k.value=kAmt();U.hl.value=kAmt()*FT;
+      pc(U.c1.value,0,.85,.42);pc(U.c2.value,2,.9,.55);pc(U.c3.value,4,.85,.72);
+      const asp=FW/FH;cam.aspect=asp;
+      /* Flow: rett ovenfra og sakte rotasjon. Terrain: lav flyging over landskapet */
+      const v=vwS,top=new THREE.Vector3(Math.sin(ang)*.01,92/Math.min(1,asp*1.1),Math.cos(ang)*.01),low=new THREE.Vector3(Math.sin(T*.07)*14,22+amp*1.6,62);
+      cam.position.copy(top).lerp(low,v);cam.up.set(Math.sin(ang)*(1-v),v,-Math.cos(ang)*(1-v)).normalize();
+      cam.lookAt(0,0,v*-20);cam.fov=(asp<1?72:55)-kick*3*INT;U.fogd.value=60+240*(1-v);U.dens.value=1.25;cam.updateProjectionMatrix()},
+    bloom(){return .5+kick*.3*INT}};
+}
+
+/* Logo 3D er lagt bort som idé (se afterhours-versjoner/ideer/logo-3d) */
+/* ---------------- Fargeinnstillinger-kort ---------------- */
+function card(){
+  const c=document.getElementById('xcard');if(!c)return;
+  const show=v=>{c.style.display=XS[v]?'block':'none';['topo'].forEach(k=>{const s=document.getElementById('xs_'+k);if(s)s.style.display=k===v?'':'none'});const h=c.querySelector('h2');if(h)h.textContent='Topo'};
+  window.xsCard=show;
+  const chips=(sel,fn)=>document.querySelectorAll(sel).forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll(sel).forEach(x=>x.classList.toggle('on',x===b));fn(b)}));
+  chips('[data-xt]',b=>XS.topo.view=+b.dataset.xt);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',card);else card();
+})();
+
 </script>
 </body>
 </html>
