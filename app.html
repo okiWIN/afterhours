@@ -134,7 +134,7 @@ input[type=color]{width:34px;height:24px;border:1px solid #232737;border-radius:
 .drop.on,.drop:hover{box-shadow:inset 0 2px 6px #000,inset 0 0 0 1px var(--a),0 1px 0 #ffffff14;color:#c5c8d4}
 .drop b{display:block;font:20px/1.1 var(--pix);color:var(--scr);margin-bottom:4px}
 .xbtn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:1px solid #3a3a40;background:#1a1a1d;color:#fff;font:600 17px/1 system-ui,sans-serif;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;z-index:2}
-.xbtn:hover{background:var(--a);border-color:var(--a)}.drop.has .xbtn{display:flex}
+.xbtn:hover{background:var(--a);border-color:var(--a)}.slot.has .xbtn{display:flex;top:50%;transform:translateY(-50%);width:24px;height:24px;font-size:15px}.slot.has{padding-right:40px}.slot.has small,.slot.has #fn{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.drop.has .xbtn{display:flex}
 .sl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 16px;margin-top:12px}
 .sl label{display:flex;flex-direction:column;gap:4px;color:#7f8496;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
 .sl input[type=range]{width:100%}
@@ -535,6 +535,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 #moreb{display:none}
 @media(max-width:820px){.adv{display:none!important}body.showadv .adv{display:block!important}#moreb{display:block;width:100%;margin:10px 0;padding:12px;border:1px solid #2b3150;border-radius:9px;background:linear-gradient(180deg,#171a26,#0d0e14);color:#dfe6ff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .fxg{grid-template-columns:1fr 1fr!important}.fxc label.t{white-space:nowrap}.row{flex-wrap:wrap}#scn{grid-template-columns:repeat(3,1fr)!important}.key{height:48px}}
+#ivmu{font-weight:700;padding:6px 14px;font-size:12px}#ivmu.muted{background:rgba(255,79,139,.18);border-color:#ff4f8b;color:#ffd0df}#ivpp{font-weight:700;padding:6px 14px;font-size:12px}
 @font-face{font-family:'VT323';src:url(vendor/fonts/vt323-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:400;src:url(vendor/fonts/space-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:700;src:url(vendor/fonts/space-mono-latin-700-normal.woff2) format('woff2')}
 </style>
 <link rel="stylesheet" href="vendor/fonts2.css">
@@ -587,7 +588,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 
 <div class="seam"></div>
 <div class="db">
-<label class="slot" id="dz" data-tip="Load a song or beat (mp3, wav, m4a). You can also drop it here."><input type="file" id="fi"><b id="fn">Insert track</b><small>mp3 · wav · m4a — click or drop</small></label>
+<label class="slot" id="dz" data-tip="Load a song or beat (mp3, wav, m4a). You can also drop it here."><input type="file" id="fi"><button type="button" class="xbtn" id="fnx" title="Remove song" aria-label="Remove song">×</button><b id="fn">Insert track</b><small>mp3 · wav · m4a — click or drop</small></label>
 <div class="trk"><b>Track:</b><span id="trk">none</span><div class="sk"><span id="tcur">0:00</span><input type="range" id="seek" min="0" max="1000" value="0" disabled aria-label="Position in the song" data-tip="Drag to jump anywhere in the song."><span id="ttot">0:00</span></div></div>
 <div class="leds">
 <div class="ledw"><button class="led w" id="play" disabled data-tip="Play or pause the song with the show.">▶ Play</button><small>Preview with sound</small></div>
@@ -624,8 +625,8 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="card" id="imgcard" style="display:none">
 <h2>Media</h2>
 <label class="drop" id="idz"><input type="file" id="ii" accept="image/*,video/*,.gif,.mp4,.webm,.mov"><button type="button" class="xbtn" id="ix" title="Remove image" aria-label="Remove image">×</button><b id="inm">Drop an image, GIF or video here, or click to choose</b>jpg, png, webp, gif, mp4, webm. The filter is applied on top, and it moves with the music</label>
-<div class="sl"><label>Size <input type="range" id="isz" min="15" max="400" value="100"></label><label>Horizontal <input type="range" id="ipx" min="-100" max="100" value="0"></label><label>Vertical <input type="range" id="ipy" min="-100" max="100" value="0"></label><label data-tip="How much the media moves, zooms and flashes with the music.">Intensity <input type="range" id="iin" min="0" max="100" value="25"></label><label data-tip="FADE IN: the media fades up from black when the Media scene starts or a new file is loaded. 0 = straight in.">Fade in <input type="range" id="ifd" min="0" max="40" value="10"></label><label data-tip="FADE OUT: the media fades to black before the song ends, and before the Scene timeline switches away from Media. 0 = straight out.">Fade out <input type="range" id="ifo" min="0" max="40" value="10"></label></div>
-<div class="field" id="ivpw" style="display:none" data-tip="VIDEO POSITION: drag to choose where in your video it plays. The video stays in step with the song from there – also in the export."><span class="lb">Video position <span id="ivpt" style="color:#9fb3e6;letter-spacing:.04em"></span></span><input type="range" id="ivp" min="0" max="1000" value="0" style="width:100%"></div>
+<div class="sl"><label>Size <input type="range" id="isz" min="15" max="400" value="100"></label><label>Horizontal <input type="range" id="ipx" min="-100" max="100" value="0"></label><label>Vertical <input type="range" id="ipy" min="-100" max="100" value="0"></label><label data-tip="How much the media moves, zooms and flashes with the music.">Intensity <input type="range" id="iin" min="0" max="100" value="25"></label><label data-tip="FADE IN: the media fades up from black at the start of the song (or the clip, or where the Scene timeline switches to Media). With only a video loaded, it fades in at the start of the video. Let go of the slider to preview it. 0 = straight in.">Fade in <input type="range" id="ifd" min="0" max="40" value="10"></label><label data-tip="FADE OUT: the media fades to black before the song ends, and before the Scene timeline switches away from Media. With only a video loaded, it fades out at the end of the video. Let go of the slider to preview it. 0 = straight out.">Fade out <input type="range" id="ifo" min="0" max="40" value="10"></label></div>
+<div class="field" id="ivpw" style="display:none" data-tip="VIDEO POSITION: drag to choose where in your video it plays. The video stays in step with the song from there – also in the export."><span class="lb">Video position <span id="ivpt" style="color:#9fb3e6;letter-spacing:.04em"></span></span><input type="range" id="ivp" min="0" max="1000" value="0" style="width:100%"></div><div class="field" id="ivcw" style="display:none"><span class="lb">Video <span id="ivna" style="color:#8e88a8;letter-spacing:.04em"></span></span><div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><button class="chip" id="ivpp" type="button" data-tip="PLAY / PAUSE the video. Space does the same – it plays and pauses the song too when one is loaded.">❚❚ Pause</button><button class="chip" id="ivmu" type="button" data-tip="SOUND: the video plays its own sound (on by default). Click to mute. The visuals react to the sound while it is on.">🔊 Sound on</button><label style="display:flex;align-items:center;gap:6px;flex:1;min-width:120px" data-tip="VOLUME of the video sound.">Vol <input type="range" id="ivvol" min="0" max="100" value="100" style="flex:1"></label></div></div>
 <div class="field"><span class="lb">Media color</span><div class="row" id="icol"><button class="chip on" data-ic="none">Original</button><button class="chip" data-ic="bw">B&amp;W</button><button class="chip" data-ic="rave">Rave</button><button class="chip" data-ic="inferno">Inferno</button><button class="chip" data-ic="toxic">Toxic</button><button class="chip" data-ic="ice">Ice</button><button class="chip" data-ic="synth">Synth</button><button class="chip" data-ic="custom" title="Uses the Custom colors">Custom</button></div></div>
 <div class="field" id="icaw" style="display:none"><span class="lb">Color amount</span><input type="range" id="ica" min="0" max="100" value="100"></div>
 <div class="cbt"><span class="note" style="margin:0;flex:1">Drag the picture to move it, scroll to zoom.</span><button class="chip" id="irs">Reset</button></div>
@@ -1350,18 +1351,26 @@ function imageUpdate(dt){
   const MI=IMI;u.z.value=1.1*IZm*(1+kick*.045*MI+bassS*.018*MI);u.pan.value.set(IPx,IPy);
   u.off.value.set(Math.sin(T*.13)*.02*Math.min(1,MI*2),Math.cos(T*.11)*.015*Math.min(1,MI*2));
   u.sp.value=.0015+(snare*.006+clap*.003)*MI;
-  const fd=+(($('#ifd')||{}).value||0)/10,fk=fd>0?Math.min(1,Math.max(0,(RT-(window.__imT0||0))/fd)):1;
+  const fd=+(($('#ifd')||{}).value||0)/10;let fk=fd>0?Math.min(1,Math.max(0,(RT-(window.__imT0||0))/fd)):1;
+  /* fade in følger sangen: fra start (eller klippets start i eksport) og fra der Scene timeline går inn i Media */
+  /* uten sang som spiller: fade følger selve videoen (inn i starten, ut mot slutten av klippet) */
+  const songOn=loaded&&(OFF||!audio.paused),vm=MEDIA&&MEDIA.kind==='video'&&MEDIA.v&&isFinite(MEDIA.v.duration)&&MEDIA.v.duration>0?MEDIA.v:null,vidF=!songOn&&!OFF&&vm;
+  if(fd>0&&vidF)fk=Math.min(fk,Math.max(0,Math.min(1,vm.currentTime/fd)));
+  if(fd>0&&songOn){const tS=OFF?OFF.t:audio.currentTime||0;let s0=OFF&&OFF.a?OFF.a:0;
+    if(window.tlGet){const L=tlGet();if(L.on){let pv=null;for(const c of [...L.c].sort((x,y)=>x.t-y.t)){if(c.t>tS+.001)break;if(c.s==='image'&&(!pv||pv.s!=='image'))s0=Math.max(s0,c.t);pv=c}}}
+    fk=Math.min(fk,Math.max(0,Math.min(1,(tS-s0)/fd)))}
   /* fade out: før sangen slutter, og før Scene timeline bytter bort fra Media */
-  const fo=+(($('#ifo')||{}).value||0)/10;let fo2=1;if(fo>0&&loaded){const t=OFF?OFF.t:audio.currentTime||0;let end=audio.duration&&isFinite(audio.duration)?audio.duration:1e9;
+  const fo=+(($('#ifo')||{}).value||0)/10;let fo2=1;if(fo>0&&vidF)fo2=Math.min(1,Math.max(0,(vm.duration-vm.currentTime)/fo));else if(fo>0&&loaded){const t=OFF?OFF.t:audio.currentTime||0;let end=audio.duration&&isFinite(audio.duration)?audio.duration:1e9;if(OFF&&OFF.b)end=Math.min(end,OFF.b);
     if(window.tlGet){const L=tlGet();if(L.on)for(const c of L.c){if(c.t>t+.01&&c.s!=='image'&&c.t<end){end=c.t}}}fo2=Math.min(1,Math.max(0,(end-t)/fo))}
-  const fe=fk*fk*(3-2*fk)*fo2*fo2*(3-2*fo2);u.br.value=(1+kick*.12*MI+snare*.05*MI)*fe;
+  /* forhåndsvis fade out når glidebryteren slippes: toner ut, så inn igjen */if(window.__foP!=null&&!OFF){const e=RT-__foP;if(fo>0&&e<fo+.4)fo2=Math.min(fo2,Math.max(0,1-e/fo));else{window.__foP=null;window.__imT0=RT}}
+  const fe=fk*fk*(3-2*fk)*fo2*fo2*(3-2*fo2);window.IMFE=fe;window.IMBR0=(1+kick*.12*MI+snare*.05*MI);u.br.value=IMBR0*fe;
 }
 /* Bilde, GIF eller video som bakgrunn i Image-scenen */
 var MEDIA=null,IMGON=false;
 function mediaSet(tex,ia,name,m){
   const old=IM.uniforms.map.value;IM.uniforms.map.value=tex;IM.uniforms.ia.value=ia;if(old&&old.dispose&&old!==tex)old.dispose();
   if(MEDIA&&MEDIA.v){MEDIA.v.pause();try{URL.revokeObjectURL(MEDIA.url)}catch(e){}}
-  MEDIA=m||null;IMGON=true;window.__imT0=RT;$('#inm').textContent=name+' · click to change';$('#idz').classList.add('has');
+  MEDIA=m||null;IMGON=true;window.__imT0=RT;if(window.mvAttach)mvAttach(MEDIA);$('#inm').textContent=name+' · click to change';$('#idz').classList.add('has');
 }
 /* Åpner bilde, GIF eller video og gir tilbake tekstur + sideforhold (brukes av Image-scenen og Overlay) */
 async function openMedia(f,lbl){
@@ -1370,7 +1379,7 @@ async function openMedia(f,lbl){
     const v=document.createElement('video'),url=URL.createObjectURL(f);v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';v.src=url;
     await new Promise((ok,no)=>{v.onloadeddata=ok;v.onerror=()=>no(new Error('video'))});
     const t=new THREE.Texture(v);t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.generateMipmaps=false;t.needsUpdate=true;
-    return{tex:t,ia:v.videoWidth/v.videoHeight,m:{kind:'video',v,tex:t,url}};
+    return{tex:t,ia:v.videoWidth/v.videoHeight,m:{kind:'video',v,tex:t,url,file:f}};
   }
   if(ty==='image/gif'||/\.gif$/i.test(nm)){
     try{
@@ -1470,7 +1479,7 @@ async function gifDecode(d,lbl){
   }
   return {fr,tot}
 }
-function mediaTick(){tickMedia(MEDIA)}
+function mediaTick(){tickMedia(MEDIA);if(window.vsSync)vsSync()}
 function tickMedia(m){
   if(!m)return;
   if(m.kind==='video'){if(m.v.readyState>=2)m.tex.needsUpdate=true}
@@ -1479,10 +1488,10 @@ function tickMedia(m){
   else if(m.kind==='gifimg'){m.g.clearRect(0,0,m.cv.width,m.cv.height);m.g.drawImage(m.im,0,0);m.tex.needsUpdate=true}
 }
 /* Brukes av skrivebordsappens eksport: stiller videoen på riktig tidspunkt for hvert bilde */
-async function mediaSeek(t){const L=[[MEDIA,-(window.MOFF||0)]];for(const k in OVMED){const md=OVMED[k];if(md.m&&md.m.kind==='video'){const [e,c]=ovEnvFor(+k,t);if(e>.001)L.push([md.m,(c?c.s:0)-(md.off||0)])}}
+async function mediaSeek(t){const L=[[MEDIA,window.__vsong?0:-(window.MOFF||0)]];for(const k in OVMED){const md=OVMED[k];if(md.m&&md.m.kind==='video'){const [e,c]=ovEnvFor(+k,t);if(e>.001)L.push([md.m,(c?c.s:0)-(md.off||0)])}}
   for(const [m,t0] of L){if(!m||m.kind!=='video'||!isFinite(m.v.duration))continue;m.v.pause();const target=((t-t0)%m.v.duration+m.v.duration)%m.v.duration;
   if(Math.abs(m.v.currentTime-target)<.001)continue;await new Promise(ok=>{const to=setTimeout(ok,700);m.v.onseeked=()=>{clearTimeout(to);ok()};m.v.currentTime=target})}}
-function mediaResume(){[MEDIA,...Object.values(OVMED).map(x=>x.m)].forEach(m=>{if(m&&m.kind==='video')m.v.play().catch(()=>{})})}
+function mediaResume(){[MEDIA,...Object.values(OVMED).map(x=>x.m)].forEach(m=>{if(m&&m.kind==='video'&&!m.up)m.v.play().catch(()=>{})})}
 
 /* Etterbehandling: glød, vignett, korn */
 var comp=null,rp,bloom,fx,trail=null,ovP=null,lzP=null,fxOn=true,FM=0,FA=1,BL=0,efr=0,eT=0,mel=0,pitch=.5,mPrev=0,mAvg=.01,lastN=-1,nT=-9,cPrev=0,cAvg=.01,lastC=-1,cT=-9,clap=0,rollV=0,kickR=0,snareR=0,clapR=0,bassS=0,SM=.5,tonal=0,melG=0,eng=0;
@@ -1517,10 +1526,10 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
   window.HUDL=window.HUDL||{a:'AFTERHOURS //A',b:'NO SIGNAL'};window.hudLabels(HUDL.a,HUDL.b);
   const GA=document.createElement('canvas');GA.width=640;GA.height=64;const gaT=new THREE.CanvasTexture(GA);gaT.minFilter=gaT.magFilter=THREE.LinearFilter;gaT.generateMipmaps=false;
   const drawGA=()=>{const g=GA.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,640,64);g.fillStyle='#fff';g.textAlign='center';g.textBaseline='middle';g.font='700 52px "Space Mono","Courier New",monospace';' .:-=+*#%@'.split('').forEach((c,i)=>g.fillText(c,i*64+32,34));gaT.needsUpdate=true};drawGA();if(document.fonts)document.fonts.ready.then(drawGA);
-  fx=new THREE.ShaderPass({uniforms:{hlw:{value:new THREE.Vector2(.6,.4)},hl:{value:HLT},th:{value:new THREE.Vector3(.5,.95,1.)},tc:{value:new THREE.Vector3(.1,.35,1.)},ga:{value:gaT},tDiffuse:{value:null},t:{value:0},ft:{value:0},k:{value:0},vg:{value:0},fm:{value:0},fa:{value:.7},sn:{value:0},rs:{value:new THREE.Vector2(1920,1080)}},
+  fx=new THREE.ShaderPass({uniforms:{hlw:{value:new THREE.Vector2(.6,.4)},hl:{value:HLT},th:{value:new THREE.Vector3(.5,.95,1.)},tc:{value:new THREE.Vector3(.1,.35,1.)},ga:{value:gaT},tDiffuse:{value:null},t:{value:0},ft:{value:0},k:{value:0},vg:{value:0},fm:{value:0},gf:{value:1},fa:{value:.7},sn:{value:0},rs:{value:new THREE.Vector2(1920,1080)}},
     vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader:[
-    'uniform vec3 tc,th;uniform vec2 hlw;uniform sampler2D hl;uniform sampler2D ga;uniform sampler2D tDiffuse;uniform float t;uniform float ft;uniform float k;uniform float vg;uniform float fm;uniform float fa;uniform float sn;uniform vec2 rs;varying vec2 vUv;',
+    'uniform vec3 tc,th;uniform vec2 hlw;uniform sampler2D hl;uniform sampler2D ga;uniform sampler2D tDiffuse;uniform float t;uniform float ft;uniform float k;uniform float vg;uniform float fm;uniform float gf;uniform float fa;uniform float sn;uniform vec2 rs;varying vec2 vUv;',
     'float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233))+t)*43758.5453);}',
     'float h2(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}',
     'void main(){',
@@ -1607,7 +1616,7 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
     '  tx*=.8+.2*step(.5,fract(P.y/3.));hud+=tx*.95;float inL=step(.995-hlw.x-.02,r1.x)*step(r1.x,1.02)*step(-.15,r1.y)*step(r1.y,1.15)*step(.001,hlw.x)+step(-.02,r2.x)*step(r2.x,hlw.y+.02)*step(-.15,r2.y)*step(r2.y,1.15)*step(.001,hlw.y);o*=1.-.6*min(inL,1.);',
     '  o+=mix(tc,hi,.35)*hud*(1.1+.5*k)*(1.-drop*.4);}',
     ' if(F>5.5)col=mix(org,o,clamp(fa,0.,1.));}',
-    ' col+=(h(vUv*512.)-.5)*.045;',
+    ' col*=gf;col+=(h(vUv*512.)-.5)*.045*gf;',
     ' col+=(h(vUv*rs+.37)+h(vUv*rs*1.13+.71)-1.)*(1.6/255.);',
     ' gl_FragColor=vec4(col,1.);}'
     ].join('\n')});
@@ -1619,7 +1628,7 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
 var OFF=null;
 const audio=new Audio();let ac,an,dest,exporting=false,loaded=false;
 const fd=new Uint8Array(512);
-function initAudio(){if(ac)return;ac=new(window.AudioContext||window.webkitAudioContext)();const s=ac.createMediaElementSource(audio);window._fsrc=s;an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=.5;s.connect(an);an2=ac.createAnalyser();an2.fftSize=1024;an2.smoothingTimeConstant=0;an2.minDecibels=-80;an2.maxDecibels=0;s.connect(an2);if(window.mtHook)mtHook(ac,s);an.connect(ac.destination);dest=ac.createMediaStreamDestination();an.connect(dest)}
+function initAudio(){if(ac)return;ac=new(window.AudioContext||window.webkitAudioContext)();const s=ac.createMediaElementSource(audio);window._fsrc=s;an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=.5;const sg=ac.createGain();window.SONGG=sg;s.connect(sg);sg.connect(an);an2=ac.createAnalyser();an2.fftSize=1024;an2.smoothingTimeConstant=0;an2.minDecibels=-80;an2.maxDecibels=0;sg.connect(an2);if(window.mtHook)mtHook(ac,s);an.connect(ac.destination);dest=ac.createMediaStreamDestination();an.connect(dest)}
 const av=(a,b)=>{let s=0;for(let i=a;i<b;i++)s+=fd[i];return s/(b-a)/255};
 var an2=null;const fd2=new Uint8Array(512);const av2=(a,b)=>{let s=0;for(let i=a;i<b;i++)s+=fd2[i];return s/(b-a)/255};
 var KL={p1:1e-9,p2:1e-9},_med=[],RT=0,lastKr=-9,lastSr=-9,snT=-9,snJ=0;
@@ -1674,7 +1683,7 @@ var _lzC=null,_mtr=null,_mPk=[0,0,0];function hwMeter(){if(!_mtr){_mtr=[$('#mL')
 function tick(){if(exporting)efr++;if(window.tlTick)tlTick();
   const now=performance.now()/1000,rdt=OFF?OFF.dt:Math.min(.05,now-last),dt=rdt*SPD;last=now;T+=dt;RT+=rdt;
   let hit=false,sh=false;
-  if(OFF||(ac&&(!audio.paused||LIVE))){
+  if(OFF||(ac&&(!audio.paused||LIVE||(window.mvLive&&mvLive())))){
     if(OFF){fd.set(OFF.fd);fd2.set(OFF.fd2||OFF.fd)}else{an.getByteFrequencyData(fd);if(an2)an2.getByteFrequencyData(fd2);else fd2.set(fd);latSync()}bass=av(1,6);mid=av(6,40);high=av(60,200);
     /* Onset-deteksjon (se detect()) */
     const dh=detect(RT);if(dh.k){hit=true;lastK=T}
@@ -1731,7 +1740,8 @@ function tick(){if(exporting)efr++;if(window.tlTick)tlTick();
   if(mode==='tunnel')tunnelUpdate(dt,hit);else if(mode==='image')imageUpdate(dt);else if(mode==='void'&&window.voidUpdate)voidUpdate(rdt);else if(mode==='drift'&&window.driftUpdate)driftUpdate(rdt);else if(window.XS&&XS[mode])XS[mode].update(rdt);
   const xs=window.XS&&XS[mode];const sc2=xs?xs.sc:mode==='tunnel'?TS:mode==='image'?IS:mode==='void'?window.VOIDSC:mode==='drift'?window.DRIFTSC:S,rc=xs?(xs.cam||ic):(mode==='image'||mode==='void'||mode==='drift')?ic:cam;
   ovUpdate();lzRender();
-  if(comp&&(fxOn||FM>0||BL>.01||(OVon&&OVshow)||lzOn)){if(ovP)ovP.enabled=OVon&&OVshow;if(lzP)lzP.enabled=lzOn;if(trail){trail.enabled=BL>.01;trail.mat.uniforms.k.value=BL;trail.mat.uniforms.zm.value=BL*(.0035+.006*kick*Math.min(1,INT+.3))}rp.scene=sc2;rp.camera=rc;bloom.strength=(!fxOn?0:xs?xs.bloom():mode==='drift'?.35+kick*.15:mode==='void'?.05+kick*.05:mode==='image'?.18+(kick*.25+clap*.1)*IMI:(.45+((kick*(.55-.25*FT)+clap*.75+snare*.7)*(.25+.75*FT)+flS*(.14+1.3*FT))*(INT*(1-rwS)+Math.max(INT,.9)*rwS)+(energy*.1+mel*.04)*INT)*(1-hy)+hy*(.45+eng*.3))*GLM;const U=fx.uniforms;if(FM===15){if(window.__hlw)U.hlw.value.set(__hlw[0],__hlw[1]);const _h=new THREE.Color(),h0=((hueAt(0)%1)+1)%1;/* Custom/B&W: bruk de valgte fargene direkte (lysere variant til høylys); ellers blå→cyan-forskyvning av palettfargen */if(CUST&&LUT){_h.setHSL(h0,1,.5);U.tc.value.set(_h.r,_h.g,_h.b);_h.setHSL(h0,1,.74);U.th.value.set(_h.r,_h.g,_h.b)}else{(window.__setHSLraw||_h.setHSL).call(_h,(h0+.07)%1,1,.5);U.tc.value.set(_h.r,_h.g,_h.b);(window.__setHSLraw||_h.setHSL).call(_h,(h0+.97)%1,1,.72);U.th.value.set(_h.r,_h.g,_h.b)}}U.t.value=T%10;U.ft.value=T;U.k.value=fxOn?kick*INT*(1-hy*.8):0;U.vg.value=eng*hy;U.fm.value=FM;U.fa.value=FA;U.sn.value=snare;U.rs.value.set(FW,FH);comp.render(dt)}else{R.render(sc2,rc);if(lzOn){R.autoClear=false;R.render(LZC,oc);R.autoClear=true}if(OVon&&OVshow){R.autoClear=false;R.render(OVC,oc);R.autoClear=true}}
+  /* Media fade: med etterbehandling skjer fade i fx (etter filtre og glow), ellers direkte på bildet */const imF=mode==='image'&&window.IMFE!=null&&!(window.XS&&XS[mode]);
+  if(comp&&(fxOn||FM>0||BL>.01||(OVon&&OVshow)||lzOn)){fx.uniforms.gf.value=imF?IMFE:1;if(imF)IM.uniforms.br.value=IMBR0;if(ovP)ovP.enabled=OVon&&OVshow;if(lzP)lzP.enabled=lzOn;if(trail){trail.enabled=BL>.01;trail.mat.uniforms.k.value=BL;trail.mat.uniforms.zm.value=BL*(.0035+.006*kick*Math.min(1,INT+.3))}rp.scene=sc2;rp.camera=rc;bloom.strength=(!fxOn?0:xs?xs.bloom():mode==='drift'?.35+kick*.15:mode==='void'?.05+kick*.05:mode==='image'?.18+(kick*.25+clap*.1)*IMI:(.45+((kick*(.55-.25*FT)+clap*.75+snare*.7)*(.25+.75*FT)+flS*(.14+1.3*FT))*(INT*(1-rwS)+Math.max(INT,.9)*rwS)+(energy*.1+mel*.04)*INT)*(1-hy)+hy*(.45+eng*.3))*GLM;const U=fx.uniforms;if(FM===15){if(window.__hlw)U.hlw.value.set(__hlw[0],__hlw[1]);const _h=new THREE.Color(),h0=((hueAt(0)%1)+1)%1;/* Custom/B&W: bruk de valgte fargene direkte (lysere variant til høylys); ellers blå→cyan-forskyvning av palettfargen */if(CUST&&LUT){_h.setHSL(h0,1,.5);U.tc.value.set(_h.r,_h.g,_h.b);_h.setHSL(h0,1,.74);U.th.value.set(_h.r,_h.g,_h.b)}else{(window.__setHSLraw||_h.setHSL).call(_h,(h0+.07)%1,1,.5);U.tc.value.set(_h.r,_h.g,_h.b);(window.__setHSLraw||_h.setHSL).call(_h,(h0+.97)%1,1,.72);U.th.value.set(_h.r,_h.g,_h.b)}}U.t.value=T%10;U.ft.value=T;U.k.value=fxOn?kick*INT*(1-hy*.8):0;U.vg.value=eng*hy;U.fm.value=FM;U.fa.value=FA;U.sn.value=snare;U.rs.value.set(FW,FH);comp.render(dt)}else{R.render(sc2,rc);if(lzOn){R.autoClear=false;R.render(LZC,oc);R.autoClear=true}if(OVon&&OVshow){R.autoClear=false;R.render(OVC,oc);R.autoClear=true}}
   renderFlash();renderTxt();if(window.renderMeters)renderMeters(rdt);renderWM();
   if(loaded&&audio.duration&&(!LOWP||exporting||frN%6===0)){$('#bar').style.width=(audio.currentTime/audio.duration*100)+'%';if(!seeking){$('#seek').value=audio.currentTime/audio.duration*1000;$('#tcur').textContent=mmss(audio.currentTime)}$('#ttot').textContent=mmss(audio.duration);$('#seek').disabled=exporting&&document.body.classList.contains('lock')}
 }
@@ -1740,13 +1750,20 @@ frame();
 /* UI */
 const st=t=>{const e=$('#st');e.textContent=t;/* etter eksport i nettversjonen: diskret lenke til desktop-appen */if(WATERMARK&&BUY_URL&&/^Done!/.test(t)){const a=document.createElement('a');a.href=BUY_URL;a.target='_blank';a.rel='noopener';a.className='buyhint';a.textContent=' Remove the watermark and export in 4K with the desktop app →';e.appendChild(a)}};
 var curFile=null;
+const dz=$('#dz');
 function load(f){
-  if(!f)return;if(LIVE)liveStop(true);curFile=f;audio.onerror=()=>{loaded=false;$('#play').disabled=$('#exp').disabled=$('#expl').disabled=true;$('#fn').textContent='Drop your song or beat here';st('That file could not be read as audio. Try an mp3, wav or m4a.')};audio.src=URL.createObjectURL(f);audio.load();loaded=true;
-  $('#fn').textContent=f.name;$('#play').disabled=$('#exp').disabled=$('#expl').disabled=false;$('#tag').textContent=f.name.replace(/\.[^.]+$/,'');
+  if(!f)return;if(window.__vsong&&!(MEDIA&&MEDIA.file===f)){window.__vsong=false;if(window.mvMix)setTimeout(mvMix)}if(LIVE)liveStop(true);curFile=f;audio.onerror=()=>{loaded=false;if(window.__vsong){window.__vsong=false;if(window.mvMix)mvMix()}$('#play').disabled=$('#exp').disabled=$('#expl').disabled=true;$('#fn').textContent='Drop your song or beat here';st('That file could not be read as audio. Try an mp3, wav or m4a.')};audio.src=URL.createObjectURL(f);audio.load();loaded=true;
+  $('#fn').textContent=f.name;dz.classList.add('has');$('#play').disabled=$('#exp').disabled=$('#expl').disabled=false;$('#tag').textContent=f.name.replace(/\.[^.]+$/,'');
   st('Ready. Press play to preview the show, or export right away.');
 }
 $('#fi').onchange=e=>load(e.target.files[0]);
-const dz=$('#dz');
+/* fjern sangen (X): appen går tilbake til uten sang – Media-videoen kan fortsatt spilles med sin egen lyd */
+function songClear(){if(exporting)return;if(LIVE)liveStop(true);audio.onerror=null;audio.pause();const u=audio.src;audio.removeAttribute('src');audio.load();try{if(u)URL.revokeObjectURL(u)}catch(e){}
+  loaded=false;curFile=null;$('#fi').value='';$('#fn').textContent='Insert track';dz.classList.remove('has');$('#play').disabled=$('#exp').disabled=$('#expl').disabled=true;$('#play').textContent='▶ Play';$('#bar').style.width='0%';$('#seek').value=0;$('#tcur').textContent='0:00';$('#ttot').textContent='0:00';
+  const wasV=window.__vsong;window.__vsong=false;if(wasV&&MEDIA)MEDIA.noSong=true;if(window.mvMix)mvMix();
+  if(!wasV&&window.vsEnter&&vsEnter(MEDIA))return;
+  st('Song removed. Load a new one, or play a video in Media with its own sound.')}
+$('#fnx').onclick=e=>{e.preventDefault();e.stopPropagation();songClear()};
 ['dragover','dragenter'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('on')}));
 ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('on')}));
 dz.addEventListener('drop',e=>load(e.dataTransfer.files[0]));
@@ -2025,7 +2042,7 @@ $('#ox').onclick=e=>{e.preventDefault();e.stopPropagation();ovClear()};
 function imgClear(){window._imgFile=null;const old=IM.uniforms.map.value;drawPh();IM.uniforms.map.value=mkTex(phC);IM.uniforms.ia.value=phC.width/phC.height;if(old&&old.dispose)old.dispose();
   if(MEDIA&&MEDIA.v){MEDIA.v.pause();try{URL.revokeObjectURL(MEDIA.url)}catch(e){}}MEDIA=null;$('#ii').value='';
   $('#inm').textContent='Drop an image, GIF or video here, or click to choose';$('#idz').classList.remove('has')}
-$('#ix').onclick=e=>{e.preventDefault();e.stopPropagation();imgClear();IMGON=false};
+$('#ix').onclick=e=>{e.preventDefault();e.stopPropagation();const vs=window.__vsong;imgClear();IMGON=false;if(vs){window.__vsong=false;songClear()}};
 /* Klikk eller slipp en fil rett på skjermen i Image-scenen */
 (()=>{const st=$('#stage');let p0=null;
   st.addEventListener('pointerdown',e=>{p0={x:e.clientX,y:e.clientY}},true);
@@ -2220,9 +2237,9 @@ async function fastExport(){if(window.psFull)psFull();
     st('Loading video tools…');
     await loadScr('vendor/mp4-muxer.js');
     st('Analyzing audio…');
-    const dctx=new(window.AudioContext||window.webkitAudioContext)(),dec=await dctx.decodeAudioData(await curFile.arrayBuffer());dctx.close();
+    const dctx=new(window.AudioContext||window.webkitAudioContext)(),dec=await expDecode(dctx);dctx.close();
     const sr=dec.sampleRate,len=dec.length,L=dec.getChannelData(0),R=dec.numberOfChannels>1?dec.getChannelData(1):L,mono=new Float32Array(len);
-    for(let i=0;i<len;i++)mono[i]=(L[i]+R[i])/2;
+    for(let i=0;i<len;i++)mono[i]=(L[i]+R[i])/2;if(window.__vsong&&window.MVMUTE){L.fill(0);if(R!==L)R.fill(0)}
     const CR=clipRange(dec.duration),n0=Math.floor(CR.a*60),total=Math.ceil(CR.b*60),s0=Math.floor(CR.a*sr),s1=Math.min(len,Math.ceil(CR.b*sr));
     const br=Math.min(100e6,Math.round(W*H*60*.3));
     let vc=null;
@@ -2245,7 +2262,7 @@ async function fastExport(){if(window.psFull)psFull();
       while(aenc.encodeQueueSize>8)await nap();if(ferr)throw ferr}
     /* bilder */
     if(window.mtSetSrc)mtSetSrc(dec);
-    const fdo=new Uint8Array(512),fdo2=new Uint8Array(512);OFF={dt:1/60,fd:fdo,fd2:fdo2};wsm.fill(0);t0=performance.now();let n=n0;
+    const fdo=new Uint8Array(512),fdo2=new Uint8Array(512);OFF={dt:1/60,fd:fdo,fd2:fdo2,a:n0/60,b:total/60};wsm.fill(0);t0=performance.now();let n=n0;
     for(;n<total&&!fastCancel;n++){
       wfftFrame(mono,sr,n/60,fdo,fdo2);OFF.t=n/60;await mediaSeek(n/60);tick();
       const vf=new VideoFrame(cv,{timestamp:Math.round((n-n0)*1e6/60),duration:16667});venc.encode(vf,{keyFrame:(n-n0)%120===0});vf.close();
@@ -2413,7 +2430,7 @@ window.afUndo=()=>uGo(-1);window.afRedo=()=>uGo(1);
 /* ===== Tastatursnarveier ===== */
 const HELP=document.createElement('div');HELP.id='kbhelp';HELP.innerHTML='<div class="kbb"><h3>Shortcuts</h3><table>'+[['1 – 7','Switch scene (Auto, Tunnel, Organic, Orbits, Hyper, Void, Media)'],['Space','Play / pause'],['X / Shift+X','Next / previous filter'],['C','Next color palette'],['F','Full screen'],['O','Show / hide overlay'],['Ctrl+Z','Undo'],['Ctrl+Shift+Z / Ctrl+Y','Redo'],['?','Show / hide this list']].map(r=>'<tr><td><kbd>'+r[0]+'</kbd></td><td>'+r[1]+'</td></tr>').join('')+'</table><small>Press ? or Esc to close</small></div>';document.body.appendChild(HELP);
 HELP.onclick=()=>HELP.classList.remove('on');
-const typing=e=>/INPUT|TEXTAREA|SELECT/.test((e.target&&e.target.tagName)||'')||(e.target&&e.target.isContentEditable);
+/* glidebrytere, avkrysninger og knapper teller ikke som skriving – da virker Space (play/pause) og snarveiene uansett hva som er markert */const typing=e=>{const t=e.target;if(!t)return false;if(t.isContentEditable)return true;if(t.tagName==='INPUT')return !/^(range|checkbox|radio|button|submit|reset|color|file)$/i.test(t.type||'');return /TEXTAREA|SELECT/.test(t.tagName||'')};
 document.addEventListener('keydown',e=>{if(typing(e))return;const k=e.key,mod=e.ctrlKey||e.metaKey;
   if(mod&&(k==='z'||k==='Z')){e.preventDefault();uGo(e.shiftKey?1:-1);return}
   if(mod&&(k==='y'||k==='Y')){e.preventDefault();uGo(1);return}
@@ -2421,7 +2438,7 @@ document.addEventListener('keydown',e=>{if(typing(e))return;const k=e.key,mod=e.
   if(k==='?'){HELP.classList.toggle('on');return}
   if(k==='Escape'&&HELP.classList.contains('on')){HELP.classList.remove('on');return}
   if(/^[1-9]$/.test(k)){const B=[...document.querySelectorAll('#scn [data-m]')];const b=B[+k-1];if(b){e.preventDefault();b.click()}return}
-  if(k===' '||e.code==='Space'){if(document.getElementById('vtapbox')&&$('#vtapbox').style.display==='block')return;const p=$('#play');if(p&&!p.disabled){e.preventDefault();p.click()}return}
+  if(k===' '||e.code==='Space'){if(document.getElementById('vtapbox')&&$('#vtapbox').style.display==='block')return;const p=$('#play');e.preventDefault();/* ikke la Space også trykke på knappen/bryteren som er markert */const fe=document.activeElement;if(fe&&fe!==document.body&&fe!==p&&fe.blur)fe.blur();if(exporting)return;if(window.mvSpace&&mvSpace())return;if(p&&!p.disabled)p.click();return}
   if(k==='x'||k==='X'){const F=[...document.querySelectorAll('[data-fl]')],i=F.findIndex(x=>x.classList.contains('on'));const n=F[(i+(e.shiftKey?-1:1)+F.length)%F.length];if(n){e.preventDefault();n.click();st('Filter: '+n.textContent)}return}
   if(k==='c'||k==='C'){const P=[...document.querySelectorAll('[data-p]')],i=P.findIndex(x=>x.classList.contains('on'));const n=P[(i+1)%P.length];if(n){e.preventDefault();n.click();st('Colors: '+n.textContent)}return}});
 })();
@@ -3705,6 +3722,45 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 <script>
+/* Media-video: egen lyd (på som standard), mute, volum og play/pause. Følger sangens play/pause når en sang er lastet. */
+(function(){
+  window.MVMUTE=false;window.MVVOL=1;
+  const vid=()=>(typeof MEDIA!=='undefined'&&MEDIA&&MEDIA.kind==='video'&&MEDIA.v)?MEDIA:null;
+  const setG=m=>{if(m&&m.g)m.g.gain.value=window.__vsong?0:(MVMUTE?0:MVVOL)};
+  const w=$('#ivcw'),pp=$('#ivpp'),mu=$('#ivmu'),vol=$('#ivvol'),na=$('#ivna');
+  function ui(){const m=vid();if(!w)return;const d=m?'':'none';if(w.style.display!==d)w.style.display=d;if(!m)return;
+    const ps=window.__vsong?audio.paused:m.v.paused;pp.textContent=ps?'▶ Play':'❚❚ Pause';mu.textContent=MVMUTE?'🔇 Muted':'🔊 Sound on';mu.classList.toggle('muted',MVMUTE);
+    const silent=m.v.currentTime>1.5&&m.v.webkitAudioDecodedByteCount===0;m.noSnd=silent;na.textContent=silent?'· no sound in this clip':'';mvMix()}
+  window.mvAttach=m=>{if(m&&m.kind==='video'){try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2)}m.v.muted=false;setG(m)}catch(e){m.v.muted=true}
+    m.up=false;if(window.__vsong){window.__vsong=false;songClear()}else if(!vsEnter(m))m.v.play().catch(()=>{})}ui()};
+  window.mvLive=()=>{if(window.__vsong)return false;const m=vid();return !!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0)};
+  /* Video som lydspor: uten sang lastet brukes videoens egen lyd som sang – da virker Play, Space, Clip og begge eksportene */
+  window.vsEnter=m=>{if(loaded||exporting||!m||m.kind!=='video'||!m.file||m.noSong)return false;window.__vsong=true;window.MOFF=0;load(m.file);
+    if(!loaded){window.__vsong=false;return false}$('#fn').textContent='🎬 '+m.file.name;try{m.v.pause();m.v.currentTime=0}catch(e){}m.up=false;setG(m);mvMix();
+    st('Using the sound from your video as the track. Press Play or Space, or export right away. Load a song to use that instead.');return true};
+  window.vsSync=()=>{const m=vid();if(!window.__vsong||OFF||!m||!loaded)return;const v=m.v,t=audio.currentTime||0;
+    if(audio.paused){if(!v.paused)v.pause();if(Math.abs(v.currentTime-t)>.05&&!v.seeking)try{v.currentTime=t}catch(e){}}
+    else{if(v.paused)v.play().catch(()=>{});if(Math.abs(v.currentTime-t)>.25&&!v.seeking)try{v.currentTime=t}catch(e){}}};
+  /* lydspor til eksport: lyden fra filen, eller stillhet hvis videoen er muted / mangler lyd */
+  window.expDecode=async ctx=>{window.__noTrack=false;try{return await ctx.decodeAudioData(await curFile.arrayBuffer())}
+    catch(e){if(!window.__vsong)throw e;window.__noTrack=true;const d=Math.max(1,(MEDIA&&MEDIA.v&&MEDIA.v.duration)||audio.duration||1);return ctx.createBuffer(2,Math.ceil(d*48000),48000)}};
+  window.expAud=()=>(window.__vsong&&(MVMUTE||window.__noTrack))?null:AH.pathFor(curFile);
+  window.mvToggle=()=>{const m=vid();if(!m)return false;if(window.__vsong){$('#play').click();ui();return true}if(m.v.paused){m.up=false;try{ac&&ac.resume()}catch(e){}m.v.play().catch(()=>{})}else{m.up=true;m.v.pause()}ui();if(window.mvMix)mvMix();return true};
+  if(pp)pp.addEventListener('click',()=>mvToggle());
+  if(mu)mu.addEventListener('click',()=>{MVMUTE=!MVMUTE;setG(vid());ui();mvMix();if(window.__vsong)st(MVMUTE?'Video sound muted – the export will be silent.':'Video sound on – it is used as the track in the export.')});
+  if(vol)vol.addEventListener('input',()=>{MVVOL=vol.value/100;if(MVVOL>0&&MVMUTE)MVMUTE=false;setG(vid());ui()});
+  /* én lydkilde om gangen: spiller videoen med lyd på, dempes sangen; er videoen muted eller pauset, hører du sangen */
+  window.mvMix=()=>{const g=window.SONGG;if(!g||!ac)return;const m=vid();const vOn=!!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd);const want=window.__vsong?(MVMUTE?0:MVVOL):vOn?0:1;if(Math.abs(g.gain.value-want)>.001)g.gain.setTargetAtTime(want,ac.currentTime,.04)};
+  /* Space: start/stopp alt som er lastet (sang og video) samtidig */
+  window.mvSpace=()=>{if(window.__vsong){$('#play').click();return true}const m=vid(),hasS=loaded&&!$('#play').disabled;const any=(hasS&&!audio.paused)||(m&&!m.v.paused);
+    if(any){if(hasS&&!audio.paused)$('#play').click();if(m&&!m.v.paused)mvToggle()}else{if(hasS)$('#play').click();if(m)mvToggle()}return !!(hasS||m)};
+  ['play','pause'].forEach(ev=>audio.addEventListener(ev,()=>{mvMix();ui();const m=vid();if(ev==='play'&&m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)st('You hear the video sound now. Click Sound on in Media to mute it and hear the song.')}));
+  /* glidebrytere for fade: slipp for å se fade in / fade out med en gang */
+  const fi=$('#ifd'),fo=$('#ifo');if(fi)fi.addEventListener('change',()=>{window.__foP=null;window.__imT0=RT});if(fo)fo.addEventListener('change',()=>{window.__foP=RT});
+  setInterval(ui,300);
+})();
+</script>
+<script>
 /* Video position: velg hvor i en video (Media eller overlay) den spiller – følger sangen derfra, også i eksporten */
 (function(){
   const fmt=x=>{x=Math.max(0,x||0);return Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0')};
@@ -3714,7 +3770,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     r.addEventListener('pointerdown',()=>drag=true);addEventListener('pointerup',()=>drag=false);r.addEventListener('change',()=>drag=false);
     r.addEventListener('input',()=>{const m=getM();if(!isVid(m))return;const d=m.v.duration,x=r.value/1000*d;try{m.v.currentTime=x}catch(e){}setOff(((x-(songT()-base()))%d+d)%d);l.textContent=fmt(x)+' / '+fmt(d)});
     setInterval(()=>{const m=getM(),ok=isVid(m);const disp=ok?'':'none';if(w.style.display!==disp)w.style.display=disp;if(!ok||drag)return;const d=m.v.duration;r.value=Math.round(m.v.currentTime/d*1000);l.textContent=fmt(m.v.currentTime)+' / '+fmt(d)},250)}
-  bind('#ivpw','#ivp','#ivpt',()=>typeof MEDIA!=='undefined'?MEDIA:null,()=>0,o=>{window.MOFF=o});
+  bind('#ivpw','#ivp','#ivpt',()=>(typeof MEDIA!=='undefined'&&!window.__vsong)?MEDIA:null,()=>0,o=>{window.MOFF=o});
   const curOv=()=>(typeof OVMED!=='undefined'&&typeof ovCurMid!=='undefined')?OVMED[ovCurMid]:null;
   bind('#ovpw','#ovvp','#ovvpt',()=>{const md=curOv();return md?md.m:null},()=>{try{const [e,c]=ovEnvFor(ovCurMid,songT());return c?c.s:0}catch(_){return 0}},o=>{const md=curOv();if(md)md.off=o});
 })();
