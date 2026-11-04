@@ -3765,13 +3765,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   /* én lydkilde om gangen: spiller videoen med lyd på, dempes sangen; er videoen muted eller pauset, hører du sangen */
   window.mvMix=()=>{const g=window.SONGG;if(!g||!ac)return;const m=vid();const vOn=!!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)||ovSnd();const want=window.__vsong?(MVMUTE?0:MVVOL):vOn?0:1;if(Math.abs(g.gain.value-want)>.001)g.gain.setTargetAtTime(want,ac.currentTime,.04)};
   /* Space: start/stopp alt som er lastet (sang og video) samtidig */
-  window.mvSpace=()=>{const m=vid(),hasS=loaded&&!$('#play').disabled;
-    /* med sang: Space = Play-knappen (videoen følger med). Spiller bare videoen mens sangen står, stoppes videoen. */
-    if(hasS){if(audio.paused&&m&&!m.v.paused&&!window.__vsong){mvToggle();return true}$('#play').click();return true}
-    const ov=ovVids();if(!m&&!ov.length)return false;
-    /* ingen sang: Space starter/stopper Media-videoen og overlay-videoene sammen */
-    const any=(m&&!m.v.paused)||ov.some(x=>!x.m.v.paused);
-    if(m&&(!m.v.paused)===any)mvToggle();ov.forEach(x=>{x.up=any;x.solo=false});return true};
+  window.mvSpace=()=>{const m=vid(),hasS=loaded&&!$('#play').disabled,ov=ovVids();if(!hasS&&!m&&!ov.length)return false;
+    /* Space: spiller noe (sang, Media-video eller overlay-video), stoppes alt. Ellers starter alt sammen. */
+    const any=(hasS&&!audio.paused)||(m&&!m.v.paused&&!window.__vsong)||ov.some(x=>!x.m.v.paused);
+    if(any){ov.forEach(x=>{x.up=true;x.solo=false;if(!x.m.v.paused)x.m.v.pause()});if(m&&!window.__vsong&&!m.v.paused){m.up=true;m.v.pause()}if(hasS&&!audio.paused)$('#play').click()}
+    else{if(hasS)$('#play').click();else{if(m&&m.v.paused){m.up=false;try{ac&&ac.resume()}catch(e){}m.v.play().catch(()=>{})}ov.forEach(x=>{x.up=false;x.solo=false})}}
+    setTimeout(()=>{ui();if(window.mvMix)mvMix()},60);return true};
   /* sangen og Media-videoen spiller sammen: Play/Space starter og stopper begge (Media-knappen styrer bare videoen) */
   audio.addEventListener('play',()=>{ovVids().forEach(x=>{x.up=false;x.solo=false});const m=vid();if(m&&!window.__vsong&&!fastRun){m.up=false;m.v.play().catch(()=>{})}});
   audio.addEventListener('pause',()=>{ovVids().forEach(x=>{x.solo=false});const m=vid();if(m&&!window.__vsong&&!exporting){m.up=true;m.v.pause()}});
