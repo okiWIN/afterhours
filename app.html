@@ -357,6 +357,7 @@ body.lock #stage{pointer-events:none}
 /* ===== v93: fremdriftslinje i skjerm-stil (segmentert, blåhvitt lys) ===== */
 #bar{height:2px;bottom:5px;left:8px;max-width:calc(100% - 16px);opacity:.55;background:repeating-linear-gradient(90deg,#d6dfff 0 5px,transparent 5px 8px);box-shadow:0 0 4px #8fa4ff66}
 #bar::after{content:'';position:absolute;right:-2px;top:-2px;width:6px;height:6px;border-radius:1px;background:#e8edff;box-shadow:0 0 5px #cfd9ffaa}
+#stage.med::after{background:none}
 #stage::before{content:'';position:absolute;left:8px;right:8px;bottom:5px;height:2px;z-index:2;pointer-events:none;background:repeating-linear-gradient(90deg,#ffffff0b 0 5px,transparent 5px 8px)}
 #seek{accent-color:#cfd9ff}
 
@@ -535,7 +536,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 #moreb{display:none}
 @media(max-width:820px){.adv{display:none!important}body.showadv .adv{display:block!important}#moreb{display:block;width:100%;margin:10px 0;padding:12px;border:1px solid #2b3150;border-radius:9px;background:linear-gradient(180deg,#171a26,#0d0e14);color:#dfe6ff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .fxg{grid-template-columns:1fr 1fr!important}.fxc label.t{white-space:nowrap}.row{flex-wrap:wrap}#scn{grid-template-columns:repeat(3,1fr)!important}.key{height:48px}}
-#ivmu{font-weight:700;padding:6px 14px;font-size:12px}#ivmu.muted{background:rgba(255,79,139,.18);border-color:#ff4f8b;color:#ffd0df}#ivpp{font-weight:700;padding:6px 14px;font-size:12px}
+#ovmu,#ovpp{font-weight:700;padding:6px 14px;font-size:12px}#ovmu.muted{background:rgba(255,79,139,.18);border-color:#ff4f8b;color:#ffd0df}#ivmu{font-weight:700;padding:6px 14px;font-size:12px}#ivmu.muted{background:rgba(255,79,139,.18);border-color:#ff4f8b;color:#ffd0df}#ivpp{font-weight:700;padding:6px 14px;font-size:12px}
 @font-face{font-family:'VT323';src:url(vendor/fonts/vt323-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:400;src:url(vendor/fonts/space-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:700;src:url(vendor/fonts/space-mono-latin-700-normal.woff2) format('woff2')}
 </style>
 <link rel="stylesheet" href="vendor/fonts2.css">
@@ -648,7 +649,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div id="octl" style="display:none"><div class="lb" style="margin:8px 0 4px">Your overlays · the sliders and dragging on the preview change the selected one</div><div id="ovlist" style="display:flex;flex-direction:column;gap:4px;margin:0 0 10px"></div>
 <div class="field"><span class="lb">Blend</span><div class="row"><button class="chip on" data-ob="0">Normal</button><button class="chip" data-ob="1">Screen</button><button class="chip" data-ob="2">Multiply</button></div></div>
 <div class="sl"><label>Opacity <input type="range" id="oop" min="0" max="100" value="100"></label><label>Size <input type="range" id="osz" min="5" max="200" value="100"></label><label>Horizontal <input type="range" id="opx" min="-100" max="100" value="0"></label><label>Vertical <input type="range" id="opy" min="-100" max="100" value="0"></label><label>Intensity <input type="range" id="oin" min="0" max="100" value="35"></label><label>Blur / echo <input type="range" id="obl" min="0" max="100" value="0"></label></div>
-<div class="field" id="ovpw" style="display:none;margin-top:10px" data-tip="VIDEO POSITION: drag to choose where in the selected overlay video it plays. It stays in step with the song from there – also in the export."><span class="lb">Video position <span id="ovvpt" style="color:#9fb3e6;letter-spacing:.04em"></span></span><input type="range" id="ovvp" min="0" max="1000" value="0" style="width:100%"></div>
+<div class="field" id="ovpw" style="display:none;margin-top:10px" data-tip="VIDEO POSITION: drag to choose where in the selected overlay video it plays. It stays in step with the song from there – also in the export."><span class="lb">Video position <span id="ovvpt" style="color:#9fb3e6;letter-spacing:.04em"></span></span><input type="range" id="ovvp" min="0" max="1000" value="0" style="width:100%"></div><div class="field" id="ovvcw" style="display:none;margin-top:10px"><span class="lb">Video <span id="ovna" style="color:#8e88a8;letter-spacing:.04em"></span></span><div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><button class="chip" id="ovpp" type="button" data-tip="PLAY / PAUSE the selected overlay video. Play and Space start and stop the song together with the videos.">❚❚ Pause</button><button class="chip" id="ovmu" type="button" data-tip="SOUND of the selected overlay video (on by default). Click to mute.">🔊 Sound on</button><label style="display:flex;align-items:center;gap:6px;flex:1;min-width:120px" data-tip="VOLUME of the selected overlay video.">Vol <input type="range" id="ovvol" min="0" max="100" value="100" style="flex:1"></label></div></div><div class="field sl" id="ovgfw" style="display:none;margin-top:10px"><label data-tip="FADE IN for the selected overlay: fades up at the start of the song (or of the video when no song is loaded). Clips on the Overlay timeline use their own fades. Let go to preview. 0 = straight in.">Fade in <input type="range" id="ovgfi" min="0" max="40" value="0"></label><label data-tip="FADE OUT for the selected overlay: fades away before the song ends (or before the video ends when no song is loaded). Let go to preview. 0 = straight out.">Fade out <input type="range" id="ovgfo" min="0" max="40" value="0"></label></div>
 <input type="file" id="ovrep" accept="image/*,video/*,.gif,.mp4,.webm,.mov" style="display:none">
 <div id="ovtlw" style="margin:10px 0 8px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap"><span class="lb" style="margin:0">Timeline</span><span id="ovtlinfo" style="flex:1;min-width:120px;font:11px var(--mono);color:#9fb3e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><button class="chip" type="button" id="ovadd" data-tip="Put the overlay that is selected in the list above on the timeline, starting where the song is now.">+ Add at playhead</button><button class="chip" type="button" id="ovall" data-tip="Remove the boxes of the selected overlay so it shows during the whole song again.">Whole song</button></div>
 <canvas id="ovtlc" tabindex="0" aria-label="Overlay timeline" style="width:100%;height:84px;display:block;border-radius:6px;cursor:pointer;outline:none;touch-action:none;background:#05070d"></canvas>
@@ -1254,8 +1255,8 @@ function ovUpdate(){
     md.mat.uniforms.map.value=md.tex;md.cq.renderOrder=md.ord??id;
     if(md.m&&md.m.kind==='video'&&!OFF){const v=md.m.v,d=v.duration||0;
       if(!vis){if(!v.paused)v.pause();md.lc=null}
-      else if(c){if(md.lc!==c.id){md.lc=c.id;try{v.currentTime=d?(t-c.s)%d:0}catch(e){}}if(playing&&v.paused)v.play().catch(()=>{});if(!playing&&!v.paused)v.pause();if(playing&&d&&Math.abs(v.currentTime-(t-c.s)%d)>.35)try{v.currentTime=(t-c.s)%d}catch(e){}}
-      else if(v.paused)v.play().catch(()=>{})}
+      else if(c){if(md.lc!==c.id){md.lc=c.id;try{v.currentTime=d?(t-c.s)%d:0}catch(e){}}const pl=(playing||md.solo)&&!md.up;if(pl&&v.paused)v.play().catch(()=>{});if(!pl&&!v.paused)v.pause();if(playing&&d&&Math.abs(v.currentTime-(t-c.s)%d)>.35)try{v.currentTime=(t-c.s)%d}catch(e){}}
+      else{/* uten klipp: følger sangen (Play/Space); uten sang spiller den fritt. Egen Play/Pause i Overlay */const want=!md.up&&(!loaded||playing||md.solo);if(want&&v.paused)v.play().catch(()=>{});if(!want&&!v.paused)v.pause()}}
     if(!vis){md.cq.visible=false;md.fresh=true;continue}any=true;tickMedia(md.m);
     if(!md.cur)md.cur=OVrt();if(md.cur.width!==FW||md.cur.height!==FH){md.cur.setSize(FW,FH);if(md.acc){md.acc[0].setSize(FW,FH);md.acc[1].setSize(FW,FH)}md.fresh=true}
     let sx=md.ia/sa,sy=1;if(sx>1){sx=1;sy=sa/md.ia}const z=(md.sz??1)*(1+(kick*.1+clap*.04+bassS*.03)*I*1.6);
@@ -1265,7 +1266,7 @@ function ovUpdate(){
       const src=md.acc[md.ai],dst=md.acc[1-md.ai];if(md.fresh){R.setRenderTarget(src);R.clear(true,false,false);md.fresh=false}
       const u=OVEMat.uniforms;u.c.value=md.cur.texture;u.p.value=src.texture;u.k.value=BLv;u.zm.value=BLv*(.0035+.006*kick*Math.min(1,I+.3));u.ctr.value.set(.5+(md.x||0)*.5,.5+(md.y||0)*.5);u.rs.value.set(FW,FH);
       R.setRenderTarget(dst);R.render(OVes,oc);md.ai=1-md.ai;out=dst}else md.fresh=true;
-    md.cq.material.uniforms.t.value=out.texture;md.cq.material.uniforms.op.value=(md.op??1)*env;md.cq.visible=true}
+    md.cq.material.uniforms.t.value=out.texture;md.cq.material.uniforms.op.value=(md.op??1)*env*(window.ovGF?ovGF(md,c,t):1);md.cq.visible=true}
   R.setRenderTarget(null);R.setClearColor(_ovCC,ca);R.autoClear=ac0;
   OVCMat.uniforms.op.value=any?1:0;
 }
@@ -1350,7 +1351,7 @@ function imageUpdate(dt){
   const u=IM.uniforms;u.sa.value=FW/FH;
   const MI=IMI;u.z.value=1.1*IZm*(1+kick*.045*MI+bassS*.018*MI);u.pan.value.set(IPx,IPy);
   u.off.value.set(Math.sin(T*.13)*.02*Math.min(1,MI*2),Math.cos(T*.11)*.015*Math.min(1,MI*2));
-  u.sp.value=.0015+(snare*.006+clap*.003)*MI;
+  u.sp.value=0;/* ingen automatisk fargesplitt på media – bildet skal se ut som originalen */
   const fd=+(($('#ifd')||{}).value||0)/10;let fk=fd>0?Math.min(1,Math.max(0,(RT-(window.__imT0||0))/fd)):1;
   /* fade in følger sangen: fra start (eller klippets start i eksport) og fra der Scene timeline går inn i Media */
   /* uten sang som spiller: fade følger selve videoen (inn i starten, ut mot slutten av klippet) */
@@ -1399,13 +1400,13 @@ async function openMedia(f,lbl){
 }
 async function loadImg(f){
   if(!f)return;
-  try{const r=await openMedia(f,'#inm');window._imgFile=f;mediaSet(r.tex,r.ia,f.name||'image',r.m);if(r.m&&r.m.kind==='video')r.m.v.play().catch(()=>{})}
+  try{const r=await openMedia(f,'#inm');window._imgFile=f;mediaSet(r.tex,r.ia,f.name||'image',r.m);if(r.m&&r.m.kind==='video'&&!r.m.up&&!window.__vsong)r.m.v.play().catch(()=>{})}
   catch(e){$('#inm').textContent='Could not open that file. Try another one.'}
 }
 function ovSet(tex,ia,name,m,file){
   /* hvert nytt overlay legges til i lista (de gamle blir liggende), med egen plassering – nye forskyves litt så de ikke havner oppå hverandre */
   ovStore();const n=Object.keys(OVMED).length,id=++ovMid,off=n?[[.35,.3],[-.35,.3],[.35,-.3],[-.35,-.3]][(n-1)%4]:[0,0];
-  OVMED[id]={tex,ia:ia||1,m:m||null,name:name||'overlay',file:file||null,x:off[0],y:off[1],sz:n?.5:1,op:1,int:.35,bl:0,bm:0,ord:Math.max(0,...Object.values(OVMED).map(o=>o.ord??0))+1};
+  OVMED[id]={t0:RT,tex,ia:ia||1,m:m||null,name:name||'overlay',file:file||null,x:off[0],y:off[1],sz:n?.5:1,op:1,int:.35,bl:0,bm:0,ord:Math.max(0,...Object.values(OVMED).map(o=>o.ord??0))+1};
   OVon=true;ovSel(id);OVfresh=true;if(m&&m.kind==='video')m.v.play().catch(()=>{});if(window.ovtlRefresh)ovtlRefresh();if(window.ovListRender)ovListRender();$('#onm').textContent=name+' · click to add another';$('#odz').classList.add('has');$('#octl').style.display='block';
   if(cur!=='image')$('#stage').style.cursor='grab';
 }
@@ -1418,7 +1419,7 @@ function ovClear(){
 }
 async function loadOv(f){
   if(!f)return;
-  try{const r=await openMedia(f,'#onm');window._ovFile=f;ovSet(r.tex,r.ia,f.name||'overlay',r.m,f);if(r.m&&r.m.kind==='video')r.m.v.play().catch(()=>{})}
+  try{const r=await openMedia(f,'#onm');window._ovFile=f;ovSet(r.tex,r.ia,f.name||'overlay',r.m,f);if(window.ovaAttach&&OVMED[ovCurMid])ovaAttach(OVMED[ovCurMid]);if(r.m&&r.m.kind==='video'&&!(loaded&&audio.paused))r.m.v.play().catch(()=>{})}
   catch(e){$('#onm').textContent='Could not open that file. Try another one.'}
 }
 
@@ -3510,7 +3511,7 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
   function ovRemove(id){const md=OVMED[id];if(!md)return;for(let i=OVT.length-1;i>=0;i--)if(OVT[i].mid===id)OVT.splice(i,1);ovDrop(md);delete OVMED[id];selC=null;
     const left=lanes();if(!left.length){ovClear();return}if(ovCurMid===id){ovCurMid=0;ovSel(left[left.length-1]);const n=OVMED[ovCurMid];window._ovFile=n.file||null;$('#onm').textContent=n.name+' · click to add another'}save();ovListRender()}
   if(rp)rp.onchange=async()=>{const f=rp.files[0],md=OVMED[repId];if(!f||!md)return;try{const r=await openMedia(f,'#onm');if(md.tex&&md.tex.dispose)md.tex.dispose();if(md.m&&md.m.v){md.m.v.pause();try{URL.revokeObjectURL(md.m.url)}catch(e){}}
-      md.tex=r.tex;md.ia=r.ia||1;md.m=r.m||null;md.name=f.name||'overlay';md.file=f;md.lc=null;if(repId===ovCurMid){OVM=md.m;OVia=md.ia}if(md.m&&md.m.kind==='video')md.m.v.play().catch(()=>{});$('#onm').textContent=md.name+' · click to add another';ovListRender();save()}catch(e){try{st('Could not open that file.')}catch(_){}}};
+      md.tex=r.tex;md.ia=r.ia||1;md.m=r.m||null;md.name=f.name||'overlay';md.file=f;md.lc=null;if(repId===ovCurMid){OVM=md.m;OVia=md.ia}md.t0=RT;if(window.ovaAttach)ovaAttach(md);if(md.m&&md.m.kind==='video')md.m.v.play().catch(()=>{});$('#onm').textContent=md.name+' · click to add another';ovListRender();save()}catch(e){try{st('Could not open that file.')}catch(_){}}};
   window.addEventListener('ovtlchange',()=>ovListRender());
   window.ovtlGet=()=>OVT.map(c=>({s:+c.s.toFixed(3),e:+c.e.toFixed(3),fi:c.fi,fo:c.fo,m:c.mid}));
   window.ovtlSet=(L,map)=>{OVT.length=0;(L||[]).forEach(c=>{const mid=map?map(c.m):c.m;if(OVMED[mid])OVT.push({id:uid++,s:c.s,e:c.e,fi:c.fi??.25,fo:c.fo??.25,mid})});selC=null};
@@ -3732,8 +3733,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     const ps=window.__vsong?audio.paused:m.v.paused;pp.textContent=ps?'▶ Play':'❚❚ Pause';mu.textContent=MVMUTE?'🔇 Muted':'🔊 Sound on';mu.classList.toggle('muted',MVMUTE);
     const silent=m.v.currentTime>1.5&&m.v.webkitAudioDecodedByteCount===0;m.noSnd=silent;na.textContent=silent?'· no sound in this clip':'';mvMix()}
   window.mvAttach=m=>{if(m&&m.kind==='video'){try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2)}m.v.muted=false;setG(m)}catch(e){m.v.muted=true}
-    m.up=false;if(window.__vsong){window.__vsong=false;songClear()}else if(!vsEnter(m))m.v.play().catch(()=>{})}ui()};
-  window.mvLive=()=>{if(window.__vsong)return false;const m=vid();return !!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0)};
+    m.up=false;if(window.__vsong){window.__vsong=false;songClear()}else if(!vsEnter(m)){/* sang lastet men på pause: videoen venter på Play */if(loaded&&audio.paused){m.up=true;m.v.pause()}else m.v.play().catch(()=>{})}}ui()};
+  const ovVids=()=>(typeof OVMED!=='undefined')?Object.values(OVMED).filter(x=>x.m&&x.m.kind==='video'&&x.m.v):[];
+  const ovSnd=()=>ovVids().some(x=>x.m.g&&!x.m.v.paused&&!x.mute&&(x.vol??1)>0&&!x.m.noSnd);
+  window.mvLive=()=>{if(window.__vsong)return ovSnd();const m=vid();return !!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0)||ovSnd()};
+  const ovG=x=>{if(x&&x.m&&x.m.g)x.m.g.gain.value=x.mute?0:(x.vol??1)};
+  window.ovaAttach=x=>{const m=x&&x.m;if(!m||m.kind!=='video')return;try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2)}m.v.muted=false;ovG(x)}catch(e){m.v.muted=true}x.up=false;x.solo=false;if(window.mvMix)setTimeout(mvMix)};
+  /* fade for hele overlayet (uten klipp): følger sangen, eller videoen når ingen sang er lastet */
+  window.ovGF=(x,c,t)=>{if(c)return 1;const fi=(x.gfi||0)/10,fo=(x.gfo||0)/10;if(!fi&&!fo&&x.foP==null)return 1;let a=1,b=1;const v=x.m&&x.m.kind==='video'&&x.m.v&&isFinite(x.m.v.duration)&&x.m.v.duration>0?x.m.v:null,songOn=loaded&&(OFF||!audio.paused);
+    if(fi)a=Math.min(1,Math.max(0,(RT-(x.t0||0))/fi));
+    if(songOn){const s0=OFF&&OFF.a?OFF.a:0;let end=audio.duration&&isFinite(audio.duration)?audio.duration:1e9;if(OFF&&OFF.b)end=Math.min(end,OFF.b);if(fi)a=Math.min(a,Math.max(0,Math.min(1,(t-s0)/fi)));if(fo)b=Math.max(0,Math.min(1,(end-t)/fo))}
+    else if(v&&!OFF){if(fi)a=Math.min(a,Math.max(0,Math.min(1,v.currentTime/fi)));if(fo)b=Math.max(0,Math.min(1,(v.duration-v.currentTime)/fo))}
+    else if(loaded&&fo&&!OFF){const end=audio.duration||1e9;b=Math.max(0,Math.min(1,(end-(audio.currentTime||0))/fo))}
+    if(x.foP!=null&&!OFF){const e=RT-x.foP;if(fo&&e<fo+.4)b=Math.min(b,Math.max(0,1-e/fo));else{x.foP=null;x.t0=RT}}
+    return a*a*(3-2*a)*b*b*(3-2*b)};
   /* Video som lydspor: uten sang lastet brukes videoens egen lyd som sang – da virker Play, Space, Clip og begge eksportene */
   window.vsEnter=m=>{if(loaded||exporting||!m||m.kind!=='video'||!m.file||m.noSong)return false;window.__vsong=true;window.MOFF=0;load(m.file);
     if(!loaded){window.__vsong=false;return false}$('#fn').textContent='🎬 '+m.file.name;try{m.v.pause();m.v.currentTime=0}catch(e){}m.up=false;setG(m);mvMix();
@@ -3750,14 +3763,36 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(mu)mu.addEventListener('click',()=>{MVMUTE=!MVMUTE;setG(vid());ui();mvMix();if(window.__vsong)st(MVMUTE?'Video sound muted – the export will be silent.':'Video sound on – it is used as the track in the export.')});
   if(vol)vol.addEventListener('input',()=>{MVVOL=vol.value/100;if(MVVOL>0&&MVMUTE)MVMUTE=false;setG(vid());ui()});
   /* én lydkilde om gangen: spiller videoen med lyd på, dempes sangen; er videoen muted eller pauset, hører du sangen */
-  window.mvMix=()=>{const g=window.SONGG;if(!g||!ac)return;const m=vid();const vOn=!!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd);const want=window.__vsong?(MVMUTE?0:MVVOL):vOn?0:1;if(Math.abs(g.gain.value-want)>.001)g.gain.setTargetAtTime(want,ac.currentTime,.04)};
+  window.mvMix=()=>{const g=window.SONGG;if(!g||!ac)return;const m=vid();const vOn=!!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)||ovSnd();const want=window.__vsong?(MVMUTE?0:MVVOL):vOn?0:1;if(Math.abs(g.gain.value-want)>.001)g.gain.setTargetAtTime(want,ac.currentTime,.04)};
   /* Space: start/stopp alt som er lastet (sang og video) samtidig */
-  window.mvSpace=()=>{if(window.__vsong){$('#play').click();return true}const m=vid(),hasS=loaded&&!$('#play').disabled;const any=(hasS&&!audio.paused)||(m&&!m.v.paused);
-    if(any){if(hasS&&!audio.paused)$('#play').click();if(m&&!m.v.paused)mvToggle()}else{if(hasS)$('#play').click();if(m)mvToggle()}return !!(hasS||m)};
+  window.mvSpace=()=>{const m=vid(),hasS=loaded&&!$('#play').disabled;
+    /* med sang: Space = Play-knappen (videoen følger med). Spiller bare videoen mens sangen står, stoppes videoen. */
+    if(hasS){if(audio.paused&&m&&!m.v.paused&&!window.__vsong){mvToggle();return true}$('#play').click();return true}
+    const ov=ovVids();if(!m&&!ov.length)return false;
+    /* ingen sang: Space starter/stopper Media-videoen og overlay-videoene sammen */
+    const any=(m&&!m.v.paused)||ov.some(x=>!x.m.v.paused);
+    if(m&&(!m.v.paused)===any)mvToggle();ov.forEach(x=>{x.up=any;x.solo=false});return true};
+  /* sangen og Media-videoen spiller sammen: Play/Space starter og stopper begge (Media-knappen styrer bare videoen) */
+  audio.addEventListener('play',()=>{ovVids().forEach(x=>{x.up=false;x.solo=false});const m=vid();if(m&&!window.__vsong&&!fastRun){m.up=false;m.v.play().catch(()=>{})}});
+  audio.addEventListener('pause',()=>{ovVids().forEach(x=>{x.solo=false});const m=vid();if(m&&!window.__vsong&&!exporting){m.up=true;m.v.pause()}});
+  setInterval(()=>{const st=$('#stage');if(st)st.classList.toggle('med',mode==='image')},300);
   ['play','pause'].forEach(ev=>audio.addEventListener(ev,()=>{mvMix();ui();const m=vid();if(ev==='play'&&m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)st('You hear the video sound now. Click Sound on in Media to mute it and hear the song.')}));
   /* glidebrytere for fade: slipp for å se fade in / fade out med en gang */
   const fi=$('#ifd'),fo=$('#ifo');if(fi)fi.addEventListener('change',()=>{window.__foP=null;window.__imT0=RT});if(fo)fo.addEventListener('change',()=>{window.__foP=RT});
   setInterval(ui,300);
+  /* Overlay: Play/Pause, lyd, volum og fade for valgt overlay */
+  const ow=$('#ovvcw'),op=$('#ovpp'),om=$('#ovmu'),ov2=$('#ovvol'),on2=$('#ovna'),gw=$('#ovgfw'),gi=$('#ovgfi'),go=$('#ovgfo');
+  const cur=()=>(typeof OVMED!=='undefined'&&typeof ovCurMid!=='undefined')?OVMED[ovCurMid]:null;
+  function oui(){const x=cur(),isV=!!(x&&x.m&&x.m.kind==='video'&&x.m.v);if(ow){const d=isV?'':'none';if(ow.style.display!==d)ow.style.display=d}if(gw){const d=x?'flex':'none';if(gw.style.display!==d)gw.style.display=d}
+    if(x&&gi&&document.activeElement!==gi)gi.value=x.gfi||0;if(x&&go&&document.activeElement!==go)go.value=x.gfo||0;
+    ovVids().forEach(y=>{y.m.noSnd=y.m.v.currentTime>1.5&&y.m.v.webkitAudioDecodedByteCount===0});
+    if(!isV)return;op.textContent=x.m.v.paused?'▶ Play':'❚❚ Pause';om.textContent=x.mute?'🔇 Muted':'🔊 Sound on';om.classList.toggle('muted',!!x.mute);if(document.activeElement!==ov2)ov2.value=Math.round((x.vol??1)*100);on2.textContent=x.m.noSnd?'· no sound in this clip':''}
+  if(op)op.addEventListener('click',()=>{const x=cur();if(!x||!x.m)return;const pl=(!audio.paused||LIVE);if(x.m.v.paused){x.up=false;x.solo=loaded&&!pl;try{ac&&ac.resume()}catch(e){}x.m.v.play().catch(()=>{})}else{x.up=true;x.solo=false;x.m.v.pause()}setTimeout(()=>{oui();mvMix()},50)});
+  if(om)om.addEventListener('click',()=>{const x=cur();if(!x)return;x.mute=!x.mute;ovG(x);oui();mvMix()});
+  if(ov2)ov2.addEventListener('input',()=>{const x=cur();if(!x)return;x.vol=ov2.value/100;if(x.vol>0)x.mute=false;ovG(x);oui();mvMix()});
+  if(gi){gi.addEventListener('input',()=>{const x=cur();if(x)x.gfi=+gi.value});gi.addEventListener('change',()=>{const x=cur();if(x){x.foP=null;x.t0=RT}})}
+  if(go){go.addEventListener('input',()=>{const x=cur();if(x)x.gfo=+go.value});go.addEventListener('change',()=>{const x=cur();if(x)x.foP=RT})}
+  setInterval(()=>{oui();mvMix()},300);
 })();
 </script>
 <script>
