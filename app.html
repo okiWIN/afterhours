@@ -625,6 +625,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <h2>Media</h2>
 <label class="drop" id="idz"><input type="file" id="ii" accept="image/*,video/*,.gif,.mp4,.webm,.mov"><button type="button" class="xbtn" id="ix" title="Remove image" aria-label="Remove image">×</button><b id="inm">Drop an image, GIF or video here, or click to choose</b>jpg, png, webp, gif, mp4, webm. The filter is applied on top, and it moves with the music</label>
 <div class="sl"><label>Size <input type="range" id="isz" min="15" max="400" value="100"></label><label>Horizontal <input type="range" id="ipx" min="-100" max="100" value="0"></label><label>Vertical <input type="range" id="ipy" min="-100" max="100" value="0"></label><label data-tip="How much the media moves, zooms and flashes with the music.">Intensity <input type="range" id="iin" min="0" max="100" value="25"></label><label data-tip="FADE IN: the media fades up from black when the Media scene starts or a new file is loaded. 0 = straight in.">Fade in <input type="range" id="ifd" min="0" max="40" value="10"></label><label data-tip="FADE OUT: the media fades to black before the song ends, and before the Scene timeline switches away from Media. 0 = straight out.">Fade out <input type="range" id="ifo" min="0" max="40" value="10"></label></div>
+<div class="field" id="ivpw" style="display:none" data-tip="VIDEO POSITION: drag to choose where in your video it plays. The video stays in step with the song from there – also in the export."><span class="lb">Video position <span id="ivpt" style="color:#9fb3e6;letter-spacing:.04em"></span></span><input type="range" id="ivp" min="0" max="1000" value="0" style="width:100%"></div>
 <div class="field"><span class="lb">Media color</span><div class="row" id="icol"><button class="chip on" data-ic="none">Original</button><button class="chip" data-ic="bw">B&amp;W</button><button class="chip" data-ic="rave">Rave</button><button class="chip" data-ic="inferno">Inferno</button><button class="chip" data-ic="toxic">Toxic</button><button class="chip" data-ic="ice">Ice</button><button class="chip" data-ic="synth">Synth</button><button class="chip" data-ic="custom" title="Uses the Custom colors">Custom</button></div></div>
 <div class="field" id="icaw" style="display:none"><span class="lb">Color amount</span><input type="range" id="ica" min="0" max="100" value="100"></div>
 <div class="cbt"><span class="note" style="margin:0;flex:1">Drag the picture to move it, scroll to zoom.</span><button class="chip" id="irs">Reset</button></div>
@@ -646,6 +647,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div id="octl" style="display:none"><div class="lb" style="margin:8px 0 4px">Your overlays · the sliders and dragging on the preview change the selected one</div><div id="ovlist" style="display:flex;flex-direction:column;gap:4px;margin:0 0 10px"></div>
 <div class="field"><span class="lb">Blend</span><div class="row"><button class="chip on" data-ob="0">Normal</button><button class="chip" data-ob="1">Screen</button><button class="chip" data-ob="2">Multiply</button></div></div>
 <div class="sl"><label>Opacity <input type="range" id="oop" min="0" max="100" value="100"></label><label>Size <input type="range" id="osz" min="5" max="200" value="100"></label><label>Horizontal <input type="range" id="opx" min="-100" max="100" value="0"></label><label>Vertical <input type="range" id="opy" min="-100" max="100" value="0"></label><label>Intensity <input type="range" id="oin" min="0" max="100" value="35"></label><label>Blur / echo <input type="range" id="obl" min="0" max="100" value="0"></label></div>
+<div class="field" id="ovpw" style="display:none;margin-top:10px" data-tip="VIDEO POSITION: drag to choose where in the selected overlay video it plays. It stays in step with the song from there – also in the export."><span class="lb">Video position <span id="ovvpt" style="color:#9fb3e6;letter-spacing:.04em"></span></span><input type="range" id="ovvp" min="0" max="1000" value="0" style="width:100%"></div>
 <input type="file" id="ovrep" accept="image/*,video/*,.gif,.mp4,.webm,.mov" style="display:none">
 <div id="ovtlw" style="margin:10px 0 8px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap"><span class="lb" style="margin:0">Timeline</span><span id="ovtlinfo" style="flex:1;min-width:120px;font:11px var(--mono);color:#9fb3e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><button class="chip" type="button" id="ovadd" data-tip="Put the overlay that is selected in the list above on the timeline, starting where the song is now.">+ Add at playhead</button><button class="chip" type="button" id="ovall" data-tip="Remove the boxes of the selected overlay so it shows during the whole song again.">Whole song</button></div>
 <canvas id="ovtlc" tabindex="0" aria-label="Overlay timeline" style="width:100%;height:84px;display:block;border-radius:6px;cursor:pointer;outline:none;touch-action:none;background:#05070d"></canvas>
@@ -1477,7 +1479,7 @@ function tickMedia(m){
   else if(m.kind==='gifimg'){m.g.clearRect(0,0,m.cv.width,m.cv.height);m.g.drawImage(m.im,0,0);m.tex.needsUpdate=true}
 }
 /* Brukes av skrivebordsappens eksport: stiller videoen på riktig tidspunkt for hvert bilde */
-async function mediaSeek(t){const L=[[MEDIA,0]];for(const k in OVMED){const md=OVMED[k];if(md.m&&md.m.kind==='video'){const [e,c]=ovEnvFor(+k,t);if(e>.001)L.push([md.m,c?c.s:0])}}
+async function mediaSeek(t){const L=[[MEDIA,-(window.MOFF||0)]];for(const k in OVMED){const md=OVMED[k];if(md.m&&md.m.kind==='video'){const [e,c]=ovEnvFor(+k,t);if(e>.001)L.push([md.m,(c?c.s:0)-(md.off||0)])}}
   for(const [m,t0] of L){if(!m||m.kind!=='video'||!isFinite(m.v.duration))continue;m.v.pause();const target=((t-t0)%m.v.duration+m.v.duration)%m.v.duration;
   if(Math.abs(m.v.currentTime-target)<.001)continue;await new Promise(ok=>{const to=setTimeout(ok,700);m.v.onseeked=()=>{clearTimeout(to);ok()};m.v.currentTime=target})}}
 function mediaResume(){[MEDIA,...Object.values(OVMED).map(x=>x.m)].forEach(m=>{if(m&&m.kind==='video')m.v.play().catch(()=>{})})}
@@ -1569,7 +1571,7 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
     ' if(F==7.){vec3 bl=(texture2D(tDiffuse,uv+vec2(4.,0.)/rs).rgb+texture2D(tDiffuse,uv-vec2(4.,0.)/rs).rgb+texture2D(tDiffuse,uv+vec2(0.,4.)/rs).rgb+texture2D(tDiffuse,uv-vec2(0.,4.)/rs).rgb)*.25;',
     '  float x=pow(lm,.65)*1.25+dot(bl,vec3(.3,.6,.1))*.6+.06;x+=(h(vUv*rs/1.5)-.5)*.22;x*=1.+.06*(h2(vec2(floor(ft*24.),7.))-.5);',
     '  o=mix(vec3(.0,.06,.02),vec3(.45,1.,.4),clamp(x,0.,1.))*min(1.4,x+.2);o+=vec3(.6,1.,.6)*pow(max(0.,x-.85),2.)*2.;',
-    '  float rr=length((vUv-.5)*vec2(rs.x/rs.y,1.));o*=smoothstep(.6,.48,rr);o+=vec3(.0,.08,.02)*smoothstep(.48,.6,rr)*smoothstep(.64,.6,rr);o*=.93+.07*sin(vUv.y*rs.y*2.1);}',
+    '  float rr=length((vUv-.5)*rs/min(rs.x,rs.y))*(rs.y>rs.x?1.12:1.);o*=smoothstep(.6,.48,rr);o+=vec3(.0,.08,.02)*smoothstep(.48,.6,rr)*smoothstep(.64,.6,rr);o*=.93+.07*sin(vUv.y*rs.y*2.1);}',
     ' if(F==8.){float id=floor(clamp(pow(lm,.55)*1.9,0.,.999)*10.);float ch=texture2D(ga,vec2((id+clamp(fp.x,.04,.96))/10.,clamp(fp.y,.02,.98))).r;',
     '  vec3 tint=mix(vec3(.6,1.,.65),col/max(.15,max(col.r,max(col.g,col.b))),.55);o=tint*ch*(1.+lm*1.6)+vec3(0.,.025,.01);}',
     ' if(F==9.){vec2 g=hfp-.5;float r=sqrt(clamp(lm*1.15,0.,1.))*.68;float aa=1.2/cell.x;float dt=smoothstep(r+aa,r-aa,length(g));',
@@ -2330,8 +2332,8 @@ window.__cap=w=>capture(w);window.__apl=(S,q)=>apply({id:null,name:'',s:S},q||' 
 function capture(withFiles){
   const r={};RG.forEach(k=>{const e=$('#'+k);if(e)r[k]=+e.value});
   return{scene:autoOn?'auto':cur,ovs:OVshow,lyr:{txt:VLRC,m:VLM},vf:window.VFONT,vw:window.VOIDW,txo:{on:!!window.TXON,p:window.TXPOS||'c',fx:window.TXFX||'mix',c:window.TXCOL||'white',cc:window.TXCC||'#7fb4ff'},tl:window.tlGet?tlGet():null,r,mt:JSON.parse(JSON.stringify(MT)),flks:Object.assign({},FLKS),faks:Object.assign({},FAK),ptks:Object.assign({},PTKS),ck:{laser:$('#laser').checked,strobe:$('#strobe').checked,fxon:$('#fxon').checked,pfx:$('#pfx').checked},
-    xs:window.XS?{t:XS.topo.view}:null,hudl:window.HUDL?{a:HUDL.a,b:HUDL.b}:null,fl:onOf('data-fl'),p:onOf('data-p'),cn:onOf('data-cn'),c:[$('#c1').value,$('#c2').value,$('#c3').value],op:ORBP,ic:ICN,ob:onOf('data-ob'),
-    f:onOf('data-f'),q:onOf('data-q'),rr:onOf('data-r'),img:withFiles?pack(window._imgFile):null,ov:withFiles?pack(window._ovFile):null,ovt:window.ovtlGet?ovtlGet():null,ovm:withFiles&&typeof OVMED!=='undefined'?Object.keys(OVMED).map(Number).filter(m=>OVMED[m].file&&m!==ovCurMid).map(m=>({m,f:pack(OVMED[m].file)})):null,ovc:typeof ovCurMid!=='undefined'?ovCurMid:0,ovp:typeof OVMED!=='undefined'?(ovStore(),Object.fromEntries(Object.keys(OVMED).map(k=>[k,{x:OVMED[k].x,y:OVMED[k].y,sz:OVMED[k].sz,op:OVMED[k].op,int:OVMED[k].int,bl:OVMED[k].bl,bm:OVMED[k].bm,ord:OVMED[k].ord}]))):null,files:!!withFiles}}
+    xs:window.XS?{t:XS.topo.view}:null,moff:window.MOFF||0,hudl:window.HUDL?{a:HUDL.a,b:HUDL.b}:null,fl:onOf('data-fl'),p:onOf('data-p'),cn:onOf('data-cn'),c:[$('#c1').value,$('#c2').value,$('#c3').value],op:ORBP,ic:ICN,ob:onOf('data-ob'),
+    f:onOf('data-f'),q:onOf('data-q'),rr:onOf('data-r'),img:withFiles?pack(window._imgFile):null,ov:withFiles?pack(window._ovFile):null,ovt:window.ovtlGet?ovtlGet():null,ovm:withFiles&&typeof OVMED!=='undefined'?Object.keys(OVMED).map(Number).filter(m=>OVMED[m].file&&m!==ovCurMid).map(m=>({m,f:pack(OVMED[m].file)})):null,ovc:typeof ovCurMid!=='undefined'?ovCurMid:0,ovp:typeof OVMED!=='undefined'?(ovStore(),Object.fromEntries(Object.keys(OVMED).map(k=>[k,{x:OVMED[k].x,y:OVMED[k].y,sz:OVMED[k].sz,op:OVMED[k].op,int:OVMED[k].int,bl:OVMED[k].bl,bm:OVMED[k].bm,ord:OVMED[k].ord,off:OVMED[k].off||0}]))):null,files:!!withFiles}}
 const clk=(a,v)=>{if(v==null)return;const e=document.querySelector('['+a+'="'+v+'"]');if(e&&!e.classList.contains('on'))e.click()};
 const setR=(k,v)=>{const e=$('#'+k);if(!e||v==null)return;e.value=v;e.dispatchEvent(new Event('input'))};
 async function apply(P,quiet){
@@ -2340,7 +2342,7 @@ async function apply(P,quiet){
   /* scene først, fordi Media-knappen slår av effektene */
   const sk=document.querySelector('[data-m="'+S.scene+'"]');if(sk)sk.click();
   ['c1','c2','c3'].forEach((id,i)=>{const e=$('#'+id);if(S.c&&S.c[i]){e.value=S.c[i];e.dispatchEvent(new Event('input'))}});if(window.cmbSync)cmbSync();
-  if(S.xs&&window.XS){clk('data-xt',S.xs.t)}if(S.hudl&&window.hudLabels){window.HUDL={a:S.hudl.a||'',b:S.hudl.b||''};hudLabels(HUDL.a,HUDL.b)}
+  if(S.xs&&window.XS){clk('data-xt',S.xs.t)}window.MOFF=S.moff||0;if(S.hudl&&window.hudLabels){window.HUDL={a:S.hudl.a||'',b:S.hudl.b||''};hudLabels(HUDL.a,HUDL.b)}
   clk('data-cn',S.cn);clk('data-p',S.p);clk('data-fl',S.fl);clk('data-ob',S.ob);clk('data-f',S.f);clk('data-q',S.q);clk('data-r',S.rr);
   if(S.op&&S.op!==ORBP)clk('data-op',S.op);
   Object.keys(S.ck||{}).forEach(k=>{const e=$('#'+k);if(e&&e.checked!==S.ck[k]){e.checked=S.ck[k];e.dispatchEvent(new Event('change'))}});
@@ -3699,6 +3701,22 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     if(e.type==='wheel'&&!t.closest('.knob,input[type=range],select'))return;
     e.preventDefault();e.stopImmediatePropagation();if(e.type==='click'||e.type==='pointerdown')note()};
   ['pointerdown','mousedown','touchstart','click','dblclick','input','change','keydown','wheel'].forEach(ev=>document.addEventListener(ev,guard,{capture:true,passive:false}));
+})();
+</script>
+
+<script>
+/* Video position: velg hvor i en video (Media eller overlay) den spiller – følger sangen derfra, også i eksporten */
+(function(){
+  const fmt=x=>{x=Math.max(0,x||0);return Math.floor(x/60)+':'+String(Math.floor(x%60)).padStart(2,'0')};
+  const songT=()=>{try{return isFinite(audio.currentTime)?audio.currentTime:0}catch(e){return 0}};
+  const isVid=m=>m&&m.kind==='video'&&m.v&&isFinite(m.v.duration)&&m.v.duration>0;
+  function bind(w,r,l,getM,base,setOff){w=document.querySelector(w);r=document.querySelector(r);l=document.querySelector(l);if(!w||!r)return;let drag=false;
+    r.addEventListener('pointerdown',()=>drag=true);addEventListener('pointerup',()=>drag=false);r.addEventListener('change',()=>drag=false);
+    r.addEventListener('input',()=>{const m=getM();if(!isVid(m))return;const d=m.v.duration,x=r.value/1000*d;try{m.v.currentTime=x}catch(e){}setOff(((x-(songT()-base()))%d+d)%d);l.textContent=fmt(x)+' / '+fmt(d)});
+    setInterval(()=>{const m=getM(),ok=isVid(m);const disp=ok?'':'none';if(w.style.display!==disp)w.style.display=disp;if(!ok||drag)return;const d=m.v.duration;r.value=Math.round(m.v.currentTime/d*1000);l.textContent=fmt(m.v.currentTime)+' / '+fmt(d)},250)}
+  bind('#ivpw','#ivp','#ivpt',()=>typeof MEDIA!=='undefined'?MEDIA:null,()=>0,o=>{window.MOFF=o});
+  const curOv=()=>(typeof OVMED!=='undefined'&&typeof ovCurMid!=='undefined')?OVMED[ovCurMid]:null;
+  bind('#ovpw','#ovvp','#ovvpt',()=>{const md=curOv();return md?md.m:null},()=>{try{const [e,c]=ovEnvFor(ovCurMid,songT());return c?c.s:0}catch(_){return 0}},o=>{const md=curOv();if(md)md.off=o});
 })();
 </script>
 </body>
