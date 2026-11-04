@@ -2350,8 +2350,8 @@ window.__cap=w=>capture(w);window.__apl=(S,q)=>apply({id:null,name:'',s:S},q||' 
 function capture(withFiles){
   const r={};RG.forEach(k=>{const e=$('#'+k);if(e)r[k]=+e.value});
   return{scene:autoOn?'auto':cur,ovs:OVshow,lyr:{txt:VLRC,m:VLM},vf:window.VFONT,vw:window.VOIDW,txo:{on:!!window.TXON,p:window.TXPOS||'c',fx:window.TXFX||'mix',c:window.TXCOL||'white',cc:window.TXCC||'#7fb4ff'},tl:window.tlGet?tlGet():null,r,mt:JSON.parse(JSON.stringify(MT)),flks:Object.assign({},FLKS),faks:Object.assign({},FAK),ptks:Object.assign({},PTKS),ck:{laser:$('#laser').checked,strobe:$('#strobe').checked,fxon:$('#fxon').checked,pfx:$('#pfx').checked},
-    xs:window.XS?{t:XS.topo.view}:null,moff:window.MOFF||0,hudl:window.HUDL?{a:HUDL.a,b:HUDL.b}:null,fl:onOf('data-fl'),p:onOf('data-p'),cn:onOf('data-cn'),c:[$('#c1').value,$('#c2').value,$('#c3').value],op:ORBP,ic:ICN,ob:onOf('data-ob'),
-    f:onOf('data-f'),q:onOf('data-q'),rr:onOf('data-r'),img:withFiles?pack(window._imgFile):null,ov:withFiles?pack(window._ovFile):null,ovt:window.ovtlGet?ovtlGet():null,ovm:withFiles&&typeof OVMED!=='undefined'?Object.keys(OVMED).map(Number).filter(m=>OVMED[m].file&&m!==ovCurMid).map(m=>({m,f:pack(OVMED[m].file)})):null,ovc:typeof ovCurMid!=='undefined'?ovCurMid:0,ovp:typeof OVMED!=='undefined'?(ovStore(),Object.fromEntries(Object.keys(OVMED).map(k=>[k,{x:OVMED[k].x,y:OVMED[k].y,sz:OVMED[k].sz,op:OVMED[k].op,int:OVMED[k].int,bl:OVMED[k].bl,bm:OVMED[k].bm,ord:OVMED[k].ord,off:OVMED[k].off||0}]))):null,files:!!withFiles}}
+    xs:window.XS?{t:XS.topo.view}:null,moff:window.MOFF||0,mvm:!!window.MVMUTE,mvv:window.MVVOL??1,hudl:window.HUDL?{a:HUDL.a,b:HUDL.b}:null,fl:onOf('data-fl'),p:onOf('data-p'),cn:onOf('data-cn'),c:[$('#c1').value,$('#c2').value,$('#c3').value],op:ORBP,ic:ICN,ob:onOf('data-ob'),
+    f:onOf('data-f'),q:onOf('data-q'),rr:onOf('data-r'),img:withFiles?pack(window._imgFile):null,ov:withFiles?pack(window._ovFile):null,ovt:window.ovtlGet?ovtlGet():null,ovm:withFiles&&typeof OVMED!=='undefined'?Object.keys(OVMED).map(Number).filter(m=>OVMED[m].file&&m!==ovCurMid).map(m=>({m,f:pack(OVMED[m].file)})):null,ovc:typeof ovCurMid!=='undefined'?ovCurMid:0,ovp:typeof OVMED!=='undefined'?(ovStore(),Object.fromEntries(Object.keys(OVMED).map(k=>[k,{x:OVMED[k].x,y:OVMED[k].y,sz:OVMED[k].sz,op:OVMED[k].op,int:OVMED[k].int,bl:OVMED[k].bl,bm:OVMED[k].bm,ord:OVMED[k].ord,off:OVMED[k].off||0,mute:!!OVMED[k].mute,vol:OVMED[k].vol??1,gfi:OVMED[k].gfi||0,gfo:OVMED[k].gfo||0}]))):null,files:!!withFiles}}
 const clk=(a,v)=>{if(v==null)return;const e=document.querySelector('['+a+'="'+v+'"]');if(e&&!e.classList.contains('on'))e.click()};
 const setR=(k,v)=>{const e=$('#'+k);if(!e||v==null)return;e.value=v;e.dispatchEvent(new Event('input'))};
 async function apply(P,quiet){
@@ -2360,7 +2360,7 @@ async function apply(P,quiet){
   /* scene først, fordi Media-knappen slår av effektene */
   const sk=document.querySelector('[data-m="'+S.scene+'"]');if(sk)sk.click();
   ['c1','c2','c3'].forEach((id,i)=>{const e=$('#'+id);if(S.c&&S.c[i]){e.value=S.c[i];e.dispatchEvent(new Event('input'))}});if(window.cmbSync)cmbSync();
-  if(S.xs&&window.XS){clk('data-xt',S.xs.t)}window.MOFF=S.moff||0;if(S.hudl&&window.hudLabels){window.HUDL={a:S.hudl.a||'',b:S.hudl.b||''};hudLabels(HUDL.a,HUDL.b)}
+  if(S.xs&&window.XS){clk('data-xt',S.xs.t)}window.MOFF=S.moff||0;if(S.mvm!=null){window.MVMUTE=!!S.mvm;window.MVVOL=S.mvv??1}if(S.hudl&&window.hudLabels){window.HUDL={a:S.hudl.a||'',b:S.hudl.b||''};hudLabels(HUDL.a,HUDL.b)}
   clk('data-cn',S.cn);clk('data-p',S.p);clk('data-fl',S.fl);clk('data-ob',S.ob);clk('data-f',S.f);clk('data-q',S.q);clk('data-r',S.rr);
   if(S.op&&S.op!==ORBP)clk('data-op',S.op);
   Object.keys(S.ck||{}).forEach(k=>{const e=$('#'+k);if(e&&e.checked!==S.ck[k]){e.checked=S.ck[k];e.dispatchEvent(new Event('change'))}});
@@ -3725,7 +3725,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script>
 /* Media-video: egen lyd (på som standard), mute, volum og play/pause. Følger sangens play/pause når en sang er lastet. */
 (function(){
-  window.MVMUTE=false;window.MVVOL=1;
+  window.MVMUTE=false;window.MVVOL=1;try{const z=JSON.parse(localStorage.getItem('ah_mv')||'null');if(z){MVMUTE=!!z.m;MVVOL=z.v??1}}catch(e){}
+  const mvSave=()=>{try{localStorage.setItem('ah_mv',JSON.stringify({m:MVMUTE,v:MVVOL}))}catch(e){}};
   const vid=()=>(typeof MEDIA!=='undefined'&&MEDIA&&MEDIA.kind==='video'&&MEDIA.v)?MEDIA:null;
   const setG=m=>{if(m&&m.g)m.g.gain.value=window.__vsong?0:(MVMUTE?0:MVVOL)};
   const w=$('#ivcw'),pp=$('#ivpp'),mu=$('#ivmu'),vol=$('#ivvol'),na=$('#ivna');
@@ -3738,7 +3739,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   const ovSnd=()=>ovVids().some(x=>x.m.g&&!x.m.v.paused&&!x.mute&&(x.vol??1)>0&&!x.m.noSnd);
   window.mvLive=()=>{if(window.__vsong)return ovSnd();const m=vid();return !!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0)||ovSnd()};
   const ovG=x=>{if(x&&x.m&&x.m.g)x.m.g.gain.value=x.mute?0:(x.vol??1)};
-  window.ovaAttach=x=>{const m=x&&x.m;if(!m||m.kind!=='video')return;try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2)}m.v.muted=false;ovG(x)}catch(e){m.v.muted=true}x.up=false;x.solo=false;if(window.mvMix)setTimeout(mvMix)};
+  window.ovaAttach=x=>{const m=x&&x.m;if(!m||m.kind!=='video')return;try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2)}m.v.muted=false;ovG(x)}catch(e){m.v.muted=true}if(x.up==null)x.up=false;x.solo=false;if(window.mvMix)setTimeout(mvMix)};
   /* fade for hele overlayet (uten klipp): følger sangen, eller videoen når ingen sang er lastet */
   window.ovGF=(x,c,t)=>{if(c)return 1;const fi=(x.gfi||0)/10,fo=(x.gfo||0)/10;if(!fi&&!fo&&x.foP==null)return 1;let a=1,b=1;const v=x.m&&x.m.kind==='video'&&x.m.v&&isFinite(x.m.v.duration)&&x.m.v.duration>0?x.m.v:null,songOn=loaded&&(OFF||!audio.paused);
     if(fi)a=Math.min(1,Math.max(0,(RT-(x.t0||0))/fi));
@@ -3760,8 +3761,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.expAud=()=>(window.__vsong&&(MVMUTE||window.__noTrack))?null:AH.pathFor(curFile);
   window.mvToggle=()=>{const m=vid();if(!m)return false;if(window.__vsong){$('#play').click();ui();return true}if(m.v.paused){m.up=false;try{ac&&ac.resume()}catch(e){}m.v.play().catch(()=>{})}else{m.up=true;m.v.pause()}ui();if(window.mvMix)mvMix();return true};
   if(pp)pp.addEventListener('click',()=>mvToggle());
-  if(mu)mu.addEventListener('click',()=>{MVMUTE=!MVMUTE;setG(vid());ui();mvMix();if(window.__vsong)st(MVMUTE?'Video sound muted – the export will be silent.':'Video sound on – it is used as the track in the export.')});
-  if(vol)vol.addEventListener('input',()=>{MVVOL=vol.value/100;if(MVVOL>0&&MVMUTE)MVMUTE=false;setG(vid());ui()});
+  if(mu)mu.addEventListener('click',()=>{MVMUTE=!MVMUTE;mvSave();setG(vid());ui();mvMix();if(window.__vsong)st(MVMUTE?'Video sound muted – the export will be silent.':'Video sound on – it is used as the track in the export.')});
+  if(vol)vol.addEventListener('input',e=>{if(!e.isTrusted)return;MVVOL=vol.value/100;if(MVVOL>0&&MVMUTE)MVMUTE=false;mvSave();setG(vid());ui()});
   /* én lydkilde om gangen: spiller videoen med lyd på, dempes sangen; er videoen muted eller pauset, hører du sangen */
   window.mvMix=()=>{const g=window.SONGG;if(!g||!ac)return;const m=vid();const vOn=!!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)||ovSnd();const want=window.__vsong?(MVMUTE?0:MVVOL):vOn?0:1;if(Math.abs(g.gain.value-want)>.001)g.gain.setTargetAtTime(want,ac.currentTime,.04)};
   /* Space: start/stopp alt som er lastet (sang og video) samtidig */
@@ -3788,10 +3789,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     if(!isV)return;op.textContent=x.m.v.paused?'▶ Play':'❚❚ Pause';om.textContent=x.mute?'🔇 Muted':'🔊 Sound on';om.classList.toggle('muted',!!x.mute);if(document.activeElement!==ov2)ov2.value=Math.round((x.vol??1)*100);on2.textContent=x.m.noSnd?'· no sound in this clip':''}
   if(op)op.addEventListener('click',()=>{const x=cur();if(!x||!x.m)return;const pl=(!audio.paused||LIVE);if(x.m.v.paused){x.up=false;x.solo=loaded&&!pl;try{ac&&ac.resume()}catch(e){}x.m.v.play().catch(()=>{})}else{x.up=true;x.solo=false;x.m.v.pause()}setTimeout(()=>{oui();mvMix()},50)});
   if(om)om.addEventListener('click',()=>{const x=cur();if(!x)return;x.mute=!x.mute;ovG(x);oui();mvMix()});
-  if(ov2)ov2.addEventListener('input',()=>{const x=cur();if(!x)return;x.vol=ov2.value/100;if(x.vol>0)x.mute=false;ovG(x);oui();mvMix()});
-  if(gi){gi.addEventListener('input',()=>{const x=cur();if(x)x.gfi=+gi.value});gi.addEventListener('change',()=>{const x=cur();if(x){x.foP=null;x.t0=RT}})}
-  if(go){go.addEventListener('input',()=>{const x=cur();if(x)x.gfo=+go.value});go.addEventListener('change',()=>{const x=cur();if(x)x.foP=RT})}
-  setInterval(()=>{oui();mvMix()},300);
+  if(ov2)ov2.addEventListener('input',e=>{if(!e.isTrusted)return;const x=cur();if(!x)return;x.vol=ov2.value/100;if(x.vol>0)x.mute=false;ovG(x);oui();mvMix()});
+  if(gi){gi.addEventListener('input',e=>{if(!e.isTrusted)return;const x=cur();if(x)x.gfi=+gi.value});gi.addEventListener('change',()=>{const x=cur();if(x){x.foP=null;x.t0=RT}})}
+  if(go){go.addEventListener('input',e=>{if(!e.isTrusted)return;const x=cur();if(x)x.gfo=+go.value});go.addEventListener('change',()=>{const x=cur();if(x)x.foP=RT})}
+  setInterval(()=>{ovVids().forEach(y=>{if(!y.m.g)ovaAttach(y);else ovG(y)});const m=vid();if(m)setG(m);if(vol&&document.activeElement!==vol)vol.value=Math.round(MVVOL*100);oui();mvMix()},300);
 })();
 </script>
 <script>
