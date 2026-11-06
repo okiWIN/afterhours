@@ -698,6 +698,14 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <script src="vendor/RenderPass.js"></script>
 <script src="vendor/UnrealBloomPass.js"></script>
 <script>
+/* Feilvarsel: viser den første feilen nederst på skjermen (også grafikkfeil), så man ser hva som er galt i stedet for at appen bare stopper */
+(function(){let shown=0;const show=(m)=>{if(shown++>2)return;const go=()=>{let b=document.getElementById('errbar');if(!b){b=document.createElement('div');b.id='errbar';b.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#3a0710;color:#ffd6de;border:1px solid #ff4f8b;border-radius:8px;padding:8px 12px;font:12px/1.4 ui-monospace,Consolas,monospace;white-space:pre-wrap;max-height:40vh;overflow:auto;cursor:pointer';b.title='Click to hide';b.onclick=()=>b.remove();document.body.appendChild(b)}b.textContent=(b.textContent?b.textContent+'\n':'Afterhours error (send this to support):\n')+String(m).slice(0,600)};if(document.body)go();else addEventListener('DOMContentLoaded',go)};
+  addEventListener('error',e=>{if(e&&e.message)show(e.message+(e.filename?' @'+e.filename.split('/').pop()+':'+e.lineno:''))});
+  addEventListener('unhandledrejection',e=>{const r=e&&e.reason;if(r&&/AbortError|NotAllowedError|play\(\)/.test(String(r&&r.name)+String(r&&r.message)))return;show('Promise: '+(r&&(r.stack||r.message)||r))});
+  const ce=console.error.bind(console);console.error=function(){try{const t=[...arguments].map(String).join(' ');if(/THREE\.WebGL(Program|Renderer)|shader|Shader|WebGL/.test(t))show('Graphics: '+t)}catch(e){}return ce.apply(console,arguments)};
+  window.__errShow=show;})();
+</script>
+<script>
 const $=s=>document.querySelector(s), add=THREE.AdditiveBlending;
 /* mobil/svak maskin: lavere forhåndsvisning, halv bloom, færre DOM-oppdateringer */
 var LOWP=(()=>{try{/* et smalt vindu (f.eks. sidepanelet i Claude-appen) er ikke en svak maskin – bare berøringsskjerm/lite minne/få kjerner gir sparemodus */return matchMedia('(pointer:coarse)').matches||(navigator.deviceMemory&&navigator.deviceMemory<=4)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4)}catch(e){return false}})();if(LOWP)document.documentElement.classList.add('lowp');
@@ -1501,7 +1509,7 @@ async function mediaSeek(t){const L=[[MEDIA,window.__vsong?0:-(window.MOFF||0)]]
 function mediaResume(){[MEDIA,...Object.values(OVMED).map(x=>x.m)].forEach(m=>{if(m&&m.kind==='video'&&!m.up)m.v.play().catch(()=>{})})}
 
 /* Etterbehandling: glød, vignett, korn */
-var comp=null,rp,bloom,fx,trail=null,ovP=null,lzP=null,fxOn=true,FM=0,FA=1,BL=0,efr=0,eT=0,mel=0,pitch=.5,mPrev=0,mAvg=.01,lastN=-1,nT=-9,cPrev=0,cAvg=.01,lastC=-1,cT=-9,clap=0,rollV=0,kickR=0,snareR=0,clapR=0,bassS=0,SM=.5,tonal=0,melG=0,eng=0;
+var comp=null,rp,bloom,fx,trail=null,ovP=null,lzP=null,fxOn=true,FM=0,FMS=[],HHC=0,FDL=1,FXX=[],FA=1,BL=0,efr=0,eT=0,mel=0,pitch=.5,mPrev=0,mAvg=.01,lastN=-1,nT=-9,cPrev=0,cAvg=.01,lastC=-1,cT=-9,clap=0,rollV=0,kickR=0,snareR=0,clapR=0,bassS=0,SM=.5,tonal=0,melG=0,eng=0;
 try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.RenderPass){
   /* kantutjevning: 4x MSAA i hovedbildet (WebGL2), ikke på mobil/svake maskiner */
   {let rt=null;try{if(!LOWP&&R.capabilities.isWebGL2&&THREE.WebGLMultisampleRenderTarget){rt=new THREE.WebGLMultisampleRenderTarget(FW,FH,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat});rt.samples=4}}catch(e){rt=null}comp=rt?new THREE.EffectComposer(R,rt):new THREE.EffectComposer(R)}comp.setSize(FW,FH);
@@ -1674,7 +1682,7 @@ setTimeout(()=>{const go=()=>{try{[[TS,cam],[S,cam],[IS,ic],[window.VOIDSC,ic]].
 let frN=0,idN=0,skN=0,scrT=0,HALF=false;['scroll','touchmove','wheel'].forEach(ev=>addEventListener(ev,()=>{scrT=performance.now()},{passive:true,capture:true}));
 /* mobil/svake maskiner: tegn sjeldnere når det ikke synes (ute av bildet), og annenhver frame mens man scroller, så siden ruller jevnt */
 const frSkip=()=>{psT=performance.now();psN=psSum=0;return true};
-function frame(){requestAnimationFrame(frame);if(OFF)return;skN++;if(!exporting){const hid=typeof stageVis!=='undefined'&&!stageVis&&!miniOn;if(audio.paused&&!LIVE){idN++;if(hid&&idN%30)return frSkip();if(LOWP&&idN%2)return frSkip()}else{if(hid&&skN%3)return frSkip();if(LOWP&&(HALF||performance.now()-scrT<250)&&skN%2)return frSkip()}}if(window.__pdrag&&!exporting&&skN%2)return frSkip();psWatch();tick();frN++;if(!LOWP||frN%2===0){miniDraw();hwMeter()}}
+function frame(){requestAnimationFrame(frame);if(OFF)return;skN++;if(!exporting){const hid=typeof stageVis!=='undefined'&&!stageVis&&!miniOn;if(audio.paused&&!LIVE){idN++;if(hid&&idN%30)return frSkip();if(LOWP&&idN%2)return frSkip()}else{if(hid&&skN%3)return frSkip();if(LOWP&&(HALF||performance.now()-scrT<250)&&skN%2)return frSkip()}}if(window.__pdrag&&!exporting&&skN%2)return frSkip();psWatch();try{tick()}catch(e){if(!window.__tkErr){window.__tkErr=1;if(window.__errShow)__errShow('tick: '+(e&&e.stack||e))}}frN++;if(!LOWP||frN%2===0){miniDraw();hwMeter()}}
 /* jevnere forhåndsvisning: hvis maskinen ikke holder skjermens bildefrekvens, rendres forhåndsvisningen litt lavere (ned til 60 %) og skrus opp igjen når det er luft.
    Eksport rendres alltid i full oppløsning. */
 var PS=1;let psBW=0,psBH=0,psW=0,psH=0,psT=performance.now(),psBest=1e9,psN=0,psSum=0,psCalm=0;
@@ -2036,7 +2044,8 @@ function fxStack(U){const n=FMS.length,g=U.gf.value;let last=null;
       p.enabled=true;const u=p.uniforms;for(const k in U)if(k!=='tDiffuse'&&u[k])u[k].value=U[k].value;u.fm.value=FMS[i];u.fa.value=faOf(FMS[i]);u.xp.value=1;u.gf.value=1;last=p}
     else if(p)p.enabled=false}
   if(last){U.gf.value=1;last.uniforms.gf.value=g}}
-var FAK={13:25,9:25};var FMS=[],HHC=0,FDL=1,FXX=[];window.faOf=f=>f===FM?FA:((FAK[f]!=null?FAK[f]:100)/100);$('#fa').oninput=e=>{FA=e.target.value/100;if(FM)FAK[FM]=+e.target.value};
+var FAK={13:25,9:25};/* FMS, HHC, FDL og FXX er deklarert tidlig (sammen med FM), fordi første bilde tegnes før denne linja */
+function faOf(f){return f===FM?FA:((typeof FAK!=='undefined'&&FAK&&FAK[f]!=null?FAK[f]:100)/100)}window.faOf=faOf;$('#fa').oninput=e=>{FA=e.target.value/100;if(FM)FAK[FM]=+e.target.value};
 $('#stb').oninput=()=>{STM=2};$('#glw').oninput=e=>GLM=e.target.value/50;$('#ptc').oninput=e=>{PTM=e.target.value/50;PTKS[curPS]=+e.target.value};$('#pfa').oninput=e=>{PFA=e.target.value/50};$('#pfx').onchange=e=>{PFX=e.target.checked;if(PFX&&typeof cur!=='undefined'&&(cur==='void'||cur==='image'))st('Particles show on Tunnel, Organic and Orbits.')};
 $('#lzb').oninput=e=>{const v=e.target.value/100;if(LZBL<.01&&v>=.01)lzFresh=true;LZBL=v};
 $('#fl').oninput=e=>{FLK=e.target.value/100*1.5;FLKS[curFS]=FLK};
