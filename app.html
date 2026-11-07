@@ -1533,7 +1533,9 @@ function mediaTick(){tickMedia(MEDIA);if(window.vsSync)vsSync();
   if((!vsIsMedia()||vsCuts())&&loaded&&!OFF&&MEDIA&&MEDIA.kind==='video'&&!MEDIA.solo){const t=audio.currentTime||0,pl=!audio.paused||LIVE;if(!(pl&&MEDIA.up)){const [me,mc]=ovEnvFor(0,t);if(me<=.001&&OVT.some(c=>c.mid===0)){if(!MEDIA.v.paused)MEDIA.v.pause()}else vidFollow(MEDIA.v,mc?t-mc.s+(mc.vi||0):t+(window.MOFF||0),pl)}}}
 function tickMedia(m){
   if(!m)return;
-  if(m.kind==='video'){if(m.v.readyState>=2)m.tex.needsUpdate=true}
+  if(m.kind==='video'){if(m.v.readyState>=2){/* forhåndsvisning: last bare opp når videoen faktisk har et nytt bilde (en 30 fps-video ble lastet opp 60 ganger i sekundet). Eksport: alltid */
+    let ex=false;try{ex=exporting||!!OFF}catch(e){}const v=m.v;if(!ex&&v.requestVideoFrameCallback){if(!m._rv){m._rv=1;m._nf=true;const cb=()=>{m._nf=true;m._ft=performance.now();try{v.requestVideoFrameCallback(cb)}catch(e){m._rv=0}};try{v.requestVideoFrameCallback(cb)}catch(e){m._rv=0}}
+      const ct=v.currentTime;if(m._nf||ct!==m._lt&&v.paused||!v.paused&&performance.now()-(m._ft||0)>200){m._nf=false;m._lt=ct;m.tex.needsUpdate=true}}else m.tex.needsUpdate=true}}
   else if(m.kind==='gif'){const t=(OFF?OFF.t:T)%m.tot;let i=m.last;if(!(m.fr[i].t0<=t&&t<m.fr[i].t0+m.fr[i].d)){i=0;while(i<m.fr.length-1&&m.fr[i].t0+m.fr[i].d<=t)i++}
     if(i!==m.last||!m.drawn){m.last=i;m.drawn=1;m.g.clearRect(0,0,m.cv.width,m.cv.height);m.g.drawImage(m.fr[i].bm,0,0);m.tex.needsUpdate=true}}
   else if(m.kind==='gifimg'){m.g.clearRect(0,0,m.cv.width,m.cv.height);m.g.drawImage(m.im,0,0);m.tex.needsUpdate=true}
@@ -3553,7 +3555,7 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
   zb('#vtlsel',()=>{const A=clips(),c=A[sel];if(!c)return;view.span=Math.max(3,(c.e-c.s)*4);view.a=Math.max(0,c.s-view.span*.35);touchT=performance.now()});
   let vis=false;try{new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(wrap)}catch(e){vis=true}
   setTimeout(()=>{const tb=$('#tlxbody');if(tb&&wrap.parentNode!==tb){tb.appendChild(wrap);wrap.style.marginTop='10px'}},0);
-  const loop=()=>{requestAnimationFrame(loop);/* tekst-sporet i Timeline: vises når lyrics er i bruk */const want=!!loaded&&(VLYR.length>0||(typeof VLM!=='undefined'&&VLM!=='off'));if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';if(!want||!vis)return;if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
+  const loop=()=>{requestAnimationFrame(loop);/* tekst-sporet i Timeline: vises når lyrics er i bruk */const want=!!loaded&&(VLYR.length>0||(typeof VLM!=='undefined'&&VLM!=='off'));if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';if(!want||!vis)return;{const F=document.fullscreenElement;if(F&&!F.contains(wrap))return}if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
 /* ===== Overlay-tidslinje: ett spor per overlay. Ingen bokser på et spor = det overlayet vises hele sangen ===== */
 (function(){const wrap=$('#ovtlw'),cv=$('#ovtlc');if(!wrap||!cv)return;const g=cv.getContext('2d');
   let peaks=null,pkFile=null,pkBusy=false,view=window.TLVIEW||(window.TLVIEW={a:0,span:30}),selC=null,drag=null,hov=null,clip=null,touchT=0,uid=1;const PR=50,HUE=[210,330,160,40,270,190];
@@ -3797,7 +3799,7 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
   window.ovtlSet=(L,map)=>{OVT.length=0;(L||[]).forEach(c=>{const mid=c.m===0?0:c.m<=-100?c.m:map?map(c.m):c.m;if(mid===0||mid<=-100||OVMED[mid])OVT.push({id:uid++,s:c.s,e:c.e,fi:c.fi??.25,fo:c.fo??.25,mid,vi:c.vi||0})});selC=null};
   let vis=false;try{new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(wrap)}catch(e){vis=true}
   {const tb=$('#tlxbody');if(tb&&wrap.parentNode!==tb)tb.appendChild(wrap)}
-  const loop=()=>{requestAnimationFrame(loop);/* Timeline under avspillingen: vises når det finnes et lydspor og noe å time (Media eller overlay) */const want=!!loaded;if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';{const x=$('#tlx');if(x&&x.style.display!==(want?'flex':'none'))x.style.display=want?'flex':'none'}if(!want||!vis)return;if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
+  const loop=()=>{requestAnimationFrame(loop);/* Timeline under avspillingen: vises når det finnes et lydspor og noe å time (Media eller overlay) */const want=!!loaded;if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';{const x=$('#tlx');if(x&&x.style.display!==(want?'flex':'none'))x.style.display=want?'flex':'none'}if(!want||!vis)return;{const F=document.fullscreenElement;if(F&&!F.contains(wrap))return}if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
 /* ===== Auto-detect: talegjenkjenning (Whisper via transformers.js) på brukerens egen låt, lokalt i nettleseren/appen.
    Lyden gjøres mono, filtreres mot vokalområdet og resamples til 16 kHz, kjøres i 30 s vinduer med overlapp, og ordene grupperes i linjer med ordtider (LRC) ===== */
 const TFX='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2/dist/transformers.min.js';let asrP=null,asrM='',asrRun=false,asrStop=false;
@@ -4101,24 +4103,39 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   const list=$('#tblist');
   const fontOf=()=>{try{return VFONT>=0&&FONTS[VFONT]?FONTS[VFONT].f:LYF[0]}catch(e){return '700 {s}px sans-serif'}};
   window.tbDirty=()=>{dirty=true};
-  function draw(){const W=FW,H=FH;if(TBC.width!==W||TBC.height!==H){TBC.width=W;TBC.height=H}g.clearRect(0,0,W,H);const f=fontOf();
-    const tt=typeof ovTime==='function'?ovTime():0;TXB.forEach(b=>{b.bb=null;if(b.on===false||!b.t)return;const EV=typeof ovEnvFor==='function'?ovEnvFor(-100-b.id,tt):[1,null],env=EV[0];if(env<=.001)return;
+  /* Ytelse: hver tekst tegnes én gang i sitt eget lille bilde (bare på nytt når teksten, størrelsen eller fargen endres).
+     Animasjon, puls og flytting gjøres på skjermkortet – samme skarphet, men ingen opplasting av et helt fullskjermbilde hver frame. */
+  const BX=new Map(),MIP=!!(R.capabilities&&R.capabilities.isWebGL2),GEO=new THREE.PlaneGeometry(1,1);
+  const bxGet=id=>{let o=BX.get(id);if(!o){const c=document.createElement('canvas');c.width=c.height=2;const t=new THREE.CanvasTexture(c);t.generateMipmaps=MIP;t.minFilter=MIP?THREE.LinearMipmapLinearFilter:THREE.LinearFilter;
+    const m=new THREE.Mesh(GEO,new THREE.MeshBasicMaterial({map:t,transparent:true,depthTest:false,depthWrite:false}));m.frustumCulled=false;TBS.add(m);o={c,g:c.getContext('2d'),t,m,key:''};BX.set(id,o)}return o};
+  const bxDrop=id=>{const o=BX.get(id);if(!o)return;TBS.remove(o.m);o.m.material.dispose();o.t.dispose();BX.delete(id)};
+  function lay(b,tt,W,H,f){const EV=typeof ovEnvFor==='function'?ovEnvFor(-100-b.id,tt):[1,null],env=EV[0];if(env<=.001)return null;
       /* animasjon inn/ut: fra starten/slutten av boksen på tidslinja (eller sangen) */const bc=EV[1],since=bc?tt-bc.s:tt,until=bc?bc.e-tt:9e9,an=(()=>{/* på pause: vis teksten ferdig, så den kan redigeres – animasjonen spilles av og eksporteres */let ex=false;try{ex=exporting||!!window.OFF}catch(e){}return(!ex&&typeof audio!=='undefined'&&audio.paused&&!(window.__vsong&&window.__vsO&&!__vsO.paused))?'none':(b.an||'none')})(),e3=x=>{x=Math.max(0,Math.min(1,x));return 1-Math.pow(1-x,3)};
       const pin=an==='none'?1:e3(since/.45),pout=an==='none'?1:e3(until/.35),pa=Math.min(pin,pout);let txt=String(b.t).toUpperCase();if(an==='type'){const n=[...txt].length,k=Math.min(n,Math.floor(since/.055)+1);txt=[...txt].slice(0,k).join('');if(until<.35)txt=[...String(b.t).toUpperCase()].slice(0,Math.max(0,Math.ceil(n*until/.35))).join('')}
-      const sz=Math.max(8,b.sz*H),L=txt.split('\n');g.save();g.globalAlpha=env*(an==='fade'||an==='slide'||an==='zoom'?pa:1);
-      {const pul=b.pl?1+(typeof kick!=='undefined'?kick:0)*.09:1,zm=(an==='zoom'?.55+.45*pa:1)*pul,dy=an==='slide'?(1-pa)*sz*1.1:0,gl=an==='glitch'&&(since<.5||until<.3||(typeof snare!=='undefined'&&snare>.6&&Math.random()<.3));
-        g.translate(b.x*W+(gl?(Math.random()-.5)*sz*.25:0),b.y*H+dy);g.scale(zm,zm);g.translate(-b.x*W,-b.y*H);if(gl){g.shadowOffsetX=sz*.05}}g.font=String(f).replace('{s}',Math.round(sz));g.textAlign='center';g.textBaseline='middle';
-      let mw=0;L.forEach(x=>{mw=Math.max(mw,g.measureText(x).width)});const ls=sz*1.15,bh=ls*L.length,cx=b.x*W,cy=b.y*H;
-      g.shadowColor=b.c||'#ffffff';g.shadowBlur=sz*.35;g.fillStyle=b.c||'#ffffff';L.forEach((x,i)=>g.fillText(x,cx,cy-bh/2+ls*(i+.5)));g.shadowBlur=0;
-      L.forEach((x,i)=>g.fillText(x,cx,cy-bh/2+ls*(i+.5)));
-      b.bb={x0:(cx-mw/2-sz*.3)/W,x1:(cx+mw/2+sz*.3)/W,y0:(cy-bh/2-sz*.2)/H,y1:(cy+bh/2+sz*.2)/H};
-      if(drag&&drag.b===b){g.strokeStyle='#ffe066';g.lineWidth=Math.max(1,H/540);g.setLineDash([H/90,H/120]);g.strokeRect(b.bb.x0*W,b.bb.y0*H,(b.bb.x1-b.bb.x0)*W,(b.bb.y1-b.bb.y0)*H);
-        if(Math.abs(b.x-.5)<1e-4){g.beginPath();g.moveTo(W/2,0);g.lineTo(W/2,H);g.stroke()}if(Math.abs(b.y-.5)<1e-4){g.beginPath();g.moveTo(0,H/2);g.lineTo(W,H/2);g.stroke()}}
-      g.restore()});dirty=false}
-  window.renderTxtBoxes=function(){if(!TXB.length)return;const W=FW,H=FH;/* bokser på tidslinja, animasjon og puls endrer seg over tid – tegn hver gang */if(dirty||TBC.width!==W||TBC.height!==H||(typeof OVT!=='undefined'&&OVT.some(c=>c.mid<=-100))||TXB.some(b=>(b.an&&b.an!=='none')||b.pl))draw();
-    if(!TBT||TBT.image!==TBC){if(TBT)TBT.dispose();TBT=new THREE.CanvasTexture(TBC);TBT.minFilter=THREE.LinearFilter;TBT.generateMipmaps=false;
-      if(!TBM){TBM=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.MeshBasicMaterial({transparent:true,depthTest:false,depthWrite:false}));TBM.frustumCulled=false;TBS.add(TBM)}TBM.material.map=TBT;TBM.material.needsUpdate=true}
-    TBT.needsUpdate=true;R.autoClear=false;R.render(TBS,oc);R.autoClear=true};
+      const sz=Math.max(8,b.sz*H),pul=b.pl?1+(typeof kick!=='undefined'?kick:0)*.09:1,zm=(an==='zoom'?.55+.45*pa:1)*pul,dy=an==='slide'?(1-pa)*sz*1.1:0,gl=an==='glitch'&&(since<.5||until<.3||(typeof snare!=='undefined'&&snare>.6&&Math.random()<.3));
+      return{txt,sz,zm,dy,gl,jx:gl?(Math.random()-.5)*sz*.25:0,al:env*(an==='fade'||an==='slide'||an==='zoom'?pa:1),ss:b.pl||an==='zoom'?1.1:1}}
+  function bxPaint(o,b,L,f){const c=b.c||'#ffffff',key=[L.txt,Math.round(L.sz*10),c,f,L.gl?1:0,L.ss].join('|');if(o.key===key)return;o.key=key;
+    const x=o.g,font=String(f).replace('{s}',Math.round(L.sz));x.setTransform(1,0,0,1,0,0);x.font=font;const T=L.txt.split('\n');let mw=0;T.forEach(t=>{mw=Math.max(mw,x.measureText(t).width)});
+    const ls=L.sz*1.15,bh=ls*T.length,pad=Math.ceil(L.sz*.9),k=L.ss,w=Math.max(2,Math.ceil((mw+pad*2)*k)),h=Math.max(2,Math.ceil((bh+pad*2)*k));
+    if(o.c.width!==w||o.c.height!==h){o.c.width=w;o.c.height=h;o.t.dispose()}else x.clearRect(0,0,w,h);
+    x.setTransform(k,0,0,k,0,0);x.font=font;x.textAlign='center';x.textBaseline='middle';const cx=w/k/2,cy=h/k/2;
+    if(L.gl)x.shadowOffsetX=L.sz*.05*k;x.shadowColor=c;x.shadowBlur=L.sz*.35*k;x.fillStyle=c;T.forEach((t,i)=>x.fillText(t,cx,cy-bh/2+ls*(i+.5)));x.shadowBlur=0;x.shadowOffsetX=0;
+    T.forEach((t,i)=>x.fillText(t,cx,cy-bh/2+ls*(i+.5)));o.mw=mw;o.bh=bh;o.w=w/k;o.h=h/k;o.t.needsUpdate=true}
+  /* hjelpelinjer mens du drar (gul ramme og midtlinjer) – bare da tegnes et helt lerret */
+  function guides(W,H){if(TBC.width!==W||TBC.height!==H){TBC.width=W;TBC.height=H}g.clearRect(0,0,W,H);const b=drag&&drag.b;if(!b||!b.bb)return false;
+    g.strokeStyle='#ffe066';g.lineWidth=Math.max(1,H/540);g.setLineDash([H/90,H/120]);g.strokeRect(b.bb.x0*W,b.bb.y0*H,(b.bb.x1-b.bb.x0)*W,(b.bb.y1-b.bb.y0)*H);
+    if(Math.abs(b.x-.5)<1e-4){g.beginPath();g.moveTo(W/2,0);g.lineTo(W/2,H);g.stroke()}if(Math.abs(b.y-.5)<1e-4){g.beginPath();g.moveTo(0,H/2);g.lineTo(W,H/2);g.stroke()}g.setLineDash([]);return true}
+  let gOn=false;
+  window.renderTxtBoxes=function(){const W=FW,H=FH;if(!TXB.length){if(BX.size)[...BX.keys()].forEach(bxDrop);if(!gOn)return}
+    const f=fontOf(),tt=typeof ovTime==='function'?ovTime():0,ids=new Set();let any=false;
+    TXB.forEach((b,i)=>{ids.add(b.id);b.bb=null;const L=(b.on===false||!b.t)?null:lay(b,tt,W,H,f);const o=L?bxGet(b.id):BX.get(b.id);if(!o)return;if(!L){o.m.visible=false;return}
+      bxPaint(o,b,L,f);const cx=b.x*W,cy=b.y*H;b.bb={x0:(cx-o.mw/2-L.sz*.3)/W,x1:(cx+o.mw/2+L.sz*.3)/W,y0:(cy-o.bh/2-L.sz*.2)/H,y1:(cy+o.bh/2+L.sz*.2)/H};
+      const m=o.m;m.visible=L.al>.001;m.renderOrder=i;m.material.opacity=Math.min(1,L.al);m.scale.set(o.w*L.zm/W*2,o.h*L.zm/H*2,1);m.position.set((cx+L.jx)/W*2-1,1-(cy+L.dy)/H*2,0);if(m.visible)any=true});
+    BX.forEach((o,id)=>{if(!ids.has(id))bxDrop(id)});
+    const gw=!!(drag&&drag.b);if(gw||gOn){guides(W,H);if(!TBT||TBT.image!==TBC){if(TBT)TBT.dispose();TBT=new THREE.CanvasTexture(TBC);TBT.minFilter=THREE.LinearFilter;TBT.generateMipmaps=false;
+        if(!TBM){TBM=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.MeshBasicMaterial({transparent:true,depthTest:false,depthWrite:false}));TBM.frustumCulled=false;TBM.renderOrder=1e6;TBS.add(TBM)}TBM.material.map=TBT;TBM.material.needsUpdate=true}
+      TBT.needsUpdate=true;TBM.visible=gw;gOn=gw;if(gw)any=true}else if(TBM)TBM.visible=false;
+    dirty=false;if(!any)return;R.autoClear=false;R.render(TBS,oc);R.autoClear=true};
   /* lista i panelet */
   function render(){if(!list)return;list.innerHTML='';TXB.forEach(b=>{const r=document.createElement('div');r.style.cssText='display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:6px;border-radius:6px;border:1px solid '+(b===selB?'#7fb4ff':'#232a40')+';background:#0b0f1a';
       r.innerHTML='<input type="text" maxlength="60" placeholder="Your text" style="flex:1;min-width:120px;padding:5px 8px;border-radius:5px;border:1px solid #262b3d;background:#0c0d12;color:#dfe6ff;font:12px var(--mono);text-transform:uppercase"><label style="display:flex;align-items:center;gap:4px;font:10px var(--mono);color:#8e98bd">Size <input type="range" min="2" max="25" step=".5" style="width:80px"></label><input type="color" title="Color" style="width:26px;height:22px;border:0;background:none;padding:0"><select title="Animation in and out" style="background:#0c0d12;border:1px solid #262b3d;border-radius:4px;color:#dfe6ff;font:11px var(--mono);padding:3px 4px"><option value="none">No anim</option><option value="fade">Fade</option><option value="slide">Slide up</option><option value="zoom">Zoom</option><option value="type">Typewriter</option><option value="glitch">Glitch</option></select><label title="Pulse with the kick" style="display:flex;align-items:center;gap:3px;font:10px var(--mono);color:#8e98bd"><input type="checkbox">Pulse</label><button class="chip" type="button" data-a="c" title="Center it">⊕</button><button class="chip" type="button" data-a="v" title="Show / hide">'+(b.on===false?'◌':'●')+'</button><button class="chip" type="button" data-a="x" title="Remove">×</button>';
