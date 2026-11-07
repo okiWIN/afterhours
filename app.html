@@ -358,6 +358,7 @@ body.lock #stage{pointer-events:none}
 #bar{height:2px;bottom:5px;left:8px;max-width:calc(100% - 16px);opacity:.55;background:repeating-linear-gradient(90deg,#d6dfff 0 5px,transparent 5px 8px);box-shadow:0 0 4px #8fa4ff66}
 #bar::after{content:'';position:absolute;right:-2px;top:-2px;width:6px;height:6px;border-radius:1px;background:#e8edff;box-shadow:0 0 5px #cfd9ffaa}
 #stage.med::after{background:none}
+#stage.dropon{outline:2px dashed #7fb4ff;outline-offset:-6px}#stage.dropon::before{content:'Drop to add · song = track, picture/video = overlay';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;background:#05070dcc;color:#dfeaff;padding:10px 16px;border-radius:8px;font:12px var(--mono);right:auto;bottom:auto;height:auto;white-space:nowrap}
 #stage::before{content:'';position:absolute;left:8px;right:8px;bottom:5px;height:2px;z-index:2;pointer-events:none;background:repeating-linear-gradient(90deg,#ffffff0b 0 5px,transparent 5px 8px)}
 #seek{accent-color:#cfd9ff}
 
@@ -537,6 +538,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 @media(max-width:820px){.adv{display:none!important}body.showadv .adv{display:block!important}#moreb{display:block;width:100%;margin:10px 0;padding:12px;border:1px solid #2b3150;border-radius:9px;background:linear-gradient(180deg,#171a26,#0d0e14);color:#dfe6ff;font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .fxg{grid-template-columns:1fr 1fr!important}.fxc label.t{white-space:nowrap}.row{flex-wrap:wrap}#scn{grid-template-columns:repeat(3,1fr)!important}.key{height:48px}}
 #ovmu,#ovpp{font-weight:700;padding:6px 14px;font-size:12px}#ovmu.muted{background:rgba(255,79,139,.18);border-color:#ff4f8b;color:#ffd0df}#ivmu{font-weight:700;padding:6px 14px;font-size:12px}#ivmu.muted{background:rgba(255,79,139,.18);border-color:#ff4f8b;color:#ffd0df}#ivpp{font-weight:700;padding:6px 14px;font-size:12px}
+#tlx #ovtlw{margin:0!important}#tlx .note{font-size:10px}
 @font-face{font-family:'VT323';src:url(vendor/fonts/vt323-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:400;src:url(vendor/fonts/space-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:700;src:url(vendor/fonts/space-mono-latin-700-normal.woff2) format('woff2')}
 </style>
 <link rel="stylesheet" href="vendor/fonts2.css">
@@ -597,6 +599,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="ledw"><button class="led r" id="expl" disabled data-tip="Plays the song in real time and records it, starting from where the song is now. Keep changing scenes and knobs while it records.">● Live export</button><small>Record live · tweak</small></div>
 </div>
 <div class="live" id="livew" data-tip="LIVE AUDIO: the show reacts to sound playing somewhere else – Spotify, YouTube, a DJ set – instead of a loaded song."><span class="lb">Live audio</span><button class="chip" type="button" id="lsys">◉ System sound</button><button class="chip" type="button" id="lmic">🎙 Microphone</button><button class="chip" type="button" id="lstop" style="display:none">■ Stop</button><span id="lst"></span></div>
+<div class="live tlx" id="tlx" style="display:none;flex-direction:column;align-items:stretch;gap:0"><div id="tlxbody"></div></div>
 </div>
 <div class="hid"><input type="range" id="int" min="30" max="160" value="30"><input type="range" id="bl" min="0" max="100" value="0"><input type="range" id="fa" min="10" max="100" value="100"><input type="range" id="fl" min="0" max="100" value="50"><input type="range" id="lzb" min="0" max="100" value="100"><input type="range" id="stb" min="0" max="100" value="100"><input type="range" id="glw" min="0" max="100" value="0"><input type="range" id="pfa" min="0" max="100" value="50"><input type="range" id="ptc" min="0" max="100" value="0"></div>
 </div>
@@ -606,7 +609,7 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="drawer">
 <div class="card" id="voidcard" style="display:none">
 <h2>Text &amp; lyrics</h2>
-<div id="vtl" style="display:none;margin:2px 0 12px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap"><span class="lb" style="margin:0">Timeline</span><button class="chip on" type="button" id="vtladd" data-tip="Add a text box where the song is now. You can also double-click anywhere on the timeline.">+ Text</button><span id="vtlinfo" style="flex:1;min-width:120px;font:11px var(--mono);color:#9fb3e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><button class="chip" type="button" id="vtlzo" title="Zoom out">−</button><button class="chip" type="button" id="vtlzi" title="Zoom in">+</button><button class="chip" type="button" id="vtlsel" title="Zoom to the selected line">Selected</button><button class="chip" type="button" id="vtlfit" title="Show the whole song">Fit</button></div><canvas id="vtlc" tabindex="0" aria-label="Lyrics timeline" style="width:100%;height:128px;display:block;border-radius:6px;cursor:pointer;outline:none;touch-action:none"></canvas><div class="note" style="margin:6px 0 0"><b style="color:#cfe0ff">Double-click the timeline to add text there</b> · double-click a box to edit it · drag a box to move it, its edges to change start and end · Ctrl+C / Ctrl+V or Ctrl+D duplicates · Delete removes · Shift+scroll or drag the empty area to move along · scroll to zoom</div></div>
+<div id="vtl" style="display:none;margin:2px 0 12px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap"><span class="lb" style="margin:0">Text · lyrics</span><button class="chip on" type="button" id="vtladd" data-tip="Add a text box where the song is now. You can also double-click anywhere on the timeline.">+ Text</button><span id="vtlinfo" style="flex:1;min-width:120px;font:11px var(--mono);color:#9fb3e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><button class="chip" type="button" id="vtlzo" title="Zoom out">−</button><button class="chip" type="button" id="vtlzi" title="Zoom in">+</button><button class="chip" type="button" id="vtlsel" title="Zoom to the selected line">Selected</button><button class="chip" type="button" id="vtlfit" title="Show the whole song">Fit</button></div><canvas id="vtlc" tabindex="0" aria-label="Lyrics timeline" style="width:100%;height:128px;display:block;border-radius:6px;cursor:pointer;outline:none;touch-action:none"></canvas><div class="note" style="margin:6px 0 0"><b style="color:#cfe0ff">Double-click the timeline to add text there</b> · double-click a box to edit it · drag a box to move it, its edges to change start and end · Ctrl+C / Ctrl+V or Ctrl+D duplicates · Delete removes · Shift+scroll or drag the empty area to move along · scroll to zoom</div></div>
 <div class="field txrow"><span class="lb">Text on other scenes</span><div class="row" style="gap:8px;align-items:center"><label class="t" data-tip="TEXT ON EVERY SCENE: shows the words or lyrics below on top of any scene (Tunnel, Orbits, Hyper, Media …). Void always shows them as big title cards."><input type="checkbox" id="txon"> Show on every scene</label><select id="txpos" data-tip="Where the text sits on the other scenes." style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px"><option value="c">Center</option><option value="b">Bottom</option><option value="t">Top</option></select><select id="txfx" data-tip="TEXT EFFECT for the lyrics and the text on other scenes. Mix picks a new one for every line." style="background:linear-gradient(180deg,#14161e,#0c0d12);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:11px var(--mono);padding:4px 6px"><option value="mix">Effect: Mix</option><option value="pump">Kick pump</option><option value="glitch">Glitch</option><option value="glow">Glow pulse</option><option value="type">Typewriter</option><option value="scramble">Scramble</option><option value="drop">Drop in</option><option value="blur">Blur in</option><option value="chrome">Chrome</option><option value="glass">Liquid glass</option><option value="trail">Echo trail</option><option value="outline">Neon outline</option><option value="wave">Wave</option><option value="none">None</option></select></div><div class="row txcol" style="gap:6px;align-items:center;margin-top:8px" data-tip="TEXT COLOR for the text on other scenes. White stays white, RGB gives every new word a new color, Custom uses your own color."><span class="lb" style="margin-right:4px">Color</span><button class="chip on" type="button" data-tc="white">White</button><button class="chip" type="button" data-tc="rgb">RGB</button><button class="chip" type="button" data-tc="custom">Custom</button><input type="color" id="txcc" value="#7fb4ff" aria-label="Custom text color"></div></div>
 <div class="field" data-tip="The words that flash on the title cards, separated by commas. Japanese and other scripts work too. Write * for a star, e.g. L*VE (the A in STAR becomes a star by itself)."><span class="lb">Words</span><input type="text" id="vwords" maxlength="300" style="width:100%;box-sizing:border-box;background:linear-gradient(180deg,#07080c,#10121a);border:1px solid #262b3d;border-radius:3px;color:#dfe6ff;font:12px var(--mono);padding:6px 9px;box-shadow:inset 0 1px 3px #000"></div>
 
@@ -650,11 +653,11 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <div class="field"><span class="lb">Blend</span><div class="row"><button class="chip on" data-ob="0">Normal</button><button class="chip" data-ob="1">Screen</button><button class="chip" data-ob="2">Multiply</button></div></div>
 <div class="sl"><label>Opacity <input type="range" id="oop" min="0" max="100" value="100"></label><label>Size <input type="range" id="osz" min="5" max="200" value="100"></label><label>Horizontal <input type="range" id="opx" min="-100" max="100" value="0"></label><label>Vertical <input type="range" id="opy" min="-100" max="100" value="0"></label><label>Intensity <input type="range" id="oin" min="0" max="100" value="35"></label><label>Blur / echo <input type="range" id="obl" min="0" max="100" value="0"></label></div>
 <div class="field" id="ovpw" style="display:none;margin-top:10px" data-tip="VIDEO POSITION: drag to choose where in the selected overlay video it plays. It stays in step with the song from there – also in the export."><span class="lb">Video position <span id="ovvpt" style="color:#9fb3e6;letter-spacing:.04em"></span></span><input type="range" id="ovvp" min="0" max="1000" value="0" style="width:100%"></div><div class="field" id="ovvcw" style="display:none;margin-top:10px"><span class="lb">Video <span id="ovna" style="color:#8e88a8;letter-spacing:.04em"></span></span><div class="row" style="align-items:center;gap:8px;flex-wrap:wrap"><button class="chip" id="ovpp" type="button" data-tip="PLAY / PAUSE the selected overlay video. Play and Space start and stop the song together with the videos.">❚❚ Pause</button><button class="chip" id="ovmu" type="button" data-tip="SOUND of the selected overlay video (on by default). Click to mute.">🔊 Sound on</button><label style="display:flex;align-items:center;gap:6px;flex:1;min-width:120px" data-tip="VOLUME of the selected overlay video.">Vol <input type="range" id="ovvol" min="0" max="100" value="100" style="flex:1"></label></div></div><div class="field sl" id="ovgfw" style="display:none;margin-top:10px"><label data-tip="FADE IN for the selected overlay: fades up at the start of the song (or of the video when no song is loaded). Clips on the Overlay timeline use their own fades. Let go to preview. 0 = straight in.">Fade in <input type="range" id="ovgfi" min="0" max="40" value="0"></label><label data-tip="FADE OUT for the selected overlay: fades away before the song ends (or before the video ends when no song is loaded). Let go to preview. 0 = straight out.">Fade out <input type="range" id="ovgfo" min="0" max="40" value="0"></label></div>
-<input type="file" id="ovrep" accept="image/*,video/*,.gif,.mp4,.webm,.mov" style="display:none">
-<div id="ovtlw" style="margin:10px 0 8px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap"><span class="lb" style="margin:0">Timeline</span><span id="ovtlinfo" style="flex:1;min-width:120px;font:11px var(--mono);color:#9fb3e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><button class="chip" type="button" id="ovadd" data-tip="Put the overlay that is selected in the list above on the timeline, starting where the song is now.">+ Add at playhead</button><button class="chip" type="button" id="ovall" data-tip="Remove the boxes of the selected overlay so it shows during the whole song again.">Whole song</button></div>
+<input type="file" id="ovrep" accept="image/*,video/*,.gif,.mp4,.webm,.mov" style="display:none"><div class="note" style="margin:8px 0 0">Timing, cuts and fades are on the <b>Timeline</b> under the player.</div>
+<div id="ovtlw" style="margin:10px 0 8px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap"><span class="lb" style="margin:0">Timeline</span><button class="chip" type="button" id="tllock" data-tip="LOCK: on = the timeline follows the playhead while it plays, also when you have zoomed in. Off = the timeline stays where you put it." style="padding:3px 8px;line-height:0;display:inline-flex;align-items:center"></button><span id="ovtlinfo" style="flex:1;min-width:120px;font:11px var(--mono);color:#9fb3e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><button class="chip" type="button" id="ovadd" data-tip="Put the overlay that is selected in the list above on the timeline, starting where the song is now.">+ Add at playhead</button><span id="tlxscw" style="display:none;gap:6px;align-items:center"><span class="lb" style="margin:0">Scene</span><select id="tlxsc" style="background:#0c0d12;border:1px solid #262b3d;border-radius:4px;color:#dfe6ff;font:11px var(--mono);padding:3px 6px"></select></span><button class="chip" type="button" id="tlzo" title="Zoom out (−)" data-tip="ZOOM OUT on the timeline. Shortcut: − (or scroll).">−</button><button class="chip" type="button" id="tlzi" title="Zoom in (+)" data-tip="ZOOM IN on the timeline – all the way down to a quarter of a second, for exact cuts. Shortcut: + (or scroll).">+</button><button class="chip" type="button" id="ovsplit" data-tip="SPLIT (S): cut the box under the playhead in two. Drag the edges to trim the start or end of the video, or select a part and press Delete to cut it out.">✂ Split</button><button class="chip" type="button" id="ovall" data-tip="Remove the boxes of the selected overlay so it shows during the whole song again.">Whole song</button></div>
 <canvas id="ovtlc" tabindex="0" aria-label="Overlay timeline" style="width:100%;height:84px;display:block;border-radius:6px;cursor:pointer;outline:none;touch-action:none;background:#05070d"></canvas>
-<div id="ovfade" style="display:none;gap:14px;align-items:center;margin-top:6px;flex-wrap:wrap" class="sl"><label>Fade in <input type="range" id="ovfi" min="0" max="200" value="25"></label><label>Fade out <input type="range" id="ovfo" min="0" max="200" value="25"></label></div>
-<div class="note" style="margin:6px 0 0">One track per overlay – the top track is in front; drag a track up or down by its grip ≡ to change the order. No boxes on a track = that overlay shows the whole song. Several overlays can show at the same time. Click one in the list to move or resize it on the preview. Double-click a track to add a box · drag a box to move it · drag its edges for start and end · Ctrl+C / Ctrl+V or Ctrl+D duplicates · Delete removes · drag the empty area or Shift+scroll to move along · scroll to zoom</div></div>
+<div id="ovfade" style="display:none;gap:14px;align-items:center;margin-top:6px;flex-wrap:wrap" class="sl"><label>Fade in <input type="range" id="ovfi" min="0" max="200" value="25"></label><label>Fade out <input type="range" id="ovfo" min="0" max="200" value="25"></label><label id="ovviw" style="display:none" data-tip="START IN VIDEO: where in the video this box starts. Dragging the left edge of a box also trims the start.">Start in video <span id="ovvit" style="color:#9fb3e6"></span> <input type="range" id="ovvi" min="0" max="1000" value="0"></label></div>
+<div class="note" style="margin:6px 0 0"><b>Scenes</b> on top – double-click to change scene there, drag a line to move it, pick the scene in the menu. Then <b>Media</b>, one track per <b>overlay</b> (the top one is in front – drag ≡ to reorder), ♪ <b>music</b>, and <b>Text</b> (lyrics) below. No boxes = shown all the time. Drag the edges of a box to trim · double-click a box or ✂ Split (S) to cut · Delete removes · Ctrl+D duplicates · <b>+ / −</b> or scroll to zoom (down to ¼ s) · <b>← →</b> or <b>, .</b> move the playhead one frame (Shift = 1 s) for exact cuts · click the music to jump there.</div></div>
 <div class="cbt"><span class="note" style="margin:0;flex:1">Drag on the preview to move it, scroll to resize.</span><button class="chip on" id="ovv" type="button" data-tip="Show or hide the overlay without removing it. Shortcut: O.">● Visible</button><button class="chip" id="ors">Reset</button><button class="chip" id="orm">Remove</button></div>
 </div>
 </div>
@@ -700,7 +703,8 @@ html.lowp *{-webkit-backdrop-filter:none!important;backdrop-filter:none!importan
 <script>
 /* Feilvarsel: viser den første feilen nederst på skjermen (også grafikkfeil), så man ser hva som er galt i stedet for at appen bare stopper */
 (function(){let shown=0;const show=(m)=>{if(shown++>2)return;const go=()=>{let b=document.getElementById('errbar');if(!b){b=document.createElement('div');b.id='errbar';b.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#3a0710;color:#ffd6de;border:1px solid #ff4f8b;border-radius:8px;padding:8px 12px;font:12px/1.4 ui-monospace,Consolas,monospace;white-space:pre-wrap;max-height:40vh;overflow:auto;cursor:pointer';b.title='Click to hide';b.onclick=()=>b.remove();document.body.appendChild(b)}b.textContent=(b.textContent?b.textContent+'\n':'Afterhours error (send this to support):\n')+String(m).slice(0,600)};if(document.body)go();else addEventListener('DOMContentLoaded',go)};
-  addEventListener('error',e=>{if(e&&e.message)show(e.message+(e.filename?' @'+e.filename.split('/').pop()+':'+e.lineno:''))});
+  /* ufarlige nettleser-varsler (ResizeObserver, avbrutt avspilling) vises ikke */const benign=m=>/ResizeObserver loop|play\(\) request was interrupted|The operation was aborted/i.test(String(m||''));
+  addEventListener('error',e=>{if(e&&e.message&&!benign(e.message))show(e.message+(e.filename?' @'+e.filename.split('/').pop()+':'+e.lineno:''))});
   addEventListener('unhandledrejection',e=>{const r=e&&e.reason;if(r&&/AbortError|NotAllowedError|play\(\)/.test(String(r&&r.name)+String(r&&r.message)))return;show('Promise: '+(r&&(r.stack||r.message)||r))});
   const ce=console.error.bind(console);console.error=function(){try{const t=[...arguments].map(String).join(' ');if(/THREE\.WebGL(Program|Renderer)|shader|Shader|WebGL/.test(t))show('Graphics: '+t)}catch(e){}return ce.apply(console,arguments)};
   window.__errShow=show;})();
@@ -1264,7 +1268,7 @@ function ovUpdate(){
     md.mat.uniforms.map.value=md.tex;md.cq.renderOrder=md.ord??id;
     if(md.m&&md.m.kind==='video'&&!OFF){const v=md.m.v,d=v.duration||0;
       if(!vis){if(!v.paused)v.pause();md.lc=null}
-      else if(c){if(md.lc!==c.id){md.lc=c.id;try{v.currentTime=d?(t-c.s)%d:0}catch(e){}}const pl=(playing||md.solo)&&!md.up;if(pl&&v.paused)v.play().catch(()=>{});if(!pl&&!v.paused)v.pause();if(playing&&d&&Math.abs(v.currentTime-(t-c.s)%d)>.35)try{v.currentTime=(t-c.s)%d}catch(e){}if(!playing&&!md.solo&&d)vidFollow(v,t-c.s+(md.off||0),false)}
+      else if(c){const ct=t-c.s+(c.vi||0);if(md.lc!==c.id){md.lc=c.id;try{v.currentTime=d?ct%d:0}catch(e){}}const pl=(playing||md.solo)&&!md.up;if(pl&&v.paused)v.play().catch(()=>{});if(!pl&&!v.paused)v.pause();if(playing&&d&&Math.abs(v.currentTime-ct%d)>.35)try{v.currentTime=ct%d}catch(e){}if(!playing&&!md.solo&&d)vidFollow(v,ct,false)}
       else if(loaded&&!md.solo){/* uten klipp: følger sangen – også når du spoler */if(!(playing&&md.up))vidFollow(v,t+(md.off||0),playing&&!md.up)}
       else{/* uten sang (eller spilt alene): spiller fritt. Egen Play/Pause i Overlay */const want=!md.up&&(!loaded||playing||md.solo);if(want&&v.paused)v.play().catch(()=>{});if(!want&&!v.paused)v.pause()}}
     if(!vis){md.cq.visible=false;md.fresh=true;continue}any=true;tickMedia(md.m);
@@ -1374,7 +1378,7 @@ function imageUpdate(dt){
   const fo=+(($('#ifo')||{}).value||0)/10;let fo2=1;if(fo>0&&vidF)fo2=Math.min(1,Math.max(0,(vm.duration-vm.currentTime)/fo));else if(fo>0&&loaded){const t=OFF?OFF.t:audio.currentTime||0;let end=audio.duration&&isFinite(audio.duration)?audio.duration:1e9;if(OFF&&OFF.b)end=Math.min(end,OFF.b);
     if(window.tlGet){const L=tlGet();if(L.on)for(const c of L.c){if(c.t>t+.01&&c.s!=='image'&&c.t<end){end=c.t}}}fo2=Math.min(1,Math.max(0,(end-t)/fo))}
   /* forhåndsvis fade out når glidebryteren slippes: toner ut, så inn igjen */if(window.__foP!=null&&!OFF){const e=RT-__foP;if(fo>0&&e<fo+.4)fo2=Math.min(fo2,Math.max(0,1-e/fo));else{window.__foP=null;window.__imT0=RT}}
-  const fe=fk*fk*(3-2*fk)*fo2*fo2*(3-2*fo2);window.IMFE=fe;window.IMBR0=(1+kick*.12*MI+snare*.05*MI);u.br.value=IMBR0*fe;
+  let fe=fk*fk*(3-2*fk)*fo2*fo2*(3-2*fo2);/* Timeline: bokser på Media-sporet bestemmer når Media vises (med egne fades) */if(loaded&&typeof ovEnvFor==='function'){fe*=ovEnvFor(0,OFF?OFF.t:audio.currentTime||0)[0]}window.IMFE=fe;window.IMBR0=(1+kick*.12*MI+snare*.05*MI);u.br.value=IMBR0*fe;
 }
 /* Bilde, GIF eller video som bakgrunn i Image-scenen */
 var MEDIA=null,IMGON=false;
@@ -1410,7 +1414,7 @@ async function openMedia(f,lbl){
 }
 async function loadImg(f){
   if(!f)return;
-  try{const r=await openMedia(f,'#inm');window._imgFile=f;mediaSet(r.tex,r.ia,f.name||'image',r.m);if(r.m&&r.m.kind==='video'&&!r.m.up&&!window.__vsong)r.m.v.play().catch(()=>{})}
+  try{const r=await openMedia(f,'#inm');window._imgFile=f;mediaSet(r.tex,r.ia,f.name||'image',r.m);if(r.m&&r.m.kind==='video'&&!r.m.up&&!vsIsMedia())r.m.v.play().catch(()=>{})}
   catch(e){$('#inm').textContent='Could not open that file. Try another one.'}
 }
 function ovSet(tex,ia,name,m,file){
@@ -1493,8 +1497,13 @@ async function gifDecode(d,lbl){
 /* hold en video i takt med sangen: spiller -> spill og rett opp hvis den glir; pause -> vis riktig bilde (spoling) */
 function vidFollow(v,tg,play){const d=v.duration;if(!isFinite(d)||d<=0)return;tg=((tg%d)+d)%d;let df=Math.abs(v.currentTime-tg);df=Math.min(df,d-df);
   if(play){if(v.paused)v.play().catch(()=>{});if(df>.3&&!v.seeking)try{v.currentTime=tg}catch(e){}}else{if(!v.paused)v.pause();if(df>.04&&!v.seeking)try{v.currentTime=tg}catch(e){}}}
+function vsIsMedia(){return !!window.__vsong&&!window.__vsO}
+/* video som lydspor MED kutt på tidslinja: da spiller videoen sin egen lyd (følger klippene), sangen er bare klokka og er stum */
+function vsLane(){if(!window.__vsong)return null;if(!window.__vsO)return 0;for(const k in OVMED)if(OVMED[k]===window.__vsO)return +k;return null}
+function vsCuts(){const l=vsLane();return l!=null&&typeof OVT!=='undefined'&&OVT.some(c=>c.mid===l)}
+function vsEnd(){const l=vsLane();let e=0;if(l!=null)OVT.forEach(c=>{if(c.mid===l&&c.e>e)e=c.e});return e}
 function mediaTick(){tickMedia(MEDIA);if(window.vsSync)vsSync();
-  if(!window.__vsong&&loaded&&!OFF&&MEDIA&&MEDIA.kind==='video'&&!MEDIA.solo){const t=audio.currentTime||0,pl=!audio.paused||LIVE;if(!(pl&&MEDIA.up))vidFollow(MEDIA.v,t+(window.MOFF||0),pl)}}
+  if((!vsIsMedia()||vsCuts())&&loaded&&!OFF&&MEDIA&&MEDIA.kind==='video'&&!MEDIA.solo){const t=audio.currentTime||0,pl=!audio.paused||LIVE;if(!(pl&&MEDIA.up)){const [me,mc]=ovEnvFor(0,t);if(me<=.001&&OVT.some(c=>c.mid===0)){if(!MEDIA.v.paused)MEDIA.v.pause()}else vidFollow(MEDIA.v,mc?t-mc.s+(mc.vi||0):t+(window.MOFF||0),pl)}}}
 function tickMedia(m){
   if(!m)return;
   if(m.kind==='video'){if(m.v.readyState>=2)m.tex.needsUpdate=true}
@@ -1503,7 +1512,7 @@ function tickMedia(m){
   else if(m.kind==='gifimg'){m.g.clearRect(0,0,m.cv.width,m.cv.height);m.g.drawImage(m.im,0,0);m.tex.needsUpdate=true}
 }
 /* Brukes av skrivebordsappens eksport: stiller videoen på riktig tidspunkt for hvert bilde */
-async function mediaSeek(t){const L=[[MEDIA,window.__vsong?0:-(window.MOFF||0)]];for(const k in OVMED){const md=OVMED[k];if(md.m&&md.m.kind==='video'){const [e,c]=ovEnvFor(+k,t);if(e>.001)L.push([md.m,(c?c.s:0)-(md.off||0)])}}
+async function mediaSeek(t){const mc0=ovEnvFor(0,t)[1],L=[[MEDIA,vsIsMedia()&&!vsCuts()?0:mc0?mc0.s-(mc0.vi||0):-(window.MOFF||0)]];for(const k in OVMED){const md=OVMED[k];if(md.m&&md.m.kind==='video'){const [e,c]=ovEnvFor(+k,t);if(e>.001)L.push([md.m,c?c.s-(c.vi||0):-(md.off||0)])}}
   for(const [m,t0] of L){if(!m||m.kind!=='video'||!isFinite(m.v.duration))continue;m.v.pause();const target=((t-t0)%m.v.duration+m.v.duration)%m.v.duration;
   if(Math.abs(m.v.currentTime-target)<.001)continue;await new Promise(ok=>{const to=setTimeout(ok,700);m.v.onseeked=()=>{clearTimeout(to);ok()};m.v.currentTime=target})}}
 function mediaResume(){[MEDIA,...Object.values(OVMED).map(x=>x.m)].forEach(m=>{if(m&&m.kind==='video'&&!m.up)m.v.play().catch(()=>{})})}
@@ -1645,7 +1654,7 @@ try{if(THREE.EffectComposer&&THREE.UnrealBloomPass&&THREE.ShaderPass&&THREE.Rend
 var OFF=null;
 const audio=new Audio();let ac,an,dest,exporting=false,loaded=false;
 const fd=new Uint8Array(512);
-function initAudio(){if(ac)return;ac=new(window.AudioContext||window.webkitAudioContext)();const s=ac.createMediaElementSource(audio);window._fsrc=s;an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=.5;const sg=ac.createGain();window.SONGG=sg;s.connect(sg);sg.connect(an);an2=ac.createAnalyser();an2.fftSize=1024;an2.smoothingTimeConstant=0;an2.minDecibels=-80;an2.maxDecibels=0;sg.connect(an2);if(window.mtHook)mtHook(ac,s);an.connect(ac.destination);dest=ac.createMediaStreamDestination();an.connect(dest)}
+function initAudio(){if(ac)return;ac=new(window.AudioContext||window.webkitAudioContext)();const s=ac.createMediaElementSource(audio);window._fsrc=s;an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=.5;const sg=ac.createGain();window.SONGG=sg;s.connect(sg);sg.connect(an);an2=ac.createAnalyser();an2.fftSize=1024;an2.smoothingTimeConstant=0;an2.minDecibels=-80;an2.maxDecibels=0;sg.connect(an2);const mb=ac.createGain();window.MBUS=mb;sg.connect(mb);if(window.mtHook)mtHook(ac,mb);an.connect(ac.destination);dest=ac.createMediaStreamDestination();an.connect(dest)}
 const av=(a,b)=>{let s=0;for(let i=a;i<b;i++)s+=fd[i];return s/(b-a)/255};
 var an2=null;const fd2=new Uint8Array(512);const av2=(a,b)=>{let s=0;for(let i=a;i<b;i++)s+=fd2[i];return s/(b-a)/255};
 var KL={p1:1e-9,p2:1e-9},_med=[],RT=0,lastKr=-9,lastSr=-9,snT=-9,snJ=0;
@@ -1769,7 +1778,7 @@ const st=t=>{const e=$('#st');e.textContent=t;/* etter eksport i nettversjonen: 
 var curFile=null;
 const dz=$('#dz');
 function load(f){
-  if(!f)return;if(window.__vsong&&!(MEDIA&&MEDIA.file===f)){window.__vsong=false;if(window.mvMix)setTimeout(mvMix)}if(LIVE)liveStop(true);curFile=f;audio.onerror=()=>{loaded=false;if(window.__vsong){window.__vsong=false;if(window.mvMix)mvMix()}$('#play').disabled=$('#exp').disabled=$('#expl').disabled=true;$('#fn').textContent='Drop your song or beat here';st('That file could not be read as audio. Try an mp3, wav or m4a.')};audio.src=URL.createObjectURL(f);audio.load();loaded=true;
+  if(!f)return;if(window.__vsong&&window.VSF!==f){window.__vsong=false;window.__vsO=null;window.VSF=null;if(window.mvMix)setTimeout(mvMix)}if(LIVE)liveStop(true);curFile=f;audio.onerror=()=>{loaded=false;if(window.__vsong){window.__vsong=false;window.__vsO=null;window.VSF=null;if(window.mvMix)mvMix()}$('#play').disabled=$('#exp').disabled=$('#expl').disabled=true;$('#fn').textContent='Drop your song or beat here';st('That file could not be read as audio. Try an mp3, wav or m4a.')};audio.src=URL.createObjectURL(f);audio.load();loaded=true;
   $('#fn').textContent=f.name;dz.classList.add('has');$('#play').disabled=$('#exp').disabled=$('#expl').disabled=false;$('#tag').textContent=f.name.replace(/\.[^.]+$/,'');
   st('Ready. Press play to preview the show, or export right away.');
 }
@@ -1777,8 +1786,8 @@ $('#fi').onchange=e=>load(e.target.files[0]);
 /* fjern sangen (X): appen går tilbake til uten sang – Media-videoen kan fortsatt spilles med sin egen lyd */
 function songClear(){if(exporting)return;if(LIVE)liveStop(true);audio.onerror=null;audio.pause();const u=audio.src;audio.removeAttribute('src');audio.load();try{if(u)URL.revokeObjectURL(u)}catch(e){}
   loaded=false;curFile=null;$('#fi').value='';$('#fn').textContent='Insert track';dz.classList.remove('has');$('#play').disabled=$('#exp').disabled=$('#expl').disabled=true;$('#play').textContent='▶ Play';$('#bar').style.width='0%';$('#seek').value=0;$('#tcur').textContent='0:00';$('#ttot').textContent='0:00';
-  const wasV=window.__vsong;window.__vsong=false;if(wasV&&MEDIA)MEDIA.noSong=true;if(window.mvMix)mvMix();
-  if(!wasV&&window.vsEnter&&vsEnter(MEDIA))return;
+  const wasV=window.__vsong;if(wasV){const o=window.__vsO||MEDIA;if(o)o.noSong=true}window.__vsong=false;window.__vsO=null;window.VSF=null;if(window.mvMix)mvMix();
+  if(!wasV&&window.vsAuto&&vsAuto())return;
   st('Song removed. Load a new one, or play a video in Media with its own sound.')}
 $('#fnx').onclick=e=>{e.preventDefault();e.stopPropagation();songClear()};
 ['dragover','dragenter'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('on')}));
@@ -2081,13 +2090,21 @@ $('#ox').onclick=e=>{e.preventDefault();e.stopPropagation();ovClear()};
 function imgClear(){window._imgFile=null;const old=IM.uniforms.map.value;drawPh();IM.uniforms.map.value=mkTex(phC);IM.uniforms.ia.value=phC.width/phC.height;if(old&&old.dispose)old.dispose();
   if(MEDIA&&MEDIA.v){MEDIA.v.pause();try{URL.revokeObjectURL(MEDIA.url)}catch(e){}}MEDIA=null;$('#ii').value='';
   $('#inm').textContent='Drop an image, GIF or video here, or click to choose';$('#idz').classList.remove('has')}
-$('#ix').onclick=e=>{e.preventDefault();e.stopPropagation();const vs=window.__vsong;imgClear();IMGON=false;if(vs){window.__vsong=false;songClear()}};
+$('#ix').onclick=e=>{e.preventDefault();e.stopPropagation();const vs=vsIsMedia();imgClear();for(let i=OVT.length-1;i>=0;i--)if(OVT[i].mid===0)OVT.splice(i,1);if(window.ovtlRefresh)ovtlRefresh();IMGON=false;if(vs){window.__vsong=false;songClear()}};
 /* Klikk eller slipp en fil rett på skjermen i Image-scenen */
 (()=>{const st=$('#stage');let p0=null;
   st.addEventListener('pointerdown',e=>{p0={x:e.clientX,y:e.clientY}},true);
   st.addEventListener('click',e=>{if(cur!=='image'||IMGON||!p0)return;if(Math.hypot(e.clientX-p0.x,e.clientY-p0.y)>5)return;$('#ii').click()});
-  st.addEventListener('dragover',e=>{if(cur==='image')e.preventDefault()});
-  st.addEventListener('drop',e=>{if(cur!=='image')return;e.preventDefault();const f=e.dataTransfer.files[0];if(f)loadImg(f)});
+  /* slipp filer rett i visualizeren: lyd = sang, bilde/GIF/video = overlay (i Media-scenen uten bilde: Media) */
+  const hasF=e=>e.dataTransfer&&[...(e.dataTransfer.types||[])].includes('Files');
+  st.addEventListener('dragover',e=>{if(!hasF(e))return;e.preventDefault();st.classList.add('dropon')});
+  st.addEventListener('dragleave',e=>{if(e.target===st)st.classList.remove('dropon')});
+  st.addEventListener('drop',async e=>{st.classList.remove('dropon');if(!hasF(e))return;e.preventDefault();if(exporting)return;const fs=[...e.dataTransfer.files];
+    for(const f of fs){const ty=f.type||'',nm=(f.name||'').toLowerCase();
+      if(/^audio\//.test(ty)||/\.(mp3|wav|m4a|aac|flac|ogg|opus)$/.test(nm)){load(f);continue}
+      if(!(/^(image|video)\//.test(ty)||/\.(png|jpe?g|webp|gif|mp4|webm|mov|m4v)$/.test(nm)))continue;
+      if(cur==='image'&&!IMGON){await loadImg(f);continue}
+      await loadOv(f)}});
   setInterval(()=>{st.style.cursor=cur==='image'?(IMGON?'grab':'pointer'):(OVon?'grab':'')},400);
 })();
 $('#laser').onchange=e=>laserOn=e.target.checked;$('#strobe').onchange=e=>strobe=e.target.checked;
@@ -2238,7 +2255,7 @@ window.tlTick=()=>{if(!TL.on||!TL.c.length)return;const t=OFF?OFF.t:(audio&&!isN
   box.addEventListener('keydown',e=>e.stopPropagation());tlRender()}
 /* utsnitt av låta til eksport */
 const tparse=v=>{v=String(v||'').trim();if(!v)return null;const m=v.split(':').map(Number);if(m.some(isNaN))return null;return m.length>1?m[0]*60+m[1]:m[0]};
-window.clipRange=dur=>{let a=tparse($('#xs').value),b=tparse($('#xe').value);a=Math.max(0,Math.min(dur,a||0));b=b==null?dur:Math.max(0,Math.min(dur,b));if(b-a<.5){a=0;b=dur}return{a,b,part:a>0||b<dur-.01}};
+window.clipRange=dur=>{if(vsCuts()){const e=vsEnd();if(e>.5)dur=Math.min(dur,e)}let a=tparse($('#xs').value),b=tparse($('#xe').value);a=Math.max(0,Math.min(dur,a||0));b=b==null?dur:Math.max(0,Math.min(dur,b));if(b-a<.5){a=0;b=dur}return{a,b,part:a>0||b<dur-.01}};
 {const fm=t=>mmss(t)+(t%1>=.05?'.'+Math.floor(t%1*10):'');$('#xsnow').onclick=()=>{$('#xs').value=fm(audio.currentTime||0)};$('#xenow').onclick=()=>{$('#xe').value=fm(audio.currentTime||0)};
   const plus=d=>{const a=tparse($('#xs').value)||0;$('#xe').value=fm(Math.min(audio.duration||a+d,a+d))};$('#x15').onclick=()=>plus(15);const quick=(f,d)=>{const fb=document.querySelector('[data-f="'+f+'"]'),qb=document.querySelector('[data-q="1080"]');if(fb)fb.click();if(qb)qb.click();if(d){const a=Math.max(0,Math.min(audio.currentTime||0,(audio.duration||d)-d));$('#xs').value=fm(a);plus(d)}else{$('#xs').value='';$('#xe').value=''}st(d?'Set up for TikTok / Reels: 9:16, 1080p, '+d+' s clip. Press Export video.':'Set up for YouTube: 16:9, 1080p, whole song. Press Export video.')};$('#qtt').onclick=()=>quick('v',30);$('#qtt15').onclick=()=>quick('v',15);$('#qyt').onclick=()=>quick('h',0);$('#x30').onclick=()=>plus(30);$('#xclr').onclick=()=>{$('#xs').value='';$('#xe').value=''};
   ['xs','xe'].forEach(id=>$('#'+id).addEventListener('keydown',e=>e.stopPropagation()))}
@@ -2278,7 +2295,7 @@ async function fastExport(){if(window.psFull)psFull();
     st('Analyzing audio…');
     const dctx=new(window.AudioContext||window.webkitAudioContext)(),dec=await expDecode(dctx);dctx.close();
     const sr=dec.sampleRate,len=dec.length,L=dec.getChannelData(0),R=dec.numberOfChannels>1?dec.getChannelData(1):L,mono=new Float32Array(len);
-    for(let i=0;i<len;i++)mono[i]=(L[i]+R[i])/2;if(window.__vsong&&window.MVMUTE){L.fill(0);if(R!==L)R.fill(0)}
+    for(let i=0;i<len;i++)mono[i]=(L[i]+R[i])/2;if(window.vsMuted&&vsMuted()){L.fill(0);if(R!==L)R.fill(0)}
     const CR=clipRange(dec.duration),n0=Math.floor(CR.a*60),total=Math.ceil(CR.b*60),s0=Math.floor(CR.a*sr),s1=Math.min(len,Math.ceil(CR.b*sr));
     const br=Math.min(100e6,Math.round(W*H*60*.3));
     let vc=null;
@@ -2477,7 +2494,7 @@ document.addEventListener('keydown',e=>{if(typing(e))return;const k=e.key,mod=e.
   if(k==='?'){HELP.classList.toggle('on');return}
   if(k==='Escape'&&HELP.classList.contains('on')){HELP.classList.remove('on');return}
   if(/^[1-9]$/.test(k)){const B=[...document.querySelectorAll('#scn [data-m]')];const b=B[+k-1];if(b){e.preventDefault();b.click()}return}
-  if(k===' '||e.code==='Space'){if(document.getElementById('vtapbox')&&$('#vtapbox').style.display==='block')return;const p=$('#play');e.preventDefault();/* ikke la Space også trykke på knappen/bryteren som er markert */const fe=document.activeElement;if(fe&&fe!==document.body&&fe!==p&&fe.blur)fe.blur();if(exporting)return;if(window.mvSpace&&mvSpace())return;if(p&&!p.disabled)p.click();return}
+  if(k===' '||e.code==='Space'){if(document.getElementById('vtapbox')&&$('#vtapbox').style.display==='block')return;const p=$('#play');e.preventDefault();/* ikke la Space også trykke på knappen/bryteren som er markert */const fe=document.activeElement;if(fe&&fe!==document.body&&fe!==p&&fe.blur)fe.blur();if(exporting)return;if(window.spaceKey&&spaceKey())return;if(p&&!p.disabled)p.click();return}
   if(k==='x'||k==='X'){const F=[...document.querySelectorAll('[data-fl]')],i=F.findIndex(x=>x.classList.contains('on'));const n=F[(i+(e.shiftKey?-1:1)+F.length)%F.length];if(n){e.preventDefault();n.click();st('Filter: '+n.textContent)}return}
   if(k==='c'||k==='C'){const P=[...document.querySelectorAll('[data-p]')],i=P.findIndex(x=>x.classList.contains('on'));const n=P[(i+1)%P.length];if(n){e.preventDefault();n.click();st('Colors: '+n.textContent)}return}});
 })();
@@ -2514,7 +2531,7 @@ window.mtSetSrc=function(dec){if(!dec){SRC=null;return}const L=dec.getChannelDat
 function slice(a,end,out){const n=out.length;for(let i=0;i<n;i++){const p=end-n+i;out[i]=p>=0&&p<a.length?a[p]:0}}
 function grab(){
   if(SRC&&OFF){const e=Math.floor(OFF.t*SRC.sr);slice(SRC.L,e,tdL);slice(SRC.R,e,tdR);if(SRC.KL){slice(SRC.KL,e,tkL);slice(SRC.KR,e,tkR)}return SRC.sr}
-  if(aL&&ac&&(!audio.paused||LIVE)){aL.getFloatTimeDomainData(tdL);aR.getFloatTimeDomainData(tdR);if(kL){kL.getFloatTimeDomainData(tkL);kR.getFloatTimeDomainData(tkR)}return ac.sampleRate}
+  if(aL&&ac&&(!audio.paused||LIVE||(window.mvLive&&mvLive()))){aL.getFloatTimeDomainData(tdL);aR.getFloatTimeDomainData(tdR);if(kL){kL.getFloatTimeDomainData(tkL);kR.getFloatTimeDomainData(tkR)}return ac.sampleRate}
   return 0}
 /* loudness (ITU BS.1770) */
 /* Bygget på 100 ms-biter av nye samples (ikke overlappende vinduer):
@@ -3344,7 +3361,7 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
 (function(){const wrap=$('#vtl'),cv2=$('#vtlc');if(!wrap||!cv2)return;const g=cv2.getContext('2d');
   /* Tidslinje i Clipchamp-stil: hver linje er en boks. Dra boksen for å flytte, dra kantene for å endre når teksten starter og slutter.
      Slutt lagres som en tom LRC-linje ([mm:ss.xx] uten tekst), så teksten forsvinner der. */
-  let peaks=null,pkFile=null,pkBusy=false,view={a:0,span:20},sel=-1,drag=null,touchT=0,hov=null,C=null;const PR=100;
+  let peaks=null,pkFile=null,pkBusy=false,view=window.TLVIEW||(window.TLVIEW={a:0,span:30}),sel=-1,drag=null,touchT=0,hov=null,C=null;const PR=100;
   async function getPeaks(){if(!curFile||pkFile===curFile||pkBusy)return;pkBusy=true;try{const a0=new(window.AudioContext||window.webkitAudioContext)(),b=await a0.decodeAudioData(await curFile.arrayBuffer());a0.close();
       const n=Math.ceil(b.duration*PR),P=new Float32Array(n),ch=[...Array(b.numberOfChannels).keys()].map(c=>b.getChannelData(c)),hop=b.sampleRate/PR;
       for(let i=0;i<n;i++){let mx=0;const s0=Math.floor(i*hop),s1=Math.min(ch[0].length,Math.floor((i+1)*hop));for(let k=s0;k<s1;k+=4){let v=0;for(const c of ch)v+=Math.abs(c[k]);if(v>mx)mx=v}P[i]=mx/ch.length}
@@ -3367,7 +3384,7 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
   function info(){const el=$('#vtlinfo');if(!el)return;const A=C||clips(),c=A[sel];el.textContent=c?'“'+(c.text.length>28?c.text.slice(0,27)+'…':c.text)+'”  '+fmt(c.s)+' → '+fmt(c.e)+'  ('+(c.e-c.s).toFixed(2)+' s)':'Click a box to select it'}
   function draw(){const W=cv2.clientWidth|0,H=cv2.clientHeight|0,d=dp();if(cv2.width!==W*d||cv2.height!==H*d){cv2.width=W*d;cv2.height=H*d}
     const w=cv2.width,h=cv2.height;g.clearRect(0,0,w,h);g.fillStyle='#05070d';g.fillRect(0,0,w,h);const A=C||clips();
-    const t=audio?audio.currentTime||0:0;if(!drag&&!audio.paused&&performance.now()-touchT>2500){if(t<view.a+view.span*.15||t>view.a+view.span*.7)view.a=Math.max(0,t-view.span*.3)}
+    const t=audio?audio.currentTime||0:0;/* lås (🔒): tidslinja ruller jevnt med spillehodet; ulåst: står stille */if(window.tlFollow)tlFollow(t,!!drag);
     /* lydbølge under boksene */
     const {by,bh}=geo();if(peaks){g.fillStyle='#1d3a7a';const mid=by+bh+(h-by-bh)*.45,amp=(h-by-bh)*.4;for(let x=0;x<w;x+=2){const i=Math.floor(Tt(x)*PR);if(i<0||i>=peaks.length)continue;const v=peaks[i]*amp;g.fillRect(x,mid-v,1.5*d,v*2)}}
     g.fillStyle='#ffffff14';g.font=(9*d)+'px monospace';const step=view.span>40?10:view.span>15?5:1;for(let s0=Math.ceil(view.a/step)*step;s0<view.a+view.span;s0+=step){const x=X(s0);g.fillRect(x,0,1,h);g.fillStyle='#ffffff40';g.fillText(mmss(s0),x+3,h-4*d);g.fillStyle='#ffffff14'}
@@ -3399,7 +3416,7 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
   const up=()=>{if(!drag)return;const d=drag;drag=null;if(d.pan){if(!d.moved)audio.currentTime=Math.max(0,Math.min(dur(),Tt(d.x)));cv2.style.cursor='pointer';return}
     if(d.moved)commit();else{C=null;audio.currentTime=Math.max(0,(VLYR.length?clips()[d.i].s:0)-.3)}};
   cv2.addEventListener('pointerup',up);cv2.addEventListener('pointercancel',up);cv2.addEventListener('pointerleave',()=>{if(!drag)hov=null});
-  const zoom=(f,tc)=>{tc=tc==null?view.a+view.span/2:tc;const r=(tc-view.a)/view.span;view.span=Math.max(3,Math.min(Math.max(30,dur()),view.span*f));view.a=Math.max(0,tc-r*view.span);touchT=performance.now()};
+  const zoom=(f,tc)=>{tc=tc==null?view.a+view.span/2:tc;const r=(tc-view.a)/view.span;view.span=Math.max(.25,Math.min(Math.max(30,dur()),view.span*f));view.a=Math.max(0,tc-r*view.span);touchT=performance.now()};
   cv2.addEventListener('wheel',e=>{e.preventDefault();touchT=performance.now();const p=pos(e);
     if(Math.abs(e.deltaX)>Math.abs(e.deltaY)||e.shiftKey){const dx=(e.shiftKey?e.deltaY:e.deltaX);view.a=Math.max(0,view.a+dx/cv2.clientWidth*view.span)}
     else zoom(Math.exp(e.deltaY*.0015),Tt(p.x))},{passive:false});
@@ -3447,27 +3464,56 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
   zb('#vtlzi',()=>zoom(.7));zb('#vtlzo',()=>zoom(1/.7));zb('#vtlfit',()=>{view.a=0;view.span=Math.max(5,dur());touchT=performance.now()});
   zb('#vtlsel',()=>{const A=clips(),c=A[sel];if(!c)return;view.span=Math.max(3,(c.e-c.s)*4);view.a=Math.max(0,c.s-view.span*.35);touchT=performance.now()});
   let vis=false;try{new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(wrap)}catch(e){vis=true}
-  const loop=()=>{requestAnimationFrame(loop);const want=!!loaded;if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';if(!want||!vis)return;if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
+  setTimeout(()=>{const tb=$('#tlxbody');if(tb&&wrap.parentNode!==tb){tb.appendChild(wrap);wrap.style.marginTop='10px'}},0);
+  const loop=()=>{requestAnimationFrame(loop);/* tekst-sporet i Timeline: vises når lyrics er i bruk */const want=!!loaded&&(VLYR.length>0||(typeof VLM!=='undefined'&&VLM!=='off'));if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';if(!want||!vis)return;if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
 /* ===== Overlay-tidslinje: ett spor per overlay. Ingen bokser på et spor = det overlayet vises hele sangen ===== */
 (function(){const wrap=$('#ovtlw'),cv=$('#ovtlc');if(!wrap||!cv)return;const g=cv.getContext('2d');
-  let peaks=null,pkFile=null,pkBusy=false,view={a:0,span:30},selC=null,drag=null,hov=null,clip=null,touchT=0,uid=1;const PR=50,HUE=[210,330,160,40,270,190];
-  const dur=()=>audio&&audio.duration&&isFinite(audio.duration)?audio.duration:60;
+  let peaks=null,pkFile=null,pkBusy=false,view=window.TLVIEW||(window.TLVIEW={a:0,span:30}),selC=null,drag=null,hov=null,clip=null,touchT=0,uid=1;const PR=50,HUE=[210,330,160,40,270,190];
+  const dur=()=>{if(audio&&audio.duration&&isFinite(audio.duration))return audio.duration;const v=window.__vsong?(window.__vsO?__vsO.m&&__vsO.m.v:MEDIA&&MEDIA.v):null;return v&&isFinite(v.duration)&&v.duration>0?v.duration:60};
   const dp=()=>Math.min(2,devicePixelRatio||1);
   const X=t=>(t-view.a)/view.span*cv.width,Tt=x=>view.a+x/cv.width*view.span;
   const fmt=t=>{t=Math.max(0,t);const m=Math.floor(t/60),x=t-m*60;return m+':'+(x<10?'0':'')+x.toFixed(2)};
-  const lanes=()=>Object.keys(OVMED).map(Number).sort((a,b)=>(OVMED[b].ord??b)-(OVMED[a].ord??a));/* øverste spor = øverste lag */
+  const ovLanes=()=>Object.keys(OVMED).map(Number).sort((a,b)=>(OVMED[b].ord??b)-(OVMED[a].ord??a));/* øverste spor = øverste lag */
+  const lanes=()=>[-1].concat(typeof IMGON!=='undefined'&&IMGON?[0]:[],ovLanes());/* spor -1 = Scener, 0 = Media */
+  const SCOL={auto:200,rings:280,organic:150,particles:40,orbits:60,topo:120,hyper:330,void:0,image:190};let selCue=null;
+  const cues=()=>{TL.c.sort((a,b)=>a.t-b.t);return TL.c};
   const of=mid=>OVT.filter(c=>c.mid===mid).sort((a,b)=>a.s-b.s);
   const nb=c=>{const L=of(c.mid),i=L.indexOf(c);return[L[i-1],L[i+1]]};
-  const nm=mid=>{const m=OVMED[mid];return m?m.name.replace(/\.[^.]+$/,''):'(missing)'};
+  const nm=mid=>{if(mid===-1)return 'Scenes';if(mid===0){const f=window._imgFile;return 'Media'+(f&&f.name?' · '+f.name.replace(/\.[^.]+$/,''):'')}const m=OVMED[mid];return m?m.name.replace(/\.[^.]+$/,''):'(missing)'};
   async function getPeaks(){if(!curFile||pkFile===curFile||pkBusy)return;pkBusy=true;try{const a0=new(window.AudioContext||window.webkitAudioContext)(),b=await a0.decodeAudioData(await curFile.arrayBuffer());a0.close();
       const n=Math.ceil(b.duration*PR),P=new Float32Array(n),c0=b.getChannelData(0),hop=b.sampleRate/PR;let top=0;
       for(let i=0;i<n;i++){let mx=0;const s0=Math.floor(i*hop),s1=Math.min(c0.length,Math.floor((i+1)*hop));for(let k=s0;k<s1;k+=8){const v=Math.abs(c0[k]);if(v>mx)mx=v}P[i]=mx;if(mx>top)top=mx}
       if(top>0)for(let i=0;i<n;i++)P[i]/=top;peaks=P;pkFile=curFile}catch(e){peaks=null}pkBusy=false}
+  /* lydbølge for videofilene på sporene, så man ser at lyden klippes sammen med bildet */
+  const srcOf=mid=>mid===0?(MEDIA&&MEDIA.kind==='video'?MEDIA:null):(OVMED[mid]&&OVMED[mid].m&&OVMED[mid].m.kind==='video'?OVMED[mid]:null);
+  async function filePeaks(h,f){if(!h||!f||h.pk||h.pkBusy)return;h.pkBusy=true;try{const a0=new(window.AudioContext||window.webkitAudioContext)(),b=await a0.decodeAudioData(await f.arrayBuffer());a0.close();
+      const n=Math.ceil(b.duration*PR),P=new Float32Array(n),c0=b.getChannelData(0),hop=b.sampleRate/PR;let top=0;for(let i=0;i<n;i++){let mx=0;const s0=Math.floor(i*hop),s1=Math.min(c0.length,Math.floor((i+1)*hop));for(let k=s0;k<s1;k+=8){const v=Math.abs(c0[k]);if(v>mx)mx=v}P[i]=mx;if(mx>top)top=mx}
+      if(top>.002){for(let i=0;i<n;i++)P[i]/=top;h.pk=P}else h.pk=new Float32Array(0)}catch(e){h.pk=new Float32Array(0)}}
+  const pkFor=mid=>{const h=srcOf(mid);if(!h)return null;const f=mid===0?window._imgFile:h.file;if(!h.pk)filePeaks(h,f);return h.pk&&h.pk.length?h.pk:null};
   /* høyde: ett spor per overlay + lydbølge nederst */
-  const LH=26,WH=26;function fitH(){const n=Math.max(1,lanes().length),want=n*LH+WH+8;if(Math.abs(cv.clientHeight-want)>1)cv.style.height=want+'px'}
-  const geo=()=>{const d=dp();return{top:4*d,lh:LH*d,n:Math.max(1,lanes().length)}};
-  const laneY=i=>{const G=geo();return G.top+i*G.lh};
-  function hit(p){const G=geo(),L=lanes(),li=Math.floor((p.y-G.top)/G.lh);if(li<0||li>=L.length)return null;const mid=L[li],cs=of(mid),E=7*dp();
+  window.TLLOCK=(()=>{try{return localStorage.getItem('ah_tllock')!=='0'}catch(e){return true}})();
+  let lastFT=-1;
+  window.tlFollow=(t,dragging)=>{const V=window.TLVIEW;if(!V||!window.TLLOCK||dragging)return;const playing=!audio.paused||(typeof LIVE!=='undefined'&&LIVE);
+    if(playing){V.a=Math.max(0,t-V.span*.35)}/* spiller: spillehodet står fast ca. en tredjedel inn, tidslinja glir */
+    else if(Math.abs(t-lastFT)>1e-4&&(t<V.a||t>V.a+V.span)){V.a=Math.max(0,t-V.span*.35)}/* på pause: hold spillehodet synlig når det flyttes */
+    lastFT=t};
+  /* høyde per spor: videospor er høye (bilder + lyd i samme klipp), scener og bilder lave */
+  const isVid=mid=>mid>=0&&!!srcOf(mid);
+  const laneH=mid=>mid===-1?24:isVid(mid)?60:30;const WHf=()=>window.__vsong?16:26;
+  function fitH(){const want=lanes().reduce((a,m)=>a+laneH(m),0)+WHf()+8;if(Math.abs(cv.clientHeight-want)>1)cv.style.height=want+'px'}
+  const geo=()=>{const d=dp();return{top:4*d,n:Math.max(1,lanes().length)}};
+  const laneY=i=>{const d=dp(),L=lanes();let y=4*d;for(let k=0;k<i&&k<L.length;k++)y+=laneH(L[k])*d;return y};
+  const laneHt=i=>laneH(lanes()[i])*dp();
+  const laneAt=py=>{const d=dp(),L=lanes();let y=4*d;for(let k=0;k<L.length;k++){const hh=laneH(L[k])*d;if(py>=y&&py<y+hh)return k;y+=hh}return py<4*d?-1:L.length};
+  /* små bilder fra videoen (filmstripe) til klippene på tidslinja */
+  async function thumbs(h,f){if(!h||!f||h.th||h.thBusy)return;h.thBusy=true;const u=URL.createObjectURL(f);try{const v=document.createElement('video');v.muted=true;v.preload='auto';v.playsInline=true;v.src=u;
+      await new Promise((ok,no)=>{v.onloadeddata=ok;v.onerror=no;setTimeout(no,8000)});const D=v.duration&&isFinite(v.duration)?v.duration:1,N=Math.max(2,Math.min(60,Math.ceil(D))),step=D/N,TH=72,TW=Math.max(24,Math.round(TH*((v.videoWidth/v.videoHeight)||16/9)));
+      h.th={im:[],step,ar:TW/TH,D};for(let i=0;i<N;i++){await new Promise(ok=>{const to=setTimeout(ok,1500);v.onseeked=()=>{clearTimeout(to);ok()};v.currentTime=Math.min(D-.05,i*step+step/2)});const c=document.createElement('canvas');c.width=TW;c.height=TH;c.getContext('2d').drawImage(v,0,0,TW,TH);h.th.im[i]=c}
+      v.removeAttribute('src');v.load()}catch(e){if(!h.th)h.th={im:[],step:1,ar:16/9,D:1}}URL.revokeObjectURL(u)}
+  const thFor=mid=>{const h=srcOf(mid);if(!h)return null;if(!h.th)thumbs(h,mid===0?window._imgFile:h.file);return h.th||null};
+  let hovX=-1;
+  function hit(p){const L=lanes(),li=laneAt(p.y);if(li<0||li>=L.length)return null;const mid=L[li],cs=of(mid),E=7*dp();
+    if(mid===-1){const C=cues();for(let i=0;i<C.length;i++){const x=X(C[i].t);if(Math.abs(p.x-x)<=E&&(i>0||C[i].t>.01))return{sc:C[i],m:'cue',mid}}for(let i=C.length-1;i>=0;i--)if(Tt(p.x)>=C[i].t)return{sc:C[i],m:'seg',mid};return{c:null,m:'lane',mid}}
     for(const c of cs){const x0=X(c.s),x1=X(c.e);if(p.x<x0||p.x>x1)continue;const e2=Math.min(E,(x1-x0)/3);if(p.x-x0<=e2)return{c,m:'l',mid};if(x1-p.x<=e2)return{c,m:'r',mid};return{c,m:'move',mid}}
     let best=null,bd=E;cs.forEach(c=>{const dl=Math.abs(p.x-X(c.s)),dr=Math.abs(p.x-X(c.e));if(dl<bd){bd=dl;best={c,m:'l',mid}}if(dr<bd){bd=dr;best={c,m:'r',mid}}});return best||{c:null,m:'lane',mid}}
   function snap(t,c){const [pv,nx]=nb(c),v=[ovTime()];if(pv)v.push(pv.e);if(nx)v.push(nx.s);OVT.forEach(o=>{if(o.mid!==c.mid){v.push(o.s,o.e)}});let b=t,bd=6*dp();v.forEach(x=>{const d=Math.abs(X(x)-X(t));if(d<bd){bd=d;b=x}});return b}
@@ -3475,64 +3521,125 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
     const md=OVMED[ovCurMid];el.textContent=c?nm(c.mid)+'  '+fmt(c.s)+' → '+fmt(c.e)+'  ('+(c.e-c.s).toFixed(2)+' s)':md?nm(ovCurMid)+' selected · '+(of(ovCurMid).length?of(ovCurMid).length+' box(es)':'whole song'):'';
     if(fd){const want=c?'flex':'none';if(fd.style.display!==want)fd.style.display=want;if(c&&document.activeElement!==$('#ovfi')&&document.activeElement!==$('#ovfo')){$('#ovfi').value=Math.round(c.fi*100);$('#ovfo').value=Math.round(c.fo*100)}}}
   window.ovtlRefresh=()=>{if(selC&&!OVT.includes(selC))selC=null;fitH();info()};
+  /* ett videoklipp: filmstripe øverst og lydbølgen nederst i samme boks – én enhet */
+  function clipBox(mid,c,x0,x1,y,bh,hu,st8,implicit){const d=dp(),w=cv.width,bw=Math.max(3,x1-x0-3*d),xl=x0+1.5*d,vid=isVid(mid),wv=vid?17*d:0,th=vid?thFor(mid):null,pk=pkFor(mid);
+    g.save();g.beginPath();g.roundRect?g.roundRect(xl,y,bw,bh,5*d):g.rect(xl,y,bw,bh);g.clip();
+    g.fillStyle=`hsl(${hu},45%,${st8.on?24:18}%)`;g.fillRect(xl,y,bw,bh);
+    if(vid&&th&&th.im.length){const fh=bh-wv,tw=Math.max(8*d,fh*th.ar),k0=Math.max(0,Math.floor((0-xl)/tw));for(let k=k0;xl+k*tw<Math.min(x1,w);k++){const tx=xl+k*tw,sT=(c.vi||0)+(Tt(tx+tw/2)-c.s),D=th.D||1,ss=((sT%D)+D)%D,ix=Math.min(th.im.length-1,Math.floor(ss/th.step)),im=th.im[ix];if(im)g.drawImage(im,tx,y,tw,fh)}
+      g.fillStyle=implicit?'#00000088':st8.on?'#00000010':'#00000040';g.fillRect(xl,y,bw,fh)}
+    else{g.fillStyle=`hsla(${hu},70%,${st8.on?50:st8.act?40:32}%,.95)`;g.fillRect(xl,y,bw,bh-wv)}
+    if(vid){g.fillStyle=`hsl(${hu},55%,${st8.on?20:13}%)`;g.fillRect(xl,y+bh-wv,bw,wv);if(pk){g.fillStyle=`hsl(${hu},80%,${st8.on?78:66}%)`;const amp=wv*.46,mid2=y+bh-wv/2;for(let x=Math.max(xl,0);x<Math.min(x1,w);x+=2*d){const sT=(c.vi||0)+(Tt(x)-c.s);let ii=Math.floor(sT*PR)%pk.length;if(ii<0)continue;const v=Math.max(.6*d,pk[ii]*amp);g.fillRect(x,mid2-v,1.4*d,v*2)}}
+      else{g.fillStyle='#ffffff30';g.font=(9*d)+'px "Space Mono",monospace';g.textBaseline='middle';g.fillText(pk===null&&srcOf(mid)&&srcOf(mid).pk?'no sound':'· · ·',xl+8*d,y+bh-wv/2)}}
+    g.fillStyle='#00000040';const fi=X(c.s+(c.fi||0))-x0,fo=x1-X(c.e-(c.fo||0));if(fi>1){g.beginPath();g.moveTo(xl,y);g.lineTo(xl+fi,y);g.lineTo(xl,y+bh-wv);g.fill()}if(fo>1){g.beginPath();g.moveTo(xl+bw,y);g.lineTo(xl+bw-fo,y);g.lineTo(xl+bw,y+bh-wv);g.fill()}
+    {const lab=nm(mid)+(implicit?(mid===0?' · whole time – double-click to cut':' · whole song – double-click to cut'):'');g.font='600 '+(10*d)+'px "Space Mono",monospace';g.textBaseline='middle';const tw2=Math.min(bw-10*d,g.measureText(lab).width+10*d);if(tw2>16*d){g.fillStyle='#000000a8';g.fillRect(xl+4*d,y+4*d,tw2,15*d);g.fillStyle='#fff';g.save();g.beginPath();g.rect(xl+4*d,y+4*d,tw2,15*d);g.clip();g.fillText(lab,xl+9*d,y+11.5*d);g.restore()}}
+    g.restore();
+    g.strokeStyle=st8.on?'#ffffff':implicit?`hsla(${hu},60%,60%,.35)`:`hsl(${hu},75%,62%)`;g.lineWidth=(st8.on?2.5:1.3)*d;g.beginPath();g.roundRect?g.roundRect(xl,y,bw,bh,5*d):g.rect(xl,y,bw,bh);g.stroke();
+    if(!implicit&&bw>18*d){g.fillStyle=st8.on||st8.ho?'#ffffff':'#ffffffaa';const hh=Math.min(22*d,bh*.45),hy=y+(bh-hh)/2;g.fillRect(xl+2.5*d,hy,3*d,hh);g.fillRect(xl+bw-5.5*d,hy,3*d,hh)}}
+  /* tydelig kutt: hvit linje med saks der to deler møtes */
+  function cutMark(x,y,bh){const d=dp();g.fillStyle='#fff';g.fillRect(x-1.2*d,y-2*d,2.4*d,bh+4*d);g.beginPath();g.arc(x,y+1*d,7*d,0,Math.PI*2);g.fillStyle='#ffe066';g.fill();g.fillStyle='#111';g.font=(9*d)+'px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('✂',x,y+1.5*d);g.textAlign='left'}
   function draw(){fitH();const W=cv.clientWidth|0,H=cv.clientHeight|0,d=dp();if(cv.width!==W*d||cv.height!==H*d){cv.width=W*d;cv.height=H*d}
-    const w=cv.width,h=cv.height;g.fillStyle='#05070d';g.fillRect(0,0,w,h);const t=ovTime(),G=geo(),L=lanes();
-    if(!drag&&!audio.paused&&performance.now()-touchT>2500){if(t<view.a+view.span*.15||t>view.a+view.span*.75)view.a=Math.max(0,t-view.span*.3)}
-    const wy=G.top+L.length*G.lh+2*d,wh=h-wy;
-    if(peaks){g.fillStyle='#1d3a7a';const mid=wy+wh*.5,amp=wh*.42;for(let x=0;x<w;x+=2){const i=Math.floor(Tt(x)*PR);if(i<0||i>=peaks.length)continue;const v=peaks[i]*amp;g.fillRect(x,mid-v,1.5*d,v*2)}}
-    g.fillStyle='#ffffff10';g.font=(9*d)+'px monospace';const step=view.span>60?15:view.span>25?5:1;for(let s0=Math.ceil(view.a/step)*step;s0<view.a+view.span;s0+=step){const x=X(s0);g.fillRect(x,0,1,h);g.fillStyle='#ffffff40';g.fillText(mmss(s0),x+3,h-4*d);g.fillStyle='#ffffff10'}
-    L.forEach((mid,li)=>{const y=laneY(li)+2*d,bh=G.lh-4*d,hu=HUE[mid%HUE.length],cs=of(mid),cur=mid===ovCurMid;
-      g.fillStyle=cur?'#ffffff0d':'#ffffff05';g.fillRect(0,y-2*d,w,G.lh);g.fillStyle='#ffffff55';for(let q=0;q<3;q++){g.fillRect(4*d,y+bh/2-5*d+q*4*d,7*d,1.5*d)}
-      if(!cs.length){g.fillStyle=`hsla(${hu},60%,40%,.28)`;g.fillRect(0,y,w,bh);g.fillStyle=`hsl(${hu},70%,75%)`;g.font=(10*d)+'px "Space Mono",monospace';g.textBaseline='middle';g.fillText(nm(mid)+' · whole song – double-click to time it',8*d,y+bh/2);return}
-      cs.forEach(c=>{const x0=X(c.s),x1=X(c.e);if(x1<0||x0>w)return;const on=c===selC,ho=hov&&hov.c===c,act=t>=c.s&&t<c.e,bw=Math.max(3,x1-x0-2);
-        g.fillStyle=`hsla(${hu},70%,${on?52:act?42:ho?34:28}%,.92)`;g.beginPath();g.roundRect?g.roundRect(x0+1,y,bw,bh,4*d):g.rect(x0+1,y,bw,bh);g.fill();g.strokeStyle=on?'#eef3ff':`hsl(${hu},60%,60%)`;g.lineWidth=(on?1.5:1)*d;g.stroke();
-        g.fillStyle='#00000055';const fi=X(c.s+c.fi)-x0,fo=x1-X(c.e-c.fo);g.beginPath();g.moveTo(x0+1,y);g.lineTo(x0+1+fi,y);g.lineTo(x0+1,y+bh);g.fill();g.beginPath();g.moveTo(x1-1,y);g.lineTo(x1-1-fo,y);g.lineTo(x1-1,y+bh);g.fill();
-        g.fillStyle=on||ho?'#eef3ff':'#cfd8ff99';const hw=3*d,hh=bh*.5,hy=y+(bh-hh)/2;if(bw>14*d){g.fillRect(x0+3*d,hy,hw,hh);g.fillRect(x0+bw-2*d-hw,hy,hw,hh)}
-        g.save();g.beginPath();g.rect(x0+9*d,y,Math.max(0,bw-16*d),bh);g.clip();g.fillStyle='#fff';g.font='600 '+(10*d)+'px "Space Mono",monospace';g.textBaseline='middle';g.fillText(nm(mid),x0+10*d,y+bh/2);g.restore()})});
-    if(drag&&drag.moved&&drag.c){const c=drag.c;g.fillStyle='#000c';g.font=(10*d)+'px monospace';const tx=fmt(c.s)+' → '+fmt(c.e),tw=g.measureText(tx).width+10*d,xx=Math.max(0,Math.min(w-tw,X(drag.m==='r'?c.e:c.s)-tw/2));g.fillRect(xx,wy,tw,15*d);g.fillStyle='#dfeaff';g.fillText(tx,xx+5*d,wy+8*d)}
-    const px=X(t);g.fillStyle='#fff';g.fillRect(px,0,1.5*d,h);g.fillStyle='#7fb4ff';g.beginPath();g.moveTo(px-4*d,0);g.lineTo(px+5*d,0);g.lineTo(px+.5*d,6*d);g.fill();info()}
+    const w=cv.width,h=cv.height;g.fillStyle='#05070d';g.fillRect(0,0,w,h);const t=ovTime(),L=lanes();
+    /* lås (🔒): tidslinja ruller jevnt med spillehodet; ulåst: står stille */if(window.tlFollow)tlFollow(t,!!drag);
+    const wy=laneY(L.length)+2*d,wh=h-wy,vsm=!!window.__vsong;
+    g.fillStyle='#ffffff0c';g.font=(9*d)+'px monospace';const step=view.span>60?15:view.span>25?5:view.span>6?1:view.span>2.5?.5:view.span>1?.2:.05;for(let k=Math.ceil(view.a/step);k*step<view.a+view.span;k++){const s0=k*step,x=X(s0);g.fillRect(x,0,1,h);g.fillStyle='#ffffff48';g.fillText(step<1?fmt(s0):mmss(s0),x+3,h-3*d);g.fillStyle='#ffffff0c'}
+    if(!vsm){g.fillStyle='#7f8db8';g.font=(9*d)+'px "Space Mono",monospace';g.textBaseline='top';g.fillText('♪ '+((typeof curFile!=='undefined'&&curFile&&curFile.name)||'Music'),6*d,wy+1*d);g.textBaseline='alphabetic';
+      if(peaks){g.fillStyle='#2a4b9a';const mid=wy+wh*.5,amp=wh*.4;for(let x=0;x<w;x+=2){const i=Math.floor(Tt(x)*PR);if(i<0||i>=peaks.length)continue;const v=peaks[i]*amp;g.fillRect(x,mid-v,1.5*d,v*2)}}}
+    L.forEach((mid,li)=>{const LY=laneY(li),LHt=laneHt(li);if(mid===-1){const y=LY+2*d,bh=LHt-4*d,C=cues(),D=dur();g.fillStyle='#ffffff05';g.fillRect(0,LY,w,LHt);g.font=(10*d)+'px "Space Mono",monospace';g.textBaseline='middle';
+        if(!C.length){g.fillStyle='#8e9ac0';g.fillText('Scenes · double-click to change scene here (uses the scene you are on) · or press ✂ Split',8*d,y+bh/2);return}
+        C.forEach((c,i)=>{const e=i+1<C.length?C[i+1].t:D,x0=X(c.t),x1=X(e);if(x1<0||x0>w)return;const hu=SCOL[c.s]??220,on=c===selCue,act=t>=c.t&&t<e;
+          g.fillStyle=`hsla(${hu},55%,${on?46:act?36:26}%,${TL.on?.9:.4})`;g.fillRect(x0+1,y,Math.max(2,x1-x0-2),bh);if(on){g.strokeStyle='#eef3ff';g.lineWidth=1.5*d;g.strokeRect(x0+1,y,Math.max(2,x1-x0-2),bh)}
+          g.fillStyle='#eef3ff';g.fillRect(x0,y,2*d,bh);g.save();g.beginPath();g.rect(x0+4*d,y,Math.max(0,x1-x0-8*d),bh);g.clip();g.fillStyle='#fff';g.fillText((SNM[c.s]||c.s)+(TL.on?'':' (timeline off)'),x0+6*d,y+bh/2);g.restore()});return}
+      const y=LY+3*d,bh=LHt-6*d,hu=HUE[mid%HUE.length],cs=of(mid),cur=mid===ovCurMid||mid===selLane;
+      g.fillStyle=cur?'#ffffff0d':'#ffffff04';g.fillRect(0,LY,w,LHt);g.fillStyle='#ffffff10';g.fillRect(0,LY+LHt-1,w,1);
+      if(!cs.length){const off=mid===0?(window.MOFF||0):((OVMED[mid]&&OVMED[mid].off)||0);clipBox(mid,{s:0,e:dur(),vi:off,fi:0,fo:0},X(0),X(dur()),y,bh,hu,{on:false},true);return}
+      cs.forEach(c=>{const x0=X(c.s),x1=X(c.e);if(x1<0||x0>w)return;clipBox(mid,c,x0,x1,y,bh,hu,{on:c===selC,ho:hov&&hov.c===c,act:t>=c.s&&t<c.e},false)});
+      for(let k=0;k+1<cs.length;k++)if(Math.abs(cs[k].e-cs[k+1].s)<.02){const x=X(cs[k].e);if(x>-10&&x<w+10)cutMark(x,y,bh)}
+      /* forhåndsvisning av kutt der musa står (dobbeltklikk deler her) */
+      if(hov&&hov.c&&hov.m==='move'&&hov.mid===mid&&hovX>=0&&!drag){g.save();g.setLineDash([4*d,3*d]);g.strokeStyle='#ffe066';g.lineWidth=1.6*d;g.beginPath();g.moveTo(hovX,y-1*d);g.lineTo(hovX,y+bh+1*d);g.stroke();g.restore();
+        g.fillStyle='#ffe066';g.font=(10*d)+'px sans-serif';g.textAlign='center';g.textBaseline='bottom';g.fillText('✂',hovX,y+1*d);g.textAlign='left'}});
+    if(drag&&drag.moved&&drag.c){const c=drag.c;g.fillStyle='#000d';g.font=(10*d)+'px monospace';const tx=fmt(c.s)+' → '+fmt(c.e),tw=g.measureText(tx).width+10*d,xx=Math.max(0,Math.min(w-tw,X(drag.m==='r'?c.e:c.s)-tw/2));g.fillRect(xx,0,tw,15*d);g.fillStyle='#dfeaff';g.textBaseline='middle';g.fillText(tx,xx+5*d,7.5*d)}
+    /* spillehodet: S deler akkurat her – markert på sporet som er valgt */
+    const px=X(t);g.fillStyle='#ffffff';g.fillRect(px-1*d,0,2*d,h);g.fillStyle='#7fb4ff';g.beginPath();g.moveTo(px-5*d,0);g.lineTo(px+5*d,0);g.lineTo(px,7*d);g.fill();
+    {const ln=lane(),li=L.indexOf(ln);if(ln!=null&&ln!==-1&&li>=0&&of(ln).some(c=>t>c.s+.02&&t<c.e-.02)){const yy=laneY(li)+laneHt(li)/2;g.beginPath();g.arc(px,yy,7*d,0,Math.PI*2);g.fillStyle='#ffe066';g.fill();g.fillStyle='#111';g.font=(9*d)+'px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('✂',px,yy+.5*d);g.textAlign='left'}}
+    info()}
   const pos=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*(cv.width/r.width),y:(e.clientY-r.top)*(cv.height/r.height)}};
   const save=()=>{try{window.dispatchEvent(new Event('ovtlchange'))}catch(e){}};
-  const pick=mid=>{if(mid&&mid!==ovCurMid){ovSel(mid);if(window.ovListRender)ovListRender()}};
+  let selLane=null;const pick=mid=>{selLane=mid;if(mid>0&&mid!==ovCurMid){ovSel(mid);if(window.ovListRender)ovListRender()}};
+  const lane=()=>selC&&OVT.includes(selC)?selC.mid:selLane===-1?-1:(selLane===0&&IMGON)?0:(OVMED[ovCurMid]?ovCurMid:(IMGON?0:null));
   cv.addEventListener('pointerdown',e=>{touchT=performance.now();cv.focus();const p=pos(e),h=hit(p);
-    if(h&&p.x<16*dp()){pick(h.mid);drag={ro:h.mid,y:p.y,x:p.x,moved:true};cv.style.cursor='ns-resize';cv.setPointerCapture(e.pointerId);e.preventDefault();return}
-    if(h&&h.c){selC=h.c;pick(h.mid);drag={c:h.c,m:h.m,x:p.x,s0:h.c.s,e0:h.c.e,moved:false}}else{if(h)pick(h.mid);selC=null;drag={pan:true,x:p.x,y:p.y,a0:view.a,moved:false,mid0:h?h.mid:0}}cv.setPointerCapture(e.pointerId);e.preventDefault()});
-  cv.addEventListener('pointermove',e=>{const p=pos(e);if(!drag){hov=hit(p);cv.style.cursor=hov&&p.x<16*dp()?'ns-resize':hov&&hov.c?(hov.m==='move'?'grab':'ew-resize'):'pointer';return}
+    if(h&&h.mid===-1){pick(-1);selC=null;if(h.sc){selCue=h.sc;scSel();drag={sc:h.sc,m:h.m,x:p.x,t0:h.sc.t,moved:false};cv.setPointerCapture(e.pointerId);e.preventDefault();return}selCue=null;scSel()}else if(h){selCue=null;scSel()}
+    if(h&&h.mid!==0&&p.x<16*dp()){pick(h.mid);drag={ro:h.mid,y:p.y,x:p.x,moved:true};cv.style.cursor='ns-resize';cv.setPointerCapture(e.pointerId);e.preventDefault();return}
+    if(h&&h.c){selC=h.c;pick(h.mid);drag={c:h.c,m:h.m,x:p.x,s0:h.c.s,e0:h.c.e,vi0:h.c.vi||0,moved:false}}else{if(h)pick(h.mid);selC=null;drag={pan:true,x:p.x,y:p.y,a0:view.a,moved:false,mid0:h?h.mid:0}}cv.setPointerCapture(e.pointerId);e.preventDefault()});
+  cv.addEventListener('pointermove',e=>{const p=pos(e);if(!drag){hov=hit(p);hovX=p.x;cv.style.cursor=hov&&hov.m==='cue'?'ew-resize':hov&&hov.mid>0&&p.x<16*dp()?'ns-resize':hov&&hov.c?(hov.m==='move'?'grab':'ew-resize'):'pointer';return}
     touchT=performance.now();
     /* dra et spor opp/ned (fra grepet til venstre, eller loddrett på tomt område) = endre hvilket overlay som ligger øverst */
-    if(drag.pan&&!drag.moved&&drag.mid0&&Math.abs(p.y-drag.y)>8*dp()&&Math.abs(p.y-drag.y)>Math.abs(p.x-drag.x)){drag={ro:drag.mid0,y:p.y,x:p.x,moved:true}}
-    if(drag.ro){const G=geo(),L=lanes(),from=L.indexOf(drag.ro);let to=Math.max(0,Math.min(L.length-1,Math.floor((p.y-G.top)/G.lh)));if(from>=0&&to!==from){L.splice(from,1);L.splice(to,0,drag.ro);L.forEach((id,i)=>OVMED[id].ord=L.length-i);drag.reord=true;if(window.ovListRender)ovListRender()}cv.style.cursor='ns-resize';return}
+    if(drag.pan&&!drag.moved&&drag.mid0&&drag.mid0!==0&&Math.abs(p.y-drag.y)>8*dp()&&Math.abs(p.y-drag.y)>Math.abs(p.x-drag.x)){drag={ro:drag.mid0,y:p.y,x:p.x,moved:true}}
+    if(drag.ro){const G=geo(),L=ovLanes(),o0=lanes().length-L.length,from=L.indexOf(drag.ro);let to=Math.max(0,Math.min(L.length-1,laneAt(p.y)-o0));if(from>=0&&to!==from){L.splice(from,1);L.splice(to,0,drag.ro);L.forEach((id,i)=>OVMED[id].ord=L.length-i);drag.reord=true;if(window.ovListRender)ovListRender()}cv.style.cursor='ns-resize';return}
     if(Math.abs(p.x-drag.x)>3)drag.moved=true;if(!drag.moved)return;const dt=(p.x-drag.x)/cv.width*view.span;
+    if(drag.sc){if(drag.m==='cue'){const C=cues(),i=C.indexOf(drag.sc),lo=i>0?C[i-1].t+.2:0,hi=i+1<C.length?C[i+1].t-.2:dur();drag.sc.t=Math.max(lo,Math.min(hi,drag.t0+dt));tlLast=-2;cv.style.cursor='ew-resize'}return}
     if(drag.pan){view.a=Math.max(0,drag.a0-dt);cv.style.cursor='grabbing';return}
     const c=drag.c,[pv,nx]=nb(c),D=dur(),MIN=.2;
     if(drag.m==='move'){const len=drag.e0-drag.s0,lo=pv?pv.e:0,hi=(nx?nx.s:D)-len;let ns=Math.max(lo,Math.min(hi,drag.s0+dt));const sn=snap(ns,c),se=snap(ns+len,c);if(sn!==ns)ns=Math.max(lo,Math.min(hi,sn));else if(se!==ns+len)ns=Math.max(lo,Math.min(hi,se-len));c.s=ns;c.e=ns+len;cv.style.cursor='grabbing'}
-    else if(drag.m==='l')c.s=Math.max(pv?pv.e:0,Math.min(c.e-MIN,snap(drag.s0+dt,c)));else c.e=Math.max(c.s+MIN,Math.min(nx?nx.s:D,snap(drag.e0+dt,c)))});
-  const up=()=>{if(!drag)return;const d=drag;drag=null;if(d.ro){cv.style.cursor='pointer';if(d.reord){save();try{st('Layer order changed – the top track is in front.')}catch(_){}}return}if(d.pan){if(!d.moved)audio.currentTime=Math.max(0,Math.min(dur(),Tt(d.x)));cv.style.cursor='pointer';return}
-    if(d.moved)save();else audio.currentTime=Math.max(0,d.c.s)};
-  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('pointerleave',()=>{if(!drag)hov=null});
-  const zoom=(f,tc)=>{tc=tc==null?view.a+view.span/2:tc;const r=(tc-view.a)/view.span;view.span=Math.max(3,Math.min(Math.max(30,dur()),view.span*f));view.a=Math.max(0,tc-r*view.span);touchT=performance.now()};
+    else if(drag.m==='l'){c.s=Math.max(pv?pv.e:0,Math.min(c.e-MIN,snap(drag.s0+dt,c)));c.vi=Math.max(0,drag.vi0+(c.s-drag.s0))}else c.e=Math.max(c.s+MIN,Math.min(nx?nx.s:D,snap(drag.e0+dt,c)))});
+  const up=()=>{if(!drag)return;const d=drag;drag=null;if(d.sc){if(d.moved){d.sc.t=Math.round(d.sc.t*100)/100;tlLast=-2;if(window.tlRender)tlRender();save()}else audio.currentTime=Math.max(0,d.sc.t);return}if(d.ro){cv.style.cursor='pointer';if(d.reord){save();try{st('Layer order changed – the top track is in front.')}catch(_){}}return}if(d.pan){/* klikk på et videoklipp (også «whole song») flytter ikke spillehodet */if(!d.moved&&!(d.mid0>=0&&isVid(d.mid0)&&!of(d.mid0).length))audio.currentTime=Math.max(0,Math.min(dur(),Tt(d.x)));cv.style.cursor='pointer';return}
+    if(d.moved)save()};
+  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('pointerleave',()=>{if(!drag){hov=null;hovX=-1}});
+  const zoom=(f,tc)=>{tc=tc==null?view.a+view.span/2:tc;const r=(tc-view.a)/view.span;view.span=Math.max(.25,Math.min(Math.max(30,dur()),view.span*f));view.a=Math.max(0,tc-r*view.span);touchT=performance.now()};
   cv.addEventListener('wheel',e=>{e.preventDefault();touchT=performance.now();const p=pos(e);if(Math.abs(e.deltaX)>Math.abs(e.deltaY)||e.shiftKey){view.a=Math.max(0,view.a+(e.shiftKey?e.deltaY:e.deltaX)/cv.clientWidth*view.span)}else zoom(Math.exp(e.deltaY*.0015),Tt(p.x))},{passive:false});
   /* legg til en boks for overlay mid fra tid t (4 s eller til neste boks på samme spor) */
   function addFor(mid,t,len){const cs=of(mid);let s0=Math.max(0,t);for(const c of cs)if(s0>=c.s&&s0<c.e)s0=c.e;const nx=cs.find(c=>c.s>=s0),e0=Math.min(s0+(len||4),nx?nx.s:dur());
     if(e0-s0<.3){try{st('No room here on that track – move the playhead to an empty spot.')}catch(_){}return null}const c={id:uid++,s:s0,e:e0,fi:.25,fo:.25,mid};OVT.push(c);selC=c;save();return c}
-  cv.addEventListener('dblclick',e=>{const p=pos(e),h=hit(p);if(!h||h.c)return;pick(h.mid);addFor(h.mid,Tt(p.x))});
-  function dupAfter(src){const cs=of(src.mid),len=src.e-src.s,at=src.e;const later=cs.filter(c=>c.s>=at);const nx=later[0];if(nx&&nx.s<at+len){const push=at+len-nx.s;later.forEach(c=>{c.s+=push;c.e+=push})}
-    const c={id:uid++,s:at,e:at+len,fi:src.fi,fo:src.fo,mid:src.mid};OVT.push(c);selC=c;save()}
+  cv.addEventListener('dblclick',e=>{const p=pos(e),h=hit(p);if(!h)return;if(h.mid===-1){scAdd(Tt(p.x));return}/* dobbeltklikk = del klippet akkurat der – ingenting annet */if(h.c){pick(h.mid);selC=h.c;splitAt(Tt(p.x),true);selC=null;return}if(h.mid>=0&&!of(h.mid).length){pick(h.mid);selC=null;splitAt(Tt(p.x),true);selC=null}});
+  /* ✂ Split: del boksen der spillehodet står i to. Andre del fortsetter samme sted i videoen. Er overlayet «whole song», lages først én boks over hele sangen */
+  /* sceneskifte: ny grense ved t med scenen du står på (eller samme scene som feltet, ved Split) */
+  function scAdd(t,same){t=Math.round(Math.max(0,Math.min(dur(),t))*100)/100;const C=cues();let s0=autoOn?'auto':cur;if(same){let pv=null;C.forEach(c=>{if(c.t<=t)pv=c});if(pv)s0=pv.s}
+    if(C.some(c=>Math.abs(c.t-t)<.15)){try{st('There is already a scene change here.')}catch(_){}return}const c={t,s:s0};TL.c.push(c);TL.on=true;const on=$('#tlon');if(on)on.checked=true;tlLast=-2;selCue=c;pick(-1);scSel();if(window.tlRender)tlRender();save();
+    try{st('Scene change at '+fmt(t)+' – pick the scene in the menu above the timeline.')}catch(_){}}
+  function scSel(){const w=$('#tlxscw'),sel=$('#tlxsc');if(!w)return;w.style.display=selCue?'flex':'none';if(selCue&&sel)sel.value=selCue.s}
+  function splitAt(t,quiet){if(lane()===-1){scAdd(t,true);return}const ln=lane();if(ln==null){try{st('Load something in Media or Overlay first.')}catch(_){}return}const md=ln===0?{off:window.MOFF||0}:OVMED[ln];if(!loaded){try{st('Load a song (or a video with sound) first – cuts are timed to it.')}catch(_){}return}
+    let c=selC&&OVT.includes(selC)&&t>selC.s+.05&&t<selC.e-.05?selC:of(ln).find(o=>t>o.s+.05&&t<o.e-.05);
+    if(!c&&!of(ln).length){c={id:uid++,s:0,e:dur(),fi:0,fo:0,mid:ln,vi:md.off||0};OVT.push(c)}
+    if(!c||!(t>c.s+.05&&t<c.e-.05)){try{st('Put the playhead inside a box on the selected track to split it.')}catch(_){}return}
+    const c2={id:uid++,s:t,e:c.e,fi:0,fo:c.fo,mid:c.mid,vi:(c.vi||0)+(t-c.s)};c.e=t;c.fo=0;OVT.push(c2);selC=quiet?null:c2;save();if(quiet){try{st('Split at '+fmt(t))}catch(_){}return}
+    try{st('Split at '+fmt(t)+'. Tip: double-click a box to split it right there. Select a part and press Delete to cut it out.')}catch(_){}}
+  window.ovSplit=()=>splitAt(ovTime());
+  function dupAfter(src){const cs=of(src.mid),len=src.e-src.s,at=src.e;/* kopien starter samme sted i videoen */const later=cs.filter(c=>c.s>=at);const nx=later[0];if(nx&&nx.s<at+len){const push=at+len-nx.s;later.forEach(c=>{c.s+=push;c.e+=push})}
+    const c={id:uid++,s:at,e:at+len,fi:src.fi,fo:src.fo,mid:src.mid,vi:src.vi||0};OVT.push(c);selC=c;save()}
   cv.addEventListener('keydown',e=>{const mod=e.ctrlKey||e.metaKey,k=(e.key||'').toLowerCase(),c=selC;
     if(mod&&k==='c'&&c){e.preventDefault();e.stopPropagation();clip={...c};try{st('Overlay box copied – Ctrl+V pastes it after the selected box.')}catch(_){}}
     else if(mod&&(k==='v'||k==='p')&&clip){e.preventDefault();e.stopPropagation();dupAfter(c&&c.mid===clip.mid?c:clip)}
     else if(mod&&k==='d'&&c){e.preventDefault();e.stopPropagation();dupAfter(c)}
-    else if((e.key==='Delete'||e.key==='Backspace')&&c){e.preventDefault();e.stopPropagation();OVT.splice(OVT.indexOf(c),1);selC=null;save()}
+    else if((e.key==='Delete'||e.key==='Backspace')&&selCue&&!c){e.preventDefault();e.stopPropagation();TL.c.splice(TL.c.indexOf(selCue),1);if(!TL.c.length){TL.on=false;const on=$('#tlon');if(on)on.checked=false}selCue=null;scSel();tlLast=-2;if(window.tlRender)tlRender();save()}
+    else if((e.key==='Delete'||e.key==='Backspace')&&c){e.preventDefault();e.stopPropagation();OVT.splice(OVT.indexOf(c),1);
+      /* på videoen som er lydspor: tett hullet (resten flyttes inntil), som i et vanlig klippeprogram */if(typeof vsLane==='function'&&c.mid===vsLane()){const g=c.e-c.s;OVT.forEach(o=>{if(o.mid===c.mid&&o.s>=c.e-.001){o.s-=g;o.e-=g}});try{st('Part removed – the rest moved up to close the gap.')}catch(_){}}
+      selC=null;save()}
     else if((k==='arrowleft'||k==='arrowright')&&c){e.preventDefault();e.stopPropagation();const [pv,nx]=nb(c),len=c.e-c.s,ns=Math.max(pv?pv.e:0,Math.min((nx?nx.s:dur())-len,c.s+(k==='arrowright'?1:-1)*(e.shiftKey?.5:.05)));c.s=ns;c.e=ns+len;save()}
-    else if(k===' '){e.preventDefault();e.stopPropagation();$('#play').click()}},true);
-  $('#ovadd').onclick=()=>{if(!OVon||!OVMED[ovCurMid]){try{st('Load an overlay file first.')}catch(_){}return}if(!loaded){try{st('Load a song first – the overlay is timed to the song.')}catch(_){}return}
-    const c=addFor(ovCurMid,ovTime());if(c){view.a=Math.max(0,c.s-view.span*.3);touchT=performance.now();cv.focus()}};
-  $('#ovall').onclick=()=>{for(let i=OVT.length-1;i>=0;i--)if(OVT[i].mid===ovCurMid)OVT.splice(i,1);selC=null;save()};
+    else if(k==='s'&&!mod){e.preventDefault();e.stopPropagation();splitAt(ovTime())}
+    else if((k===','||k==='.')&&!mod){e.preventDefault();e.stopPropagation();nudge((k===','?-1:1)*(e.shiftKey?1:1/30))}
+    else if((k==='+'||k==='='||k==='-')&&!mod){e.preventDefault();e.stopPropagation();zoom(k==='-'?1.8:1/1.8,ovTime())}
+    else if((k==='arrowleft'||k==='arrowright')&&!c&&!selCue){e.preventDefault();e.stopPropagation();nudge((k==='arrowright'?1:-1)*(e.shiftKey?1:1/30))}
+    else if(k===' '){e.preventDefault();e.stopPropagation();if(!(window.spaceKey&&spaceKey()))$('#play').click()}},true);
+  $('#ovadd').onclick=()=>{if(lane()===-1){scAdd(ovTime());return}const ln=lane();if(ln==null){try{st('Load something in Media or Overlay first.')}catch(_){}return}if(!loaded){try{st('Load a song first – the overlay is timed to the song.')}catch(_){}return}
+    const c=addFor(ln,ovTime());if(c){view.a=Math.max(0,c.s-view.span*.3);touchT=performance.now();cv.focus()}};
+  $('#ovall').onclick=()=>{const ln=lane();if(ln==null)return;if(ln===-1){TL.c.length=0;TL.on=false;const on=$('#tlon');if(on)on.checked=false;selCue=null;scSel();if(window.tlRender)tlRender();save();return}for(let i=OVT.length-1;i>=0;i--)if(OVT[i].mid===ln)OVT.splice(i,1);selC=null;save()};
   $('#ovfi').oninput=e=>{const c=selC;if(c)c.fi=Math.min(+e.target.value/100,(c.e-c.s)/2)};$('#ovfo').oninput=e=>{const c=selC;if(c)c.fo=Math.min(+e.target.value/100,(c.e-c.s)/2)};
   $('#ovfi').onchange=save;$('#ovfo').onchange=save;
+  $('#ovsplit').onclick=()=>{splitAt(ovTime());cv.focus()};
+  {const b=$('#tllock');const LK='<svg width="12" height="13" viewBox="0 0 12 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="1.5" y="6" width="9" height="6" rx="1.3" fill="currentColor" fill-opacity=".25"/><path d="'+'M3.5 6V4.2a2.5 2.5 0 0 1 5 0V6'+'"/></svg>',UL=LK.replace('M3.5 6V4.2a2.5 2.5 0 0 1 5 0V6','M3.5 6V4.2a2.5 2.5 0 0 1 4.9-.7'),
+      sync=()=>{b.innerHTML=TLLOCK?LK:UL;b.setAttribute('aria-label',TLLOCK?'Timeline locked to the playhead':'Timeline not following the playhead');b.classList.toggle('on',TLLOCK);b.title=TLLOCK?'Following the playhead – click to unlock':'Not following – click to lock to the playhead'};sync();
+    b.onclick=()=>{TLLOCK=!TLLOCK;try{localStorage.setItem('ah_tllock',TLLOCK?'1':'0')}catch(e){}sync();if(TLLOCK){const t=ovTime();TLVIEW.a=Math.max(0,t-TLVIEW.span*.35)}try{st(TLLOCK?'Timeline locked to the playhead – it scrolls along while playing.':'Timeline unlocked – it stays where you put it.')}catch(_){}}}
+  /* zoom rundt spillehodet */
+  const zAt=f=>{zoom(f,ovTime());cv.focus()};$('#tlzi').onclick=()=>zAt(1/1.8);$('#tlzo').onclick=()=>zAt(1.8);
+  /* flytt spillehodet ett bilde (1/30 s) – for helt presise kutt */
+  const nudge=dt=>{const t=Math.max(0,Math.min(dur(),ovTime()+dt));audio.currentTime=t;if(t<view.a||t>view.a+view.span)view.a=Math.max(0,t-view.span*.5);touchT=performance.now();try{st('Playhead '+fmt(t)+' – press S to split here.')}catch(_){}};
+  {const sel=$('#tlxsc');if(sel){Object.keys(SNM).filter(k=>k!=='particles').forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=SNM[k];sel.appendChild(o)});
+    sel.onchange=()=>{if(!selCue)return;selCue.s=sel.value;TL.on=true;const on=$('#tlon');if(on)on.checked=true;tlLast=-2;if(window.tlRender)tlRender();save()};sel.addEventListener('keydown',e=>e.stopPropagation())}}
+  const vdur=c=>{if(c&&c.mid===0)return MEDIA&&MEDIA.kind==='video'&&isFinite(MEDIA.v.duration)?MEDIA.v.duration:0;const md=c&&OVMED[c.mid];return md&&md.m&&md.m.kind==='video'&&isFinite(md.m.v.duration)?md.m.v.duration:0};
+  $('#ovvi').oninput=e=>{const c=selC,d=vdur(c);if(!c||!d)return;c.vi=+e.target.value/1000*d;const v=c.mid===0?MEDIA.v:OVMED[c.mid].m.v;if(c.mid)OVMED[c.mid].lc=null;const t=ovTime();if(t>=c.s&&t<c.e)try{v.currentTime=(t-c.s+c.vi)%d}catch(_){}};$('#ovvi').onchange=save;
+  setInterval(()=>{const w=$('#ovviw');if(!w)return;const c=selC&&OVT.includes(selC)?selC:null,d=vdur(c);const want=c&&d?'':'none';if(w.style.display!==want)w.style.display=want;if(c&&d){if(document.activeElement!==$('#ovvi'))$('#ovvi').value=Math.round((c.vi||0)/d*1000);$('#ovvit').textContent=fmt(c.vi||0)}},250);
   /* lista: velg (justeringene og + Add gjelder den valgte), bytt fil, fjern */
   const lst=$('#ovlist'),rp=$('#ovrep');let repId=0;
-  window.ovListRender=()=>{if(!lst)return;const ids=lanes();lst.innerHTML='';
+  window.ovListRender=()=>{if(!lst)return;const ids=ovLanes();lst.innerHTML='';
     ids.forEach(id=>{const md=OVMED[id],n=of(id).length,on=id===ovCurMid,hu=HUE[id%HUE.length];const r=document.createElement('div');
       r.style.cssText='display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;border:1px solid '+(on?'#7fb4ff':'#232a40')+';background:'+(on?'#16223f':'#0b0f1a');
       r.dataset.id=id;r.innerHTML='<b data-a="grip" title="Drag up or down – the top one is in front" style="cursor:ns-resize;color:#7f8db8;font:14px/1 var(--mono);padding:0 2px;user-select:none;touch-action:none">≡</b><i style="width:10px;height:10px;border-radius:3px;flex:none;background:hsl('+hu+',70%,50%)"></i><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:11px var(--mono);color:'+(on?'#fff':'#c8d3f0')+'"></span><span style="font:10px var(--mono);color:#7f8db8;white-space:nowrap"></span><button class="chip" type="button" data-a="rep" style="padding:2px 7px" title="Swap this overlay for another file – position and boxes stay">Replace</button><button class="chip" type="button" data-a="del" style="padding:2px 7px" title="Remove this overlay and its boxes">×</button>';
@@ -3543,18 +3650,19 @@ window.lyrApply=o=>{if(!o)return;lyrSet(o.txt||'');setMode(o.m||'off')};hint();
   /* dra i grepet ≡ i lista for å endre rekkefølgen (samme som å dra sporene på tidslinjen) */
   if(lst){let rd=null;
     lst.addEventListener('pointerdown',e=>{if(e.button!==0||!e.target.closest||e.target.closest('button'))return;const row=e.target.closest('[data-id]');if(!row)return;rd={id:+row.dataset.id,y0:e.clientY,moved:false,re:false};try{lst.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault();e.stopPropagation()});
-    lst.addEventListener('pointermove',e=>{if(!rd)return;if(!rd.moved){if(Math.abs(e.clientY-rd.y0)<5)return;rd.moved=true;lst.style.cursor='ns-resize'}const rows=[...lst.children],L=lanes();let to=rows.length-1;for(let i=0;i<rows.length;i++){const b=rows[i].getBoundingClientRect();if(e.clientY<b.top+b.height/2){to=i;break}}
+    lst.addEventListener('pointermove',e=>{if(!rd)return;if(!rd.moved){if(Math.abs(e.clientY-rd.y0)<5)return;rd.moved=true;lst.style.cursor='ns-resize'}const rows=[...lst.children],L=ovLanes();let to=rows.length-1;for(let i=0;i<rows.length;i++){const b=rows[i].getBoundingClientRect();if(e.clientY<b.top+b.height/2){to=i;break}}
       const from=L.indexOf(rd.id);if(from>=0&&to!==from){L.splice(from,1);L.splice(to,0,rd.id);L.forEach((id,i)=>OVMED[id].ord=L.length-i);rd.re=true;ovListRender()}});
     const end=()=>{if(!rd)return;const d=rd;rd=null;lst.style.cursor='';if(d.re){save();try{st('Layer order changed – the top one is in front.')}catch(_){}}else if(!d.moved){const md=OVMED[d.id];if(md){ovSel(d.id);ovListRender();try{st('“'+md.name+'” selected – drag it on the preview, use the sliders, or + Add at playhead to time it.')}catch(_){}}}};lst.addEventListener('pointerup',end);lst.addEventListener('pointercancel',end)}
-  function ovRemove(id){const md=OVMED[id];if(!md)return;for(let i=OVT.length-1;i>=0;i--)if(OVT[i].mid===id)OVT.splice(i,1);ovDrop(md);delete OVMED[id];selC=null;
-    const left=lanes();if(!left.length){ovClear();return}if(ovCurMid===id){ovCurMid=0;ovSel(left[left.length-1]);const n=OVMED[ovCurMid];window._ovFile=n.file||null;$('#onm').textContent=n.name+' · click to add another'}save();ovListRender()}
+  function ovRemove(id){const md=OVMED[id];if(!md)return;if(md===window.__vsO&&window.songClear){window.__vsO=null;window.__vsong=false;songClear()}for(let i=OVT.length-1;i>=0;i--)if(OVT[i].mid===id)OVT.splice(i,1);ovDrop(md);delete OVMED[id];selC=null;
+    const left=ovLanes();if(!left.length){ovClear();return}if(ovCurMid===id){ovCurMid=0;ovSel(left[left.length-1]);const n=OVMED[ovCurMid];window._ovFile=n.file||null;$('#onm').textContent=n.name+' · click to add another'}save();ovListRender()}
   if(rp)rp.onchange=async()=>{const f=rp.files[0],md=OVMED[repId];if(!f||!md)return;try{const r=await openMedia(f,'#onm');if(md.tex&&md.tex.dispose)md.tex.dispose();if(md.m&&md.m.v){md.m.v.pause();try{URL.revokeObjectURL(md.m.url)}catch(e){}}
       md.tex=r.tex;md.ia=r.ia||1;md.m=r.m||null;md.name=f.name||'overlay';md.file=f;md.lc=null;if(repId===ovCurMid){OVM=md.m;OVia=md.ia}md.t0=RT;if(window.ovaAttach)ovaAttach(md);if(md.m&&md.m.kind==='video')md.m.v.play().catch(()=>{});$('#onm').textContent=md.name+' · click to add another';ovListRender();save()}catch(e){try{st('Could not open that file.')}catch(_){}}};
   window.addEventListener('ovtlchange',()=>ovListRender());
-  window.ovtlGet=()=>OVT.map(c=>({s:+c.s.toFixed(3),e:+c.e.toFixed(3),fi:c.fi,fo:c.fo,m:c.mid}));
-  window.ovtlSet=(L,map)=>{OVT.length=0;(L||[]).forEach(c=>{const mid=map?map(c.m):c.m;if(OVMED[mid])OVT.push({id:uid++,s:c.s,e:c.e,fi:c.fi??.25,fo:c.fo??.25,mid})});selC=null};
+  window.ovtlGet=()=>OVT.map(c=>({s:+c.s.toFixed(3),e:+c.e.toFixed(3),fi:c.fi,fo:c.fo,m:c.mid,vi:+(c.vi||0).toFixed(3)}));
+  window.ovtlSet=(L,map)=>{OVT.length=0;(L||[]).forEach(c=>{const mid=c.m===0?0:map?map(c.m):c.m;if(mid===0||OVMED[mid])OVT.push({id:uid++,s:c.s,e:c.e,fi:c.fi??.25,fo:c.fo??.25,mid,vi:c.vi||0})});selC=null};
   let vis=false;try{new IntersectionObserver(es=>{vis=es[0].isIntersecting}).observe(wrap)}catch(e){vis=true}
-  const loop=()=>{requestAnimationFrame(loop);const want=OVon&&loaded;if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';if(!want||!vis)return;if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
+  {const tb=$('#tlxbody');if(tb&&wrap.parentNode!==tb)tb.appendChild(wrap)}
+  const loop=()=>{requestAnimationFrame(loop);/* Timeline under avspillingen: vises når det finnes et lydspor og noe å time (Media eller overlay) */const want=!!loaded;if(wrap.style.display!==(want?'block':'none'))wrap.style.display=want?'block':'none';{const x=$('#tlx');if(x&&x.style.display!==(want?'flex':'none'))x.style.display=want?'flex':'none'}if(!want||!vis)return;if(pkFile!==curFile)getPeaks();draw()};requestAnimationFrame(loop)})();
 /* ===== Auto-detect: talegjenkjenning (Whisper via transformers.js) på brukerens egen låt, lokalt i nettleseren/appen.
    Lyden gjøres mono, filtreres mot vokalområdet og resamples til 16 kHz, kjøres i 30 s vinduer med overlapp, og ordene grupperes i linjer med ordtider (LRC) ===== */
 const TFX='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2/dist/transformers.min.js';let asrP=null,asrM='',asrRun=false,asrStop=false;
@@ -3766,18 +3874,18 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   window.MVMUTE=false;window.MVVOL=1;try{const z=JSON.parse(localStorage.getItem('ah_mv')||'null');if(z){MVMUTE=!!z.m;MVVOL=z.v??1}}catch(e){}
   const mvSave=()=>{try{localStorage.setItem('ah_mv',JSON.stringify({m:MVMUTE,v:MVVOL}))}catch(e){}};
   const vid=()=>(typeof MEDIA!=='undefined'&&MEDIA&&MEDIA.kind==='video'&&MEDIA.v)?MEDIA:null;
-  const setG=m=>{if(m&&m.g)m.g.gain.value=window.__vsong?0:(MVMUTE?0:MVVOL)};
+  const setG=m=>{if(m&&m.g)m.g.gain.value=vsIsMedia()&&!vsCuts()?0:(MVMUTE?0:MVVOL)};
   const w=$('#ivcw'),pp=$('#ivpp'),mu=$('#ivmu'),vol=$('#ivvol'),na=$('#ivna');
   function ui(){const m=vid();if(!w)return;const d=m?'':'none';if(w.style.display!==d)w.style.display=d;if(!m)return;
-    const ps=window.__vsong?audio.paused:m.v.paused;pp.textContent=ps?'▶ Play':'❚❚ Pause';mu.textContent=MVMUTE?'🔇 Muted':'🔊 Sound on';mu.classList.toggle('muted',MVMUTE);
+    const ps=vsIsMedia()?audio.paused:m.v.paused;pp.textContent=ps?'▶ Play':'❚❚ Pause';mu.textContent=MVMUTE?'🔇 Muted':'🔊 Sound on';mu.classList.toggle('muted',MVMUTE);
     const silent=m.v.currentTime>1.5&&m.v.webkitAudioDecodedByteCount===0;m.noSnd=silent;na.textContent=silent?'· no sound in this clip':'';mvMix()}
-  window.mvAttach=m=>{if(m&&m.kind==='video'){try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2)}m.v.muted=false;setG(m)}catch(e){m.v.muted=true}
-    m.up=false;if(window.__vsong){window.__vsong=false;songClear()}else if(!vsEnter(m)){/* sang lastet men på pause: videoen venter på Play */if(loaded&&audio.paused){m.up=true;m.v.pause()}else m.v.play().catch(()=>{})}}ui()};
+  window.mvAttach=m=>{if(m&&m.kind==='video'){try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2);if(window.MBUS)m.g.connect(MBUS)}m.v.muted=false;setG(m)}catch(e){m.v.muted=true}
+    m.up=false;if(vsIsMedia()){window.__vsong=false;songClear()}else if(!vsEnter(m)){/* sang lastet men på pause: videoen venter på Play */if(loaded&&audio.paused){m.up=true;m.v.pause()}else m.v.play().catch(()=>{})}}ui()};
   const ovVids=()=>(typeof OVMED!=='undefined')?Object.values(OVMED).filter(x=>x.m&&x.m.kind==='video'&&x.m.v):[];
-  const ovSnd=()=>ovVids().some(x=>x.m.g&&!x.m.v.paused&&!x.mute&&(x.vol??1)>0&&!x.m.noSnd);
-  window.mvLive=()=>{if(window.__vsong)return ovSnd();const m=vid();return !!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0)||ovSnd()};
-  const ovG=x=>{if(x&&x.m&&x.m.g)x.m.g.gain.value=x.mute?0:(x.vol??1)};
-  window.ovaAttach=x=>{const m=x&&x.m;if(!m||m.kind!=='video')return;try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2)}m.v.muted=false;ovG(x)}catch(e){m.v.muted=true}if(x.up==null)x.up=false;x.solo=false;if(window.mvMix)setTimeout(mvMix)};
+  const ovSnd=()=>ovVids().some(x=>(x!==window.__vsO||vsCuts())&&x.m.g&&!x.m.v.paused&&!x.mute&&(x.vol??1)>0&&!x.m.noSnd);
+  window.mvLive=()=>{if(vsIsMedia()&&!vsCuts())return ovSnd();const m=vid();return !!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0)||ovSnd()};
+  const ovG=x=>{if(x&&x.m&&x.m.g)x.m.g.gain.value=x===window.__vsO&&!vsCuts()?0:x.mute?0:(x.vol??1)};
+  window.ovaAttach=x=>{const m=x&&x.m;if(!m||m.kind!=='video')return;try{initAudio();ac.resume();if(!m.g){m.src=ac.createMediaElementSource(m.v);m.g=ac.createGain();m.src.connect(m.g);m.g.connect(an);if(an2)m.g.connect(an2);if(window.MBUS)m.g.connect(MBUS)}m.v.muted=false;ovG(x)}catch(e){m.v.muted=true}if(x.up==null)x.up=false;x.solo=false;if(window.mvMix)setTimeout(mvMix);if(!loaded&&!exporting)setTimeout(()=>{if(window.vsAuto)vsAuto()},0)};
   /* fade for hele overlayet (uten klipp): følger sangen, eller videoen når ingen sang er lastet */
   window.ovGF=(x,c,t)=>{if(c)return 1;const fi=(x.gfi||0)/10,fo=(x.gfo||0)/10;if(!fi&&!fo&&x.foP==null)return 1;let a=1,b=1;const v=x.m&&x.m.kind==='video'&&x.m.v&&isFinite(x.m.v.duration)&&x.m.v.duration>0?x.m.v:null,songOn=loaded&&(OFF||!audio.paused);
     if(fi)a=Math.min(1,Math.max(0,(RT-(x.t0||0))/fi));
@@ -3787,33 +3895,51 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     if(x.foP!=null&&!OFF){const e=RT-x.foP;if(fo&&e<fo+.4)b=Math.min(b,Math.max(0,1-e/fo));else{x.foP=null;x.t0=RT}}
     return a*a*(3-2*a)*b*b*(3-2*b)};
   /* Video som lydspor: uten sang lastet brukes videoens egen lyd som sang – da virker Play, Space, Clip og begge eksportene */
-  window.vsEnter=m=>{if(loaded||exporting||!m||m.kind!=='video'||!m.file||m.noSong)return false;window.__vsong=true;window.MOFF=0;load(m.file);
-    if(!loaded){window.__vsong=false;return false}$('#fn').textContent='🎬 '+m.file.name;try{m.v.pause();m.v.currentTime=0}catch(e){}m.up=false;setG(m);mvMix();
-    st('Using the sound from your video as the track. Press Play or Space, or export right away. Load a song to use that instead.');return true};
-  window.vsSync=()=>{const m=vid();if(!window.__vsong||OFF||!m||!loaded)return;const v=m.v,t=audio.currentTime||0;
+  /* Video som lydspor: uten sang brukes lyden fra en video (Media først, ellers et overlay) som sang – Play, Space, Clip og begge eksportene virker */
+  window.vsEnterAny=(src,isOv)=>{const m=isOv?src&&src.m:src,file=isOv?src&&src.file:m&&m.file;if(loaded||exporting||!m||m.kind!=='video'||!file||src.noSong)return false;
+    window.__vsong=true;window.__vsO=isOv?src:null;window.VSF=file;if(isOv)src.off=0;else window.MOFF=0;load(file);
+    if(!loaded){window.__vsong=false;window.__vsO=null;window.VSF=null;return false}$('#fn').textContent='🎬 '+file.name;try{m.v.pause();m.v.currentTime=0}catch(e){}
+    if(isOv){src.up=false;ovG(src)}else{m.up=false;setG(m)}mvMix();
+    st('Using the sound from '+(isOv?'the overlay video':'your video')+' as the track. Press Play or Space, or export right away. Load a song to use that instead.');return true};
+  window.vsEnter=m=>vsEnterAny(m,false);
+  window.vsAuto=()=>{if(loaded||exporting)return false;if(vid()&&vsEnterAny(MEDIA,false))return true;for(const x of ovVids())if(vsEnterAny(x,true))return true;return false};
+  window.vsMuted=()=>!!window.__vsong&&(window.__vsO?!!window.__vsO.mute||(window.__vsO.vol??1)<=0:!!MVMUTE);
+  window.vsSync=()=>{const m=vid();if(!vsIsMedia()||vsCuts()||OFF||!m||!loaded)return;const v=m.v,t=audio.currentTime||0;
     if(audio.paused){if(!v.paused)v.pause();if(Math.abs(v.currentTime-t)>.05&&!v.seeking)try{v.currentTime=t}catch(e){}}
     else{if(v.paused)v.play().catch(()=>{});if(Math.abs(v.currentTime-t)>.25&&!v.seeking)try{v.currentTime=t}catch(e){}}};
   /* lydspor til eksport: lyden fra filen, eller stillhet hvis videoen er muted / mangler lyd */
-  window.expDecode=async ctx=>{window.__noTrack=false;try{return await ctx.decodeAudioData(await curFile.arrayBuffer())}
-    catch(e){if(!window.__vsong)throw e;window.__noTrack=true;const d=Math.max(1,(MEDIA&&MEDIA.v&&MEDIA.v.duration)||audio.duration||1);return ctx.createBuffer(2,Math.ceil(d*48000),48000)}};
-  window.expAud=()=>(window.__vsong&&(MVMUTE||window.__noTrack))?null:AH.pathFor(curFile);
-  window.mvToggle=()=>{const m=vid();if(!m)return false;if(window.__vsong){$('#play').click();ui();return true}if(m.v.paused){m.up=false;m.solo=loaded&&audio.paused;try{ac&&ac.resume()}catch(e){}m.v.play().catch(()=>{})}else{m.up=true;m.solo=false;m.v.pause()}ui();if(window.mvMix)mvMix();return true};
+  window.expDecode=async ctx=>{window.__noTrack=false;window.__vsBuf=null;try{const d0=await ctx.decodeAudioData(await curFile.arrayBuffer());if(!vsCuts())return d0;
+      /* kuttet lydspor: hver boks henter sin del av lyden fra videoen (fra «Start in video»), med boksens fades; mellomrom = stille */
+      const sr=d0.sampleRate,nc=Math.min(2,d0.numberOfChannels),L=vsLane(),end=vsEnd()||d0.duration,n=Math.ceil(end*sr),out=ctx.createBuffer(2,n,sr),src=[0,1].map(i=>d0.getChannelData(Math.min(i,nc-1))),dst=[out.getChannelData(0),out.getChannelData(1)],len=d0.length;
+      OVT.filter(c=>c.mid===L).forEach(c=>{const a=Math.floor(c.s*sr),b=Math.min(n,Math.ceil(c.e*sr)),v0=Math.floor((c.vi||0)*sr),fi=Math.max(1,(c.fi||0)*sr),fo=Math.max(1,(c.fo||0)*sr);
+        for(let i=a;i<b;i++){let j=(v0+i-a)%len;const gn=Math.min(1,(i-a)/fi,(b-i)/fo);for(let k=0;k<2;k++)dst[k][i]=src[k][j]*gn}});
+      window.__vsBuf=out;return out}
+    catch(e){if(!window.__vsong)throw e;window.__noTrack=true;const sv=window.__vsO?__vsO.m.v:(MEDIA&&MEDIA.v),d=Math.max(1,(sv&&sv.duration)||audio.duration||1);return ctx.createBuffer(2,Math.ceil(d*48000),48000)}};
+  const wavOf=b=>{const n=b.length,ch=2,sr=b.sampleRate,buf=new ArrayBuffer(44+n*ch*2),v=new DataView(buf),w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
+    w(0,'RIFF');v.setUint32(4,36+n*ch*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);v.setUint32(24,sr,true);v.setUint32(28,sr*ch*2,true);v.setUint16(32,ch*2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*ch*2,true);
+    const a=b.getChannelData(0),c=b.numberOfChannels>1?b.getChannelData(1):a;let o=44;for(let i=0;i<n;i++){for(const x of [a[i],c[i]]){const y=Math.max(-1,Math.min(1,x));v.setInt16(o,y<0?y*32768:y*32767,true);o+=2}}return new Uint8Array(buf)};
+  window.expAud=async()=>{if(window.__vsong&&(vsMuted()||window.__noTrack))return null;if(vsCuts()&&window.__vsBuf&&AH.tmpWrite){const p=await AH.tmpWrite(wavOf(window.__vsBuf),'wav');if(p)return p}return AH.pathFor(curFile)};
+  window.mvToggle=()=>{const m=vid();if(!m)return false;if(vsIsMedia()){$('#play').click();ui();return true}if(m.v.paused){m.up=false;m.solo=loaded&&audio.paused;try{ac&&ac.resume()}catch(e){}m.v.play().catch(()=>{})}else{m.up=true;m.solo=false;m.v.pause()}ui();if(window.mvMix)mvMix();return true};
   if(pp)pp.addEventListener('click',()=>mvToggle());
-  if(mu)mu.addEventListener('click',()=>{MVMUTE=!MVMUTE;mvSave();setG(vid());ui();mvMix();if(window.__vsong)st(MVMUTE?'Video sound muted – the export will be silent.':'Video sound on – it is used as the track in the export.')});
+  if(mu)mu.addEventListener('click',()=>{MVMUTE=!MVMUTE;mvSave();setG(vid());ui();mvMix();if(vsIsMedia())st(MVMUTE?'Video sound muted – the export will be silent.':'Video sound on – it is used as the track in the export.')});
   if(vol)vol.addEventListener('input',e=>{if(!e.isTrusted)return;MVVOL=vol.value/100;if(MVVOL>0&&MVMUTE)MVMUTE=false;mvSave();setG(vid());ui()});
   /* én lydkilde om gangen: spiller videoen med lyd på, dempes sangen; er videoen muted eller pauset, hører du sangen */
-  window.mvMix=()=>{const g=window.SONGG;if(!g||!ac)return;const m=vid();const vOn=!!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)||ovSnd();const want=window.__vsong?(MVMUTE?0:MVVOL):vOn?0:1;if(Math.abs(g.gain.value-want)>.001)g.gain.setTargetAtTime(want,ac.currentTime,.04)};
+  window.mvMix=()=>{const g=window.SONGG;if(!g||!ac)return;const m=vid();const vOn=!!(m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)||ovSnd();const want=window.__vsong?(vsCuts()?0:vsMuted()?0:(window.__vsO?(__vsO.vol??1):MVVOL)):vOn?0:1;if(Math.abs(g.gain.value-want)>.001)g.gain.setTargetAtTime(want,ac.currentTime,.04)};
   /* Space: start/stopp alt som er lastet (sang og video) samtidig */
   window.mvSpace=()=>{const m=vid(),hasS=loaded&&!$('#play').disabled,ov=ovVids();if(!hasS&&!m&&!ov.length)return false;
     /* Space: spiller noe (sang, Media-video eller overlay-video), stoppes alt. Ellers starter alt sammen. */
-    const any=(hasS&&!audio.paused)||(m&&!m.v.paused&&!window.__vsong)||ov.some(x=>!x.m.v.paused);
-    if(any){ov.forEach(x=>{x.up=true;x.solo=false;if(!x.m.v.paused)x.m.v.pause()});if(m&&!window.__vsong&&!m.v.paused){m.up=true;m.v.pause()}if(hasS&&!audio.paused)$('#play').click()}
+    const any=(hasS&&!audio.paused)||(m&&!m.v.paused&&!vsIsMedia())||ov.some(x=>!x.m.v.paused);
+    if(any){ov.forEach(x=>{x.up=true;x.solo=false;if(!x.m.v.paused)x.m.v.pause()});if(m&&!vsIsMedia()&&!m.v.paused){m.up=true;m.v.pause()}if(hasS&&!audio.paused)$('#play').click()}
     else{if(hasS)$('#play').click();else{if(m&&m.v.paused){m.up=false;try{ac&&ac.resume()}catch(e){}m.v.play().catch(()=>{})}ov.forEach(x=>{x.up=false;x.solo=false})}}
     setTimeout(()=>{ui();if(window.mvMix)mvMix()},60);return true};
   /* sangen og Media-videoen spiller sammen: Play/Space starter og stopper begge (Media-knappen styrer bare videoen) */
-  audio.addEventListener('play',()=>{ovVids().forEach(x=>{x.up=false;x.solo=false});const m=vid();if(m)m.solo=false;if(m&&!window.__vsong&&!fastRun){m.up=false;m.v.play().catch(()=>{})}});
-  audio.addEventListener('pause',()=>{ovVids().forEach(x=>{x.solo=false});const m=vid();if(m)m.solo=false;if(m&&!window.__vsong&&!exporting){m.up=true;m.v.pause()}});
+  audio.addEventListener('play',()=>{ovVids().forEach(x=>{x.up=false;x.solo=false});const m=vid();if(m)m.solo=false;if(m&&!vsIsMedia()&&!fastRun){m.up=false;m.v.play().catch(()=>{})}});
+  audio.addEventListener('pause',()=>{ovVids().forEach(x=>{x.solo=false});const m=vid();if(m)m.solo=false;if(m&&!vsIsMedia()&&!exporting){m.up=true;m.v.pause()}});
   setInterval(()=>{const st=$('#stage');if(st)st.classList.toggle('med',mode==='image')},300);
+  /* Space: ett trykk = play/pause. To raske trykk = tilbake til 0:00 (sang og video), og avspillingen blir som før første trykk */
+  window.goStart=()=>{if(loaded){try{audio.currentTime=0}catch(e){}}else{const m=vid();if(m)try{m.v.currentTime=0}catch(e){}ovVids().forEach(x=>{try{x.m.v.currentTime=0}catch(e){}})}
+    if(typeof OVMED!=='undefined')Object.values(OVMED).forEach(x=>x.lc=null);if(window.TLVIEW)TLVIEW.a=0;st('Back to 0:00');};
+  let spT=0;window.spaceKey=()=>{const now=performance.now();if(spT&&now-spT<380){spT=0;mvSpace();goStart();return true}spT=now;const r=mvSpace();if(!r&&loaded&&!$('#play').disabled){$('#play').click();return true}return r};
   ['play','pause'].forEach(ev=>audio.addEventListener(ev,()=>{mvMix();ui();const m=vid();if(ev==='play'&&m&&m.g&&!m.v.paused&&!MVMUTE&&MVVOL>0&&!m.noSnd)st('You hear the video sound now. Click Sound on in Media to mute it and hear the song.')}));
   /* glidebrytere for fade: slipp for å se fade in / fade out med en gang */
   const fi=$('#ifd'),fo=$('#ifo');if(fi)fi.addEventListener('change',()=>{window.__foP=null;window.__imT0=RT});if(fo)fo.addEventListener('change',()=>{window.__foP=RT});
@@ -3824,9 +3950,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   function oui(){const x=cur(),isV=!!(x&&x.m&&x.m.kind==='video'&&x.m.v);if(ow){const d=isV?'':'none';if(ow.style.display!==d)ow.style.display=d}if(gw){const d=x?'flex':'none';if(gw.style.display!==d)gw.style.display=d}
     if(x&&gi&&document.activeElement!==gi)gi.value=x.gfi||0;if(x&&go&&document.activeElement!==go)go.value=x.gfo||0;
     ovVids().forEach(y=>{y.m.noSnd=y.m.v.currentTime>1.5&&y.m.v.webkitAudioDecodedByteCount===0});
-    if(!isV)return;op.textContent=x.m.v.paused?'▶ Play':'❚❚ Pause';om.textContent=x.mute?'🔇 Muted':'🔊 Sound on';om.classList.toggle('muted',!!x.mute);if(document.activeElement!==ov2)ov2.value=Math.round((x.vol??1)*100);on2.textContent=x.m.noSnd?'· no sound in this clip':''}
-  if(op)op.addEventListener('click',()=>{const x=cur();if(!x||!x.m)return;const pl=(!audio.paused||LIVE);if(x.m.v.paused){x.up=false;x.solo=loaded&&!pl;try{ac&&ac.resume()}catch(e){}x.m.v.play().catch(()=>{})}else{x.up=true;x.solo=false;x.m.v.pause()}setTimeout(()=>{oui();mvMix()},50)});
-  if(om)om.addEventListener('click',()=>{const x=cur();if(!x)return;x.mute=!x.mute;ovG(x);oui();mvMix()});
+    if(!isV)return;op.textContent=(x===window.__vsO?audio.paused:x.m.v.paused)?'▶ Play':'❚❚ Pause';om.textContent=x.mute?'🔇 Muted':'🔊 Sound on';om.classList.toggle('muted',!!x.mute);if(document.activeElement!==ov2)ov2.value=Math.round((x.vol??1)*100);on2.textContent=x.m.noSnd?'· no sound in this clip':''}
+  if(op)op.addEventListener('click',()=>{const x=cur();if(!x||!x.m)return;if(x===window.__vsO){$('#play').click();setTimeout(oui,60);return}const pl=(!audio.paused||LIVE);if(x.m.v.paused){x.up=false;x.solo=loaded&&!pl;try{ac&&ac.resume()}catch(e){}x.m.v.play().catch(()=>{})}else{x.up=true;x.solo=false;x.m.v.pause()}setTimeout(()=>{oui();mvMix()},50)});
+  if(om)om.addEventListener('click',()=>{const x=cur();if(!x)return;x.mute=!x.mute;ovG(x);oui();mvMix();if(x===window.__vsO)st(x.mute?'Overlay sound muted – the export will be silent.':'Overlay sound on – it is used as the track in the export.')});
   if(ov2)ov2.addEventListener('input',e=>{if(!e.isTrusted)return;const x=cur();if(!x)return;x.vol=ov2.value/100;if(x.vol>0)x.mute=false;ovG(x);oui();mvMix()});
   if(gi){gi.addEventListener('input',e=>{if(!e.isTrusted)return;const x=cur();if(x)x.gfi=+gi.value});gi.addEventListener('change',()=>{const x=cur();if(x){x.foP=null;x.t0=RT}})}
   if(go){go.addEventListener('input',e=>{if(!e.isTrusted)return;const x=cur();if(x)x.gfo=+go.value});go.addEventListener('change',()=>{const x=cur();if(x)x.foP=RT})}
@@ -3843,9 +3969,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     r.addEventListener('pointerdown',()=>drag=true);addEventListener('pointerup',()=>drag=false);r.addEventListener('change',()=>drag=false);
     r.addEventListener('input',()=>{const m=getM();if(!isVid(m))return;const d=m.v.duration,x=r.value/1000*d;try{m.v.currentTime=x}catch(e){}setOff(((x-(songT()-base()))%d+d)%d);l.textContent=fmt(x)+' / '+fmt(d)});
     setInterval(()=>{const m=getM(),ok=isVid(m);const disp=ok?'':'none';if(w.style.display!==disp)w.style.display=disp;if(!ok||drag)return;const d=m.v.duration;r.value=Math.round(m.v.currentTime/d*1000);l.textContent=fmt(m.v.currentTime)+' / '+fmt(d)},250)}
-  bind('#ivpw','#ivp','#ivpt',()=>(typeof MEDIA!=='undefined'&&!window.__vsong)?MEDIA:null,()=>0,o=>{window.MOFF=o});
+  bind('#ivpw','#ivp','#ivpt',()=>(typeof MEDIA!=='undefined'&&!vsIsMedia())?MEDIA:null,()=>0,o=>{window.MOFF=o});
   const curOv=()=>(typeof OVMED!=='undefined'&&typeof ovCurMid!=='undefined')?OVMED[ovCurMid]:null;
-  bind('#ovpw','#ovvp','#ovvpt',()=>{const md=curOv();return md?md.m:null},()=>{try{const [e,c]=ovEnvFor(ovCurMid,songT());return c?c.s:0}catch(_){return 0}},o=>{const md=curOv();if(md)md.off=o});
+  bind('#ovpw','#ovvp','#ovvpt',()=>{const md=curOv();return md&&md!==window.__vsO?md.m:null},()=>{try{const [e,c]=ovEnvFor(ovCurMid,songT());return c?c.s:0}catch(_){return 0}},o=>{const md=curOv();if(md)md.off=o});
 })();
 </script>
 </body>
