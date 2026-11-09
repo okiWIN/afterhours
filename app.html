@@ -2372,7 +2372,7 @@ $('#xpng').onclick=async()=>{try{if(LOWP&&!exporting)tick();const url=cv.toDataU
     sc.sort((a,b)=>b.s-a.s);const out=[];for(const x of sc){if(out.every(o=>Math.abs(o.t-x.t)>7))out.push(x);if(out.length>=12)break}return out.map(o=>Math.min(dur-.05,o.t))}
   const nap=()=>new Promise(r=>setTimeout(r));
   /* tegn ett øyeblikk som i eksporten: varm opp 1,5 s før så lys og partikler har bygget seg opp */
-  async function grab(t){const fdo=new Uint8Array(512),fdo2=new Uint8Array(512);wsm.fill(0);const wu=window.THWARM||1.2;OFF={dt:1/60,fd:fdo,fd2:fdo2,a:Math.max(0,t-wu),b:t+.1};
+  async function grab(t){const fdo=new Uint8Array(512),fdo2=new Uint8Array(512);wsm.fill(0);const wu=window.THWARM||1.2;/* a/b = hele sangen, ellers tror fade inn/ut at klippet starter/slutter her (svart bilde) */OFF={dt:1/60,fd:fdo,fd2:fdo2,a:0,b:(audio.duration&&isFinite(audio.duration))?audio.duration:S.mono.length/S.sr,thumb:1};
     const n0=Math.max(0,Math.round((t-wu)*60)),n1=Math.round(t*60);let img=null;
     for(let n=n0;n<=n1;n++){wfftFrame(S.mono,S.sr,n/60,fdo,fdo2);OFF.t=n/60;await mediaSeek(n/60);tick();
       if(n===n1){img=document.createElement('canvas');img.width=cv.width;img.height=cv.height;img.getContext('2d').drawImage(cv,0,0)}else if(n%10===0)await nap()}
@@ -4121,7 +4121,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   /* fade for hele overlayet (uten klipp): følger sangen, eller videoen når ingen sang er lastet */
   window.ovGF=(x,c,t)=>{if(c)return 1;const fi=(x.gfi||0)/10,fo=(x.gfo||0)/10;if(!fi&&!fo&&x.foP==null)return 1;let a=1,b=1;const v=x.m&&x.m.kind==='video'&&x.m.v&&isFinite(x.m.v.duration)&&x.m.v.duration>0?x.m.v:null,songOn=loaded&&(OFF||!audio.paused);
     if(fi)a=Math.min(1,Math.max(0,(RT-(x.t0||0))/fi));
-    if(songOn){const s0=OFF&&OFF.a?OFF.a:0;let end=audio.duration&&isFinite(audio.duration)?audio.duration:1e9;if(OFF&&OFF.b)end=Math.min(end,OFF.b);if(fi)a=Math.min(a,Math.max(0,Math.min(1,(t-s0)/fi)));if(fo)b=Math.max(0,Math.min(1,(end-t)/fo))}
+    if(songOn&&!(OFF&&OFF.thumb)){const s0=OFF&&OFF.a?OFF.a:0;let end=audio.duration&&isFinite(audio.duration)?audio.duration:1e9;if(OFF&&OFF.b)end=Math.min(end,OFF.b);if(fi)a=Math.min(a,Math.max(0,Math.min(1,(t-s0)/fi)));if(fo)b=Math.max(0,Math.min(1,(end-t)/fo))}
     else if(v&&!OFF){if(fi)a=Math.min(a,Math.max(0,Math.min(1,v.currentTime/fi)));if(fo)b=Math.max(0,Math.min(1,(v.duration-v.currentTime)/fo))}
     else if(loaded&&fo&&!OFF){const end=audio.duration||1e9;b=Math.max(0,Math.min(1,(end-(audio.currentTime||0))/fo))}
     if(x.foP!=null&&!OFF){const e=RT-x.foP;if(fo&&e<fo+.4)b=Math.min(b,Math.max(0,1-e/fo));else{x.foP=null;x.t0=RT}}
