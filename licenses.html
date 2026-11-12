@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Open-source licenses – Afterhours VFX</title>
+<link rel="icon" href="icon-192.png">
+<style>
+@font-face{font-family:'Manrope';font-weight:400;src:url(fonts/manrope-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Manrope';font-weight:700;src:url(fonts/manrope-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Unbounded';font-weight:700;src:url(fonts/unbounded-latin-700-normal.woff2) format('woff2')}
+:root{color-scheme:dark;--bg:#05070d;--card:#0a1020;--line:#1b2745;--ink:#eef3fc;--mut:#97a6c4;--blue:#3d6dff;--cyan:#a9d2ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 'Manrope','Segoe UI',system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+a{color:var(--cyan)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px}
+.logo{font:700 14px/1 'Unbounded','Arial Black',sans-serif;letter-spacing:.28em;text-transform:uppercase;background:linear-gradient(90deg,var(--blue),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;text-decoration:none}
+h1{font:700 34px/1.15 'Unbounded','Arial Black',sans-serif;margin:0 0 6px}
+.date{color:var(--mut);font-size:14px;margin:0 0 28px}
+h2{font:700 18px/1.3 'Unbounded','Arial Black',sans-serif;margin:34px 0 8px}
+p,li{color:#d2dbee}
+ul{padding-left:20px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:18px 0}
+footer{margin-top:48px;color:var(--mut);font-size:14px;border-top:1px solid var(--line);padding-top:18px}
+</style>
+</head>
+<body><main>
+<div class="top"><a class="logo" href="index.html">Afterhours VFX</a><a href="index.html">← Back</a></div>
+<h1>Open-source licenses</h1>
+<p class="date">Last updated: 12 November 2026</p>
+<div class="box">Afterhours VFX is built with the open-source software and fonts below. Thank you to everyone who made them. Each part keeps its own license; the full license texts are at the bottom of this page.</div>
+
+<h2>Code</h2>
+<ul>
+<li><b>three.js</b> r128 (incl. EffectComposer, RenderPass, ShaderPass, UnrealBloomPass, CopyShader, LuminosityHighPassShader, MaskPass) – © 2010–2021 three.js authors – MIT License – <a href="https://github.com/mrdoob/three.js">github.com/mrdoob/three.js</a></li>
+<li><b>mp4-muxer</b> 5.1.3 – © Vanilagy – MIT License – <a href="https://github.com/Vanilagy/mp4-muxer">github.com/Vanilagy/mp4-muxer</a></li>
+<li><b>Electron</b> (desktop app only) – © Electron contributors, GitHub Inc. – MIT License. Electron includes Chromium and other components; their licenses are shipped with the desktop app in <code>LICENSES.chromium.html</code> – <a href="https://github.com/electron/electron">github.com/electron/electron</a></li>
+<li><b>FFmpeg</b> (desktop app only, via ffmpeg-static) – used as a separate program to add sound to exported videos. FFmpeg is licensed under the GNU GPL / LGPL. Source code: <a href="https://ffmpeg.org/download.html">ffmpeg.org</a> · build: <a href="https://github.com/eugeneware/ffmpeg-static">github.com/eugeneware/ffmpeg-static</a>. Ask me by email and I will send you the exact source code for the FFmpeg version in your copy of the app.</li>
+<li><b>Transformers.js</b> (desktop app, auto-detect lyrics; downloaded when first used) – © Hugging Face – Apache License 2.0 – <a href="https://github.com/huggingface/transformers.js">github.com/huggingface/transformers.js</a></li>
+<li><b>Whisper</b> speech-recognition model (downloaded when first used) – © OpenAI – MIT License – <a href="https://github.com/openai/whisper">github.com/openai/whisper</a></li>
+</ul>
+
+<h2>Fonts</h2>
+<p>All fonts are bundled with Afterhours VFX (no font services are contacted) and are licensed under the <b>SIL Open Font License 1.1</b>, except Permanent Marker (Apache License 2.0). Copyright belongs to their designers:</p>
+<ul>
+<li>Abril Fatface, Alfa Slab One, Anton, Archivo Black, Audiowide, Bebas Neue, Big Shoulders Display, Black Ops One, Bungee, Bungee Shade, Dela Gothic One, Jost, Krona One, Manrope, M PLUS Rounded 1c, Monoton, Orbitron, Pacifico, Press Start 2P, Reggae One, Righteous, Rubik Glitch, Rubik Mono One, Six Caps, Space Mono, Syne, Unbounded, UnifrakturMaguntia, VT323, Yuji Syuku, Zen Kaku Gothic New – SIL OFL 1.1</li>
+<li>Permanent Marker – © Font Diner – Apache License 2.0</li>
+</ul>
+<p>Font files are packaged by <a href="https://fontsource.org">Fontsource</a>. Sources and authors: <a href="https://fonts.google.com">fonts.google.com</a>.</p>
+
+<h2>MIT License</h2>
+<pre style="white-space:pre-wrap;font-size:13px;color:#b8c3dc">Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre>
+
+<h2>SIL Open Font License 1.1</h2>
+<p>The fonts may be used, embedded and redistributed freely together with software, but may not be sold on their own. Full text: <a href="https://openfontlicense.org/open-font-license-official-text/">openfontlicense.org</a>.</p>
+
+<h2>Apache License 2.0</h2>
+<p>Full text: <a href="https://www.apache.org/licenses/LICENSE-2.0">apache.org/licenses/LICENSE-2.0</a>.</p>
+
+<h2>GNU General Public License</h2>
+<p>Full text: <a href="https://www.gnu.org/licenses/gpl-3.0.html">gnu.org/licenses/gpl-3.0.html</a> · LGPL: <a href="https://www.gnu.org/licenses/lgpl-3.0.html">gnu.org/licenses/lgpl-3.0.html</a>.</p>
+
+<footer>Questions? <a href="mailto:afterhours.hyper.void@gmail.com">afterhours.hyper.void@gmail.com</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="licenses.html">Open-source licenses</a></footer>
+</main></body></html>
