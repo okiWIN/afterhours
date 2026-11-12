@@ -26,6 +26,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--body
 .wrap{max-width:1040px;margin:0 auto}
 a{color:inherit}
 header.top{display:flex;justify-content:space-between;align-items:center;padding-block:18px;gap:12px}
+.brand{display:inline-flex;align-items:center;gap:10px}.brand img{width:36px;height:36px;display:block}
 .logo{font:700 15px/1 var(--display);letter-spacing:.28em;text-transform:uppercase;background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
 nav{display:flex;gap:20px;font-size:14px;color:var(--mut)}
 nav a{text-decoration:none}
@@ -89,7 +90,7 @@ a:focus-visible,.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:
 
 <div class="wrap">
 <header class="top">
-  <span class="logo">Afterhours VFX</span>
+  <span class="brand"><img src="logo-mark.png" alt="" width="36" height="36"><span class="logo">Afterhours VFX</span></span>
   <nav><a href="#looks">Looks</a><a href="#try">Try it</a><a href="#why">Features</a><a href="#get">Get it</a><a class="donate" data-donate hidden target="_blank" rel="noopener"><b>♥</b> Support</a></nav>
 </header>
 
