@@ -80,6 +80,18 @@ h2{font:700 clamp(24px,3.6vw,38px)/1.12 var(--display);margin:0 0 14px;letter-sp
 
 /* looks */
 .looks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+/* new */
+.newg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.nw{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin:0}
+.nw video{width:100%;aspect-ratio:9/16;display:block;object-fit:cover;background:#000}
+.nw .tag{position:absolute;left:10px;top:10px;font:500 10px/1 var(--display);letter-spacing:.16em;text-transform:uppercase;padding:6px 9px;border-radius:999px;background:#05070dcc;border:1px solid var(--line2);color:var(--acc)}
+.nw .tag.pro{color:#ffd36b}
+.nw figcaption{padding:12px 14px 14px}
+.nw h3{margin:0 0 3px;font:500 13px/1.3 var(--display);letter-spacing:.05em}
+.nw p{margin:0;color:var(--mut);font-size:13.5px;line-height:1.5}
+.tools{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.tools li{font-size:13.5px;color:#c5cfe8;border:1px solid var(--line2);border-radius:999px;padding:6px 13px;background:#0d1328}
+.tools li b{color:var(--ink)}
 .look{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);margin:0}
 .look video,.look img{width:100%;aspect-ratio:16/9;display:block;object-fit:cover;background:#000}
 .look figcaption{padding:12px 14px 14px}
@@ -142,7 +154,7 @@ footer a:hover{color:var(--acc2)}
 .donate{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border:1px solid var(--line);border-radius:999px;font-size:13px;font-weight:700;background:var(--card)}.donate b{color:#ff6b9a}.donate[hidden]{display:none}
 
 @media(max-width:900px){
-  .looks{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .looks,.newg{grid-template-columns:repeat(2,minmax(0,1fr))}
   .look.big{grid-column:span 2;grid-row:auto}.look.big video,.look.big img{aspect-ratio:16/9;height:auto;min-height:0}
 }
 @media(max-width:700px){
@@ -156,7 +168,7 @@ footer a:hover{color:var(--acc2)}
   .cta .btn{flex:1 1 100%}
   section{padding-block:72px 0}
   .steps,.feat{grid-template-columns:1fr}
-  .looks{gap:10px}
+  .looks,.newg{gap:10px}
   #app,#try .fine{display:none!important}
   .mobopen{display:block;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
   .mobopen video{width:100%;aspect-ratio:16/9;display:block;object-fit:cover}
@@ -170,7 +182,7 @@ footer a:hover{color:var(--acc2)}
 <div class="wrap">
 <header class="top">
   <a class="brand" href="#"><img src="logo-mark.png" alt="" width="38" height="38"><span>Afterhours <i>VFX</i></span></a>
-  <nav aria-label="Main"><a href="#how">How it works</a><a href="#looks">Looks</a><a href="#features">Features</a><a href="#faq">FAQ</a><a class="buy" href="#get" data-buy>Get it</a></nav>
+  <nav aria-label="Main"><a href="#how">How it works</a><a href="#new">New</a><a href="#looks">Looks</a><a href="#features">Features</a><a href="#faq">FAQ</a><a class="buy" href="#get" data-buy>Get it</a></nav>
 </header>
 
 <div class="hero">
@@ -200,10 +212,34 @@ footer a:hover{color:var(--acc2)}
   </div>
 </section>
 
+<section id="new">
+  <p class="kick">Just added</p>
+  <h2>New and upgraded</h2>
+  <p class="sub">Fresh looks from the latest updates – rendered straight from the app in 9:16, the way they land on TikTok and Reels.</p>
+  <div class="newg">
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-y97.jpg"><source src="clips/new-y97.mp4" type="video/mp4"></video><span class="tag">New scene</span><figcaption><h3>'97</h3><p>An analog video synth that looks like a tape from 1997 – flowing, grainy and warm. Loops seamlessly for Spotify Canvas.</p></figcaption></figure>
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-fbk.jpg"><source src="clips/new-fbk.mp4" type="video/mp4"></video><span class="tag">Upgraded</span><figcaption><h3>Feedback</h3><p>A video-feedback tunnel that keeps folding into itself, with spinning shapes and color fringing.</p></figcaption></figure>
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-skull.jpg"><source src="clips/new-skull.mp4" type="video/mp4"></video><span class="tag">Upgraded</span><figcaption><h3>Swarm · Skull</h3><p>Turn up Density for a solid skull of sparks, with motion blur when you spin it fast.</p></figcaption></figure>
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-rain.jpg"><source src="clips/new-rain.mp4" type="video/mp4"></video><span class="tag">Upgraded</span><figcaption><h3>Rain Window</h3><p>Slim drops running down the glass in front of any scene.</p></figcaption></figure>
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-soap.jpg"><source src="clips/new-soap.mp4" type="video/mp4"></video><span class="tag">Upgraded</span><figcaption><h3>Soap Bubble</h3><p>A shimmering oil-slick film across the whole picture.</p></figcaption></figure>
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-xerox.jpg"><source src="clips/new-xerox.mp4" type="video/mp4"></video><span class="tag pro">Pro filter</span><figcaption><h3>Xerox</h3><p>Hard black-and-white photocopy grain that turns any scene into a flyer.</p></figcaption></figure>
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-melt.jpg"><source src="clips/new-melt.mp4" type="video/mp4"></video><span class="tag pro">Pro filter</span><figcaption><h3>Melt</h3><p>The picture drips and smears on the beat.</p></figcaption></figure>
+    <figure class="nw"><video autoplay muted loop playsinline preload="none" poster="shots/new-demo.jpg"><source src="clips/new-demo.mp4" type="video/mp4"></video><span class="tag">Upgraded</span><figcaption><h3>Demo</h3><p>A retro checkerboard floor with glowing copper bars.</p></figcaption></figure>
+  </div>
+  <ul class="tools">
+    <li><b>Beat mix</b> – cut between your videos on the beat</li>
+    <li><b>16:9 + 9:16</b> in one export</li>
+    <li><b>Seamless loops</b> for Spotify Canvas</li>
+    <li><b>Style packs</b> – one click, whole look</li>
+    <li><b>Auto scenes</b> on every drop</li>
+    <li><b>Camera moves</b> on the timeline</li>
+  </ul>
+</section>
+
 <section id="looks">
   <p class="kick">Looks</p>
-  <h2>One beat, twelve worlds</h2>
-  <p class="sub">Straight from the app – no mockups. Twelve scenes, each moving to your music in its own way, and 35 filters to push any of them further.</p>
+  <h2>One beat, fourteen worlds</h2>
+  <p class="sub">Straight from the app – no mockups. Fourteen scenes, each moving to your music in its own way, and 35 filters to push any of them further.</p>
   <div class="looks">
     <figure class="look big"><img src="shots/fractal.jpg" alt="Fractal scene: an endless dive into a glowing fractal" loading="lazy"><figcaption><h3>Fractal</h3><p>An endless dive that accelerates with your track. Pick the pattern – seahorse, starfish, lightning and more.</p></figcaption></figure>
     <figure class="look"><video autoplay muted loop playsinline preload="none" poster="shots/tunnel.jpg"><source src="clips/tunnel.mp4" type="video/mp4"><source src="clips/tunnel.webm" type="video/webm"></video><figcaption><h3>Tunnel</h3><p>Neon rings you fly through, reshaping as the song builds.</p></figcaption></figure>
