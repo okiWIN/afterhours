@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="icon-192.png">
 <title>Afterhours VFX – make your music impossible to scroll past</title>
-<meta name="description" content="Drop in a beat, get a music video that moves with every kick, snare, melody and drop. Audio-reactive 3D visuals, lyrics and title cards for YouTube, TikTok and Reels. Free in your browser, $19.99 once for the Windows app.">
+<meta name="description" content="Music visualizer and type beat video maker. Drop in a beat, get a music video that moves with every kick, snare, melody and drop. Audio-reactive 3D visuals, lyrics and title cards for YouTube, TikTok and Reels. Free in your browser, $19.99 once for the Windows app.">
 <meta property="og:title" content="Afterhours VFX – make your music impossible to scroll past">
-<meta property="og:description" content="Drop in your track. Get a video that moves with it – 12 scenes, 35 filters, lyrics and export up to 4K.">
+<meta property="og:description" content="Drop in your track. Get a video that moves with it – 14 scenes, 35 filters, lyrics and export up to 4K. Free in your browser.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://okiwin.github.io/afterhours/og.jpg">
 <meta property="og:url" content="https://okiwin.github.io/afterhours/">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Afterhours VFX","applicationCategory":"MultimediaApplication","operatingSystem":"Windows 10, Windows 11, Web browser","description":"Audio-reactive music visualizer for producers and artists. Turn a beat into a music video for YouTube, TikTok and Reels.","offers":{"@type":"Offer","price":"19.99","priceCurrency":"USD"}}</script>
 <meta name="theme-color" content="#05070d">
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>@font-face{font-family:'Unbounded';font-weight:500;font-display:swap;src:url(fonts/unbounded-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Unbounded';font-weight:700;font-display:swap;src:url(fonts/unbounded-latin-700-normal.woff2) format('woff2')}@font-face{font-family:'Manrope';font-weight:400;font-display:swap;src:url(fonts/manrope-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Manrope';font-weight:500;font-display:swap;src:url(fonts/manrope-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Manrope';font-weight:700;font-display:swap;src:url(fonts/manrope-latin-700-normal.woff2) format('woff2')}</style>
@@ -177,6 +178,41 @@ footer a:hover{color:var(--acc2)}
   .final{grid-template-columns:1fr;text-align:left}
 }
 </style>
+<style>@font-face{font-family:'Michroma';font-weight:400;font-display:swap;src:url(fonts/michroma-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Geist';font-weight:400;font-display:swap;src:url(fonts/geist-sans-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Geist';font-weight:500;font-display:swap;src:url(fonts/geist-sans-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Geist';font-weight:600;font-display:swap;src:url(fonts/geist-sans-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Geist';font-weight:700;font-display:swap;src:url(fonts/geist-sans-latin-700-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:400;font-display:swap;src:url(fonts/space-mono-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Space Mono';font-weight:700;font-display:swap;src:url(fonts/space-mono-latin-700-normal.woff2) format('woff2')}
+/* ===== Premium / futuristisk: Michroma + Geist + Space Mono, is-blått krom med glød ===== */
+:root{--display:'Michroma','Arial',system-ui,sans-serif;--body:'Geist','Segoe UI',system-ui,sans-serif;--mono:'Space Mono',ui-monospace,monospace;
+  --acc:#8cc8ff;--acc2:#d6ecff;--accd:#2f6fd6;--glow:#5aa8ff;--line:#162036;--line2:#22304f;--chrome:linear-gradient(180deg,#ffffff 0%,#dbeeff 38%,#8cc8ff 72%,#4f86e8 100%)}
+body{background:radial-gradient(1200px 600px at 70% -10%,#0d1b33 0%,transparent 60%),var(--bg)}
+h1,h2,.brand span{font-weight:400!important}
+h1{font-size:clamp(26px,4.3vw,52px)!important;line-height:1.12!important;letter-spacing:0!important;text-transform:uppercase}
+h1 em{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px #5aa8ff66) drop-shadow(0 0 2px #bfe2ff88)}
+h2{font-size:clamp(20px,2.9vw,32px)!important;line-height:1.25!important;letter-spacing:.01em!important}
+.brand span{font-size:12px!important;letter-spacing:.16em!important}
+.brand span i{color:var(--acc);text-shadow:0 0 12px #5aa8ff99}
+.kick,.eyebrow,.f .t,.look h3,.nw h3,.nw .tag{font-family:var(--mono)!important;font-weight:400!important}
+.kick{letter-spacing:.24em!important;color:var(--acc)!important;text-shadow:0 0 10px #5aa8ff66}
+.kick::before{content:'// ';opacity:.55}
+.eyebrow{letter-spacing:.18em!important;color:var(--acc2)!important;border-color:#2b4570!important;box-shadow:0 0 0 1px #00000060,0 0 18px #3d7ed633 inset}
+.eyebrow::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#7dffb0;box-shadow:0 0 8px #7dffb0;margin-right:9px;vertical-align:1px}
+.btn.p{background:linear-gradient(180deg,#f6fbff 0%,#cfe5ff 55%,#9cc8ff 100%);color:#04101f;box-shadow:0 0 0 1px #ffffff40 inset,0 8px 28px #4f9dff40,0 0 18px #6fb4ff33}
+.btn.p:hover{background:linear-gradient(180deg,#ffffff,#dcedff 55%,#b2d6ff);box-shadow:0 0 0 1px #ffffff60 inset,0 10px 34px #4f9dff66,0 0 26px #6fb4ff55}
+.btn.s{background:#0a1224cc;border-color:#2b4570;box-shadow:0 0 14px #3d7ed622 inset}
+.btn.s:hover{border-color:var(--acc);box-shadow:0 0 18px #5aa8ff44}
+nav .buy{border-color:#2b4570;box-shadow:0 0 14px #3d7ed622 inset}
+/* hero: HUD-hjørner, skannelinjer og en liten statuslinje som i appen */
+.hero{border-color:#1c2a47;box-shadow:0 0 0 1px #00000080,0 30px 80px #000a,0 0 60px #2f6fd61f}
+.hero::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,#ffffff06 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+.hero .in{z-index:2}
+.hud{position:absolute;inset:14px;z-index:2;pointer-events:none}
+.hud i{position:absolute;width:22px;height:22px;border-color:#8cc8ff99;border-style:solid;filter:drop-shadow(0 0 4px #5aa8ff)}
+.hud i:nth-child(1){left:0;top:0;border-width:1px 0 0 1px}.hud i:nth-child(2){right:0;top:0;border-width:1px 1px 0 0}
+.hud i:nth-child(3){left:0;bottom:0;border-width:0 0 1px 1px}.hud i:nth-child(4){right:0;bottom:0;border-width:0 1px 1px 0}
+.hud b{position:absolute;right:14px;top:10px;font:400 10px/1 var(--mono);letter-spacing:.22em;color:#9fc6ffb3;text-transform:uppercase;white-space:nowrap}
+@media (max-width:700px){.hud b{display:none}}
+.step,.f,.look,.nw,.tbl,.price{border-color:#1a2640!important}
+.step b{font-family:var(--mono)}
+.f:hover,.look:hover,.nw:hover{border-color:#2f4d80!important;box-shadow:0 0 24px #2f6fd622}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -189,10 +225,11 @@ footer a:hover{color:var(--acc2)}
   <img class="poster" src="shots/fractal.jpg" alt="" aria-hidden="true">
   <video id="herov" autoplay muted loop playsinline preload="auto" aria-hidden="true" poster="shots/fractal.jpg"><source src="clips/hero.mp4" type="video/mp4"><source src="clips/hero.webm" type="video/webm"></video>
   <div class="shade"></div>
+  <div class="hud" aria-hidden="true"><i></i><i></i><i></i><i></i><b>AH-01 · Visual unit · 4K60</b></div>
   <div class="in">
     <span class="eyebrow">Audio-reactive visuals for producers &amp; artists</span>
     <h1>Make your music <em>impossible to scroll past.</em></h1>
-    <p class="lead">Drop in a beat. Afterhours VFX hears every kick, snare, clap and melody, feels the build-up, explodes on the drop, and turns it all into a 3D music video – ready to post on YouTube, TikTok and Reels, no editing needed.</p>
+    <p class="lead">Turn your beat into a music video in a couple of minutes – no editing skills, no timeline work. Afterhours VFX hears every kick, snare and melody, feels the build-up and hits on the drop. Ready for YouTube, TikTok and Reels.</p>
     <div class="cta">
       <a class="btn p" href="#try">Try it free – no sign-up</a>
       <a class="btn s" href="#get" data-buy>Get the desktop app</a>
@@ -263,6 +300,7 @@ footer a:hover{color:var(--acc2)}
   <h2>Built for release day</h2>
   <p class="sub">Everything you need to finish the video – and nothing that gets in the way.</p>
   <div class="feat">
+    <div class="f" style="grid-column:1/-1"><div class="t">Type beats</div><h3>The type beat video, done in a minute</h3><p>One picture, 100% still, with a soft fade in and out – the classic look – with the ◆ Type beat style pack. Or let the beat run a full 3D scene for TikTok and Reels. Export 16:9 and 9:16 at once.</p></div>
     <div class="f"><div class="t">Sync</div><h3>It moves like your track, not like a metronome</h3><p>Kick, snare, claps and melody each drive their own movement. It feels the build-up, holds its breath before the drop, and hits hard when it lands.</p></div>
     <div class="f"><div class="t">Lyrics &amp; text</div><h3>Lyrics that land on the beat</h3><p>Let the desktop app transcribe the vocals for you, load an .lrc, or tap the timing yourself. Then style every line with 11 text effects – in any font, including your own.</p><ul><li>Kick pump</li><li>Glitch</li><li>Chrome</li><li>Liquid glass</li><li>Typewriter</li><li>Neon outline</li></ul></div>
     <div class="f"><div class="t">Look</div><h3>35 filters, palettes and your own media</h3><p>Stack filters, build a palette from one to three colors, or bring your own image, GIF or video. Drop your logo on top and every video carries your brand.</p><ul><li>VHS</li><li>CRT</li><li>Film</li><li>Datamosh</li><li>Oil Paint</li><li>Pixel Sort</li><li>Thermal</li><li>Radiation</li><li>+27 more</li></ul></div>
@@ -304,6 +342,11 @@ footer a:hover{color:var(--acc2)}
   </div>
   <p class="fine" id="dlnote">Windows 10/11 · sold securely through Gumroad</p>
   <details class="news"><summary>What’s new</summary><ul>
+    <li>New scene: '97 – an analog video synth that loops seamlessly for Spotify Canvas</li>
+    <li>Upgraded Feedback, Demo, Swarm skull, Rain Window and Soap Bubble</li>
+    <li>◆ Type beat style pack and a Still button for 100% still pictures and overlays</li>
+    <li>Export 16:9 and 9:16 in one go, and Beat mix to cut between your videos on the beat</li>
+    <li>Lock Sift in place, and a Preview quality setting for smoother editing</li>
     <li>Your own fonts: load .ttf, .otf or .woff and use them in every text</li>
     <li>Automate as many filters as you like on the timeline</li>
     <li>Frame: pick the Swarm shape inside – size it, spin it, turn it by hand</li>
@@ -321,6 +364,8 @@ footer a:hover{color:var(--acc2)}
     <details><summary>What happens after I buy?</summary><p>Gumroad sends you the download link and a license key right away. Install the app, paste the key, and you are ready. One key works on up to 3 computers that you use yourself.</p></details>
     <details><summary>Can I use the videos commercially?</summary><p>Yes. Videos you make with Afterhours VFX are yours: music releases, client work, ads and social media. You just need the rights to the music and media you put in.</p></details>
     <details><summary>Will it run on my PC?</summary><p>It runs on Windows 10 and 11. A dedicated graphics card makes exports much faster, but it is not required. Try the free web version first. If the desktop app does not run on your computer, email within 14 days and you get a full refund.</p></details>
+    <details><summary>Windows says “Windows protected your PC”. Is it safe?</summary><p>Yes. Afterhours VFX is a new app from an independent maker, and Windows shows this warning for programs it has not seen many times yet. Download it only from the Gumroad link on this page, then click <b>More info</b> → <b>Run anyway</b>. If anything feels off, email me before you install – and the 14-day refund applies.</p></details>
+    <details><summary>Can I make a classic type beat video?</summary><p>Yes. Load your cover picture, pick the <b>◆ Type beat</b> style pack under Presets, and export. The picture stays 100% still with a soft fade in and out – or use any scene if you want the beat to drive the visuals. Videos are made in 16:9 for YouTube and 9:16 for TikTok and Reels, and you can export both at once.</p></details>
     <details><summary>Is there a Mac version?</summary><p>Not yet for desktop. The web version runs on a Mac in Chrome or Edge, with export up to 1080p.</p></details>
     <details><summary>Is my music uploaded anywhere?</summary><p>No. Everything happens on your own computer. Your songs, images and videos never leave it. The microphone is only used when you turn on Live audio.</p></details>
     <details><summary>The visuals flash a lot. Can I tone it down?</summary><p>Yes. Turn on Calm under Effects, lower the Flash knob, or use a calmer scene. If you publish videos with flashing, consider adding a warning for your viewers.</p></details>
@@ -338,7 +383,7 @@ footer a:hover{color:var(--acc2)}
 
 <footer>
   <div class="row"><span>Afterhours VFX is made by Oscar Kilic Sordal in Oslo, Norway.</span><a class="donate" data-donate hidden target="_blank" rel="noopener"><b>♥</b> Support on PayPal</a></div>
-  <div class="row"><a href="https://www.tiktok.com/@afterhours.visual" target="_blank" rel="noopener">TikTok @afterhours.visual</a><a href="https://www.instagram.com/afterhours.hyper.visual/" target="_blank" rel="noopener">Instagram @afterhours.hyper.visual</a><a href="mailto:afterhours.hyper.void@gmail.com">afterhours.hyper.void@gmail.com</a></div>
+  <div class="row"><a href="https://www.tiktok.com/@afterhours_vfx" target="_blank" rel="noopener">TikTok @afterhours_vfx</a><a href="https://www.instagram.com/afterhours_vfx/" target="_blank" rel="noopener">Instagram @afterhours_vfx</a><a href="mailto:the.afterhours.vfx@gmail.com">the.afterhours.vfx@gmail.com</a></div>
   <div class="row"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="licenses.html">Licenses</a><span>Your music stays on your device. Nothing is uploaded.</span></div>
 </footer>
 </div>
